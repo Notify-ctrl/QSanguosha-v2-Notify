@@ -180,6 +180,7 @@ void MainWindow::on_actionStart_Server_triggered()
     server = new Server(this);
     if (!server->listen()) {
         QMessageBox::warning(this, tr("Warning"), tr("Can not start server!"));
+        server->deleteLater();
         return;
     }
 

@@ -41,6 +41,8 @@ ServerDialog::ServerDialog(QWidget *parent)
     setLayout(layout);
 
     setMinimumWidth(300);
+
+    connect(this, &ServerDialog::finished, this, &ServerDialog::deleteLater);
 }
 
 QWidget *ServerDialog::createBasicTab()

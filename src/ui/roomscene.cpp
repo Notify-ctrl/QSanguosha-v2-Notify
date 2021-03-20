@@ -2950,6 +2950,7 @@ ScriptExecutor::ScriptExecutor(QWidget *parent)
 
     connect(ok_button, SIGNAL(clicked()), this, SLOT(accept()));
     connect(this, SIGNAL(accepted()), this, SLOT(doScript()));
+    connect(this, &ScriptExecutor::finished, this, &ScriptExecutor::deleteLater);
 
     setLayout(vlayout);
 }
@@ -2991,6 +2992,8 @@ DeathNoteDialog::DeathNoteDialog(QWidget *parent)
     layout->addRow(hlayout);
 
     setLayout(layout);
+
+    connect(this, &DeathNoteDialog::finished, this, &DeathNoteDialog::deleteLater);
 }
 
 void DeathNoteDialog::accept()
@@ -3041,6 +3044,7 @@ DamageMakerDialog::DamageMakerDialog(QWidget *parent)
     setLayout(layout);
 
     connect(damage_nature, SIGNAL(currentIndexChanged(int)), this, SLOT(disableSource()));
+    connect(this, &DamageMakerDialog::finished, this, &DamageMakerDialog::deleteLater);
 }
 
 void DamageMakerDialog::disableSource()
