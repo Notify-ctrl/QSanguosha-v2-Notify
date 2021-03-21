@@ -15,10 +15,8 @@
 #include <QtNetwork>
 #include <QtGui>
 #include <QtWidgets>
-
-#ifndef Q_OS_WINRT
-#include <QtQml>
-#endif
+#include <QtQuick>
+#include <QtQuickWidgets>
 
 #ifdef AUDIO_SUPPORT
 #include <fmod.hpp>

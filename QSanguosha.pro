@@ -3,7 +3,7 @@
 # -------------------------------------------------
 TARGET = QSanguosha
 QT += network widgets
-!winrt: QT += qml
+QT += qml quick quickwidgets multimedia
 TEMPLATE = app
 
 CONFIG(release,debug|release){
@@ -265,6 +265,12 @@ FORMS += \
     src/dialog/mainwindow.ui \
     src/dialog/mainwindowserverlist.ui \
     src/dialog/dialogslsettings.ui
+
+OTHER_FILES += \
+    script/* \
+    script/ui/* \
+    script/ui/RoomElement/* \
+    script/ui/Dialog/*
 
 
 CONFIG(buildbot) {

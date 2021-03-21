@@ -53,8 +53,9 @@ protected:
     virtual void closeEvent(QCloseEvent *);
 
 private:
-    FitView *view;
-    QGraphicsScene *scene;
+    // FitView *view;
+    // QGraphicsScene *scene;
+    QQuickWidget *scene;
     Ui::MainWindow *ui;
     ConnectionDialog *connection_dialog;
     ConfigDialog *config_dialog;
@@ -93,7 +94,8 @@ private slots:
     void checkVersion(const QString &server_version, const QString &server_mod);
     void networkError(const QString &error_msg);
     void enterRoom();
-    void gotoScene(QGraphicsScene *scene);
+    // void gotoScene(QGraphicsScene *scene);
+    void gotoScene(const QString &filename);
     void gotoStartScene();
     void enableDialogButtons();
     void startGameInAnotherInstance();
