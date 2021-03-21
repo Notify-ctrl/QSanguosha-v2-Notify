@@ -27,7 +27,7 @@ Image {
         font.weight: Font.Black
         font.letterSpacing: columns === 1 ? 20 : 0
         horizontalAlignment: Text.AlignHCenter
-        x: columns === 1 ? 26) : Device.gu(20
+        x: columns === 1 ? 26 : 20
         y: 6
         width: parent.width - 25
         style: Text.Outline

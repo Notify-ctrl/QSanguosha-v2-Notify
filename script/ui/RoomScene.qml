@@ -2,11 +2,10 @@ import QtQuick 2.4
 import QtQuick.Layouts 1.1
 import QtMultimedia 5.12
 import "Util"
-// import Sanguosha 1.0
+import Sanguosha 1.0
 import "RoomElement"
 
-// RoomScene {
-Item {
+RoomScene {
     property var dashboardModel: null
     property var photoModel: []
     property int playerNum: 0
@@ -39,7 +38,7 @@ Item {
 
     ColumnLayout {
         anchors.fill: parent
-        spacing: Device.gu(3)
+        spacing: 3
 
         RowLayout {
             spacing: 1
@@ -51,7 +50,7 @@ Item {
                 Item {
                     id: roomArea
                     anchors.fill: parent
-                    anchors.margins: Device.gu(10)
+                    anchors.margins: 10
 
                     Repeater {
                         id: photos
@@ -87,7 +86,7 @@ Item {
                     TablePile {
                         id: tablePile
                         width: parent.width * 0.6
-                        height: Device.gu(150)
+                        height: 150
                         x: parent.width * 0.2
                         y: parent.height * 0.5
                     }
@@ -105,7 +104,7 @@ Item {
             ColumnLayout {
                 spacing: 1
                 Layout.fillWidth: false
-                Layout.preferredWidth: Device.gu(275)
+                Layout.preferredWidth: 275
 
                 LogBox {
                     id: logBox
@@ -120,7 +119,7 @@ Item {
 
                 ChatBox {
                     Layout.fillWidth: true
-                    Layout.preferredHeight: Device.gu(200)
+                    Layout.preferredHeight: 200
                 }
             }
         }
@@ -404,7 +403,7 @@ Item {
             {top: 0, bottom: horizontalBorder, left: 0, right: roomArea.width, players: []}
         ];
 
-        var roomAreaPadding = Device.gu(10);
+        var roomAreaPadding = 10;
         var item, region, i, subindex, x, y, spacing;
 
         for (i = 0; i < playerNum - 1; i++)

@@ -1,7 +1,5 @@
 import QtQuick 2.4
 import QtQuick.Layouts 1.1
-import Cardirector.Gui 1.0
-
 
 Rectangle {
     id: splash
@@ -27,7 +25,7 @@ Rectangle {
 
         Image {
             id: logo
-            source: "image://system/mogara/logo"
+            source: "../../image/logo/logo"
             width: Math.min(implicitWidth, Math.round(Math.max(splash.width, splash.height) * 0.2))
             height: width
         }

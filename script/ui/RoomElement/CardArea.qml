@@ -1,5 +1,5 @@
 import QtQuick 2.4
-import Cardirector.Device 1.0
+
 
 Item {
     property var cards: []

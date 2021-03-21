@@ -7,7 +7,6 @@ namespace Ui {
     class MainWindow;
 }
 
-class FitView;
 class QGraphicsScene;
 class QSystemTrayIcon;
 class Server;

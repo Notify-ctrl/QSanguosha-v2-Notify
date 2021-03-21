@@ -1,7 +1,7 @@
 import QtQuick 2.4
 import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.1
-import Cardirector.Gui 1.0
+import "Util"
 
 import Sanguosha 1.0
 

@@ -1,5 +1,4 @@
 ﻿#include "mainwindow.h"
-#include "startscene.h"
 #include "roomscene.h"
 #include "server.h"
 #include "client.h"
@@ -7,12 +6,9 @@
 #include "cardoverview.h"
 #include "ui_mainwindow.h"
 #include "scenario-overview.h"
-#include "window.h"
-#include "pixmapanimation.h"
 #include "record-analysis.h"
 #include "banipdialog.h"
 #include "recorder.h"
-#include "audio.h"
 #include "lua.hpp"
 #include "clientplayer.h"
 #include "engine.h"
@@ -20,46 +16,6 @@
 #include "configdialog.h"
 #include "clientstruct.h"
 #include "settings.h"
-#include "button.h"
-
-class FitView : public QGraphicsView
-{
-public:
-    FitView(QGraphicsScene *scene) : QGraphicsView(scene)
-    {
-        setSceneRect(Config.Rect);
-        setRenderHints(QPainter::TextAntialiasing | QPainter::Antialiasing);
-    }
-
-    virtual void resizeEvent(QResizeEvent *event)
-    {
-        QGraphicsView::resizeEvent(event);
-        MainWindow *main_window = qobject_cast<MainWindow *>(parentWidget());
-        if (scene()->inherits("RoomScene")) {
-            RoomScene *room_scene = qobject_cast<RoomScene *>(scene());
-            QRectF newSceneRect(0, 0, event->size().width(), event->size().height());
-            room_scene->setSceneRect(newSceneRect);
-            room_scene->adjustItems();
-            setSceneRect(room_scene->sceneRect());
-            if (newSceneRect != room_scene->sceneRect())
-                fitInView(room_scene->sceneRect(), Qt::KeepAspectRatio);
-            else
-                this->resetTransform();
-            main_window->setBackgroundBrush(false);
-            return;
-        } else if (scene()->inherits("StartScene")) {
-            StartScene *start_scene = qobject_cast<StartScene *>(scene());
-            QRectF newSceneRect(-event->size().width() / 2, -event->size().height() / 2,
-                event->size().width(), event->size().height());
-            start_scene->setSceneRect(newSceneRect);
-            setSceneRect(start_scene->sceneRect());
-            if (newSceneRect != start_scene->sceneRect())
-                fitInView(start_scene->sceneRect(), Qt::KeepAspectRatio);
-        }
-        if (main_window)
-            main_window->setBackgroundBrush(true);
-    }
-};
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow), server(NULL)
@@ -72,6 +28,8 @@ MainWindow::MainWindow(QWidget *parent)
     scene = new QQuickWidget(this);
     scene->rootContext()->setContextProperty("sceneHeight", this->height());
     scene->rootContext()->setContextProperty("sceneWidth", this->width());
+    scene->rootContext()->setContextProperty("Root", QVariant::fromValue(scene->rootObject()));
+    qmlRegisterType<RoomScene>("Sanguosha", 1, 0, "RoomScene");
 
     connection_dialog = new ConnectionDialog(this);
     connect(ui->actionStart_Game, SIGNAL(triggered()), connection_dialog, SLOT(exec()));
@@ -84,27 +42,9 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->actionAbout_Qt, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
     connect(ui->actionAcknowledgement_2, SIGNAL(triggered()), this, SLOT(on_actionAcknowledgement_triggered()));
 
-    StartScene *start_scene = new StartScene;
-
-    QList<QAction *> actions;
-    actions << ui->actionStart_Game
-        << ui->actionStart_Server
-        << ui->actionReplay
-        << ui->actionConfigure
-        << ui->actionGeneral_Overview
-        << ui->actionCard_Overview
-        << ui->actionScenario_Overview
-        << ui->actionAbout;
-
-    foreach(QAction *action, actions)
-        start_scene->addButton(action);
-    // view = new FitView(scene);
-
-    // setCentralWidget(view);
     restoreFromConfig();
 
     BackLoader::preload();
-    // gotoScene(start_scene);
     gotoScene("./script/ui/StartScene.qml");
 
     addAction(ui->actionShow_Hide_Menu);
@@ -146,7 +86,7 @@ MainWindow::~MainWindow()
     // view->deleteLater();
     if (scene)
         scene->deleteLater();
-    QSanSkinFactory::destroyInstance();
+    // QSanSkinFactory::destroyInstance();
 }
 
 /*

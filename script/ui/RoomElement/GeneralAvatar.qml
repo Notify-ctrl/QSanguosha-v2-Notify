@@ -27,7 +27,7 @@ Item {
         visible: kingdom != ""
 
         Item {
-            x: nameItem.text.length >= 3 ? 26) : Device.gu(28
+            x: nameItem.text.length >= 3 ? 26: 28
 
             GlowText {
                 id: nameItem

@@ -1,5 +1,5 @@
 import QtQuick 2.4
-import Cardirector.Gui 1.0
+
 
 import "../../engine.js" as Engine
 
@@ -9,7 +9,7 @@ GraphicsBox {
 
     id: root
     title.text: qsTr("Please choose")
-    width: Math.max(140), body.width + Device.gu(20)
+    width: Math.max(140), body.width + 20
     height: body.height + title.height + 20
 
     Column {

@@ -1,5 +1,4 @@
 import QtQuick 2.4
-import Cardirector.Device 1.0
 
 Item {
     property bool enabled: true
@@ -9,7 +8,7 @@ Item {
     property alias backgroundColor: bg.color
     property alias border: bg.border
     property alias iconSource: icon.source
-    property int padding: Device.gu(5)
+    property int padding: 5
 
     signal clicked
 
@@ -21,7 +20,7 @@ Item {
         id: bg
         anchors.fill: parent
         color: "black"
-        border.width: Device.gu(2)
+        border.width: 2
         border.color: "white"
         opacity: 0.8
     }
@@ -49,7 +48,7 @@ Item {
         x: padding
         y: padding
         anchors.centerIn: parent
-        spacing: Device.gu(5)
+        spacing: 5
 
         Image {
             id: icon
@@ -59,7 +58,7 @@ Item {
 
         Text {
             id: title
-            font.pixelSize: Device.gu(18)
+            font.pixelSize: 18
             font.family: "WenQuanYi Micro Hei"
             anchors.verticalCenter: parent.verticalCenter
             text: ""

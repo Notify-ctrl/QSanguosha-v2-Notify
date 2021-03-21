@@ -1,5 +1,4 @@
 import QtQuick 2.4
-import Cardirector.Gui.Private 1.0
 
 MouseArea {
     id: mouseArea
