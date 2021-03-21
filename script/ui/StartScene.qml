@@ -3,24 +3,22 @@ import "Util"
 
 Image {
     id: startScene
-    source: config.backgroundImage
+    source: "../../image/system/backdrop/new-version.jpg"
     anchors.fill: parent
 
-    property bool isFeteDay: isInFeteDays()
-
     FitInView {
-        minWidth: Device.gu(870)
-        minHeight: Device.gu(700)
+        minWidth: 870
+        minHeight: 700
 
         Image {
             id: logo
-            source: "image://system/mogara/logo" + (isFeteDay ? "-moxuan" : "")
+            source: "../../image/logo/logo"
             anchors.centerIn: parent
             anchors.horizontalCenterOffset: -parent.width / 4
             opacity: 0
 
             ToolTipArea {
-                text: isFeteDay ? qsTr("At 10:40 a.m., August 19, 2014, Moxuanyanyun, a developer of QSanguosha, passed away peacefully in Dalian Medical College. He was 18 and had struggled with leukemia for more than 4 years. May there is no pain in Heaven.") : ""
+                text: qsTr("QSanguosha")
             }
         }
 
@@ -30,7 +28,7 @@ Image {
             anchors.centerIn: parent
             anchors.horizontalCenterOffset: parent.width / 4
             flow: GridView.FlowTopToBottom
-            cellHeight: Device.gu(162); cellWidth: Device.gu(162)
+            cellHeight: 162; cellWidth: 162
             height: cellHeight * 4; width: cellWidth * 2
             delegate: buttonDelegate
         }
@@ -50,7 +48,7 @@ Image {
 
         TileButton {
             text: name
-            iconSource: "image://system/tileicon/" + icon
+            iconSource: "../../image/system/tileicon/" + icon
             onClicked: {
                 var dialog = icon.substr(0, 1).toUpperCase() + icon.substr(1);
                 dialog = dialog.replace(/\_([a-z])/g, function(str, group1){
@@ -77,14 +75,6 @@ Image {
         interval: 1000
         running: true
         onTriggered: logoAni.start()
-    }
-
-    function isInFeteDays() {
-        var date = new Date();
-        if (date.getMonth() == 7 && date.getDate() >= 19 && date.getDate() <= 26) {
-            return true;
-        }
-        return false;
     }
 }
 

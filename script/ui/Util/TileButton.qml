@@ -1,6 +1,5 @@
 import QtQuick 2.4
-import Cardirector.Device 1.0
-//import QtGraphicalEffects 1.0
+import QtGraphicalEffects 1.0
 
 Item {
     property alias text: labelText.text
@@ -15,24 +14,24 @@ Item {
 
 
     id: button
-    width: Device.gu(154)
-    height: Device.gu(154)
+    width: 154
+    height: 154
     antialiasing: true
 
-//    RectangularGlow {
-//        anchors.fill: rect
-//        glowRadius: 1
-//        spread: 1.0
-//        visible: mouse.containsMouse || parent.focus
-//        antialiasing: true
-//    }
+    RectangularGlow {
+        anchors.fill: rect
+        glowRadius: 1
+        spread: 1.0
+        visible: mouse.containsMouse || parent.focus
+        antialiasing: true
+    }
 
     Rectangle {
         id: rect
         anchors.fill: parent
         color: "#78D478"
         antialiasing: true
-        border.width: Device.gu(1)
+        border.width: 1
         border.color: "#8CDA8C"
     }
 
@@ -83,14 +82,14 @@ Item {
         id: labelText
 
         anchors.bottom: parent.bottom
-        anchors.bottomMargin: Device.gu(3)
+        anchors.bottomMargin: 3
         anchors.left: parent.left
-        anchors.leftMargin: Device.gu(3)
+        anchors.leftMargin: 3
 
         visible: !autoHideText || mouse.containsMouse
 
         color: "white"
-        font.pixelSize: Device.gu(16)
+        font.pixelSize: 16
         font.family: "WenQuanYi Micro Hei"
 
         text: "Button"

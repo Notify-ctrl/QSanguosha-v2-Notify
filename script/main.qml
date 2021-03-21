@@ -36,7 +36,7 @@ Item {
             }
         }
 
-        if (skip_splash || Qt.application.arguments.contains("--skip-splash")) {
+        if (skip_splash) {
             startSceneLoader.source = "ui/StartScene.qml";
         } else {
             splashLoader.source = "ui/Splash.qml";

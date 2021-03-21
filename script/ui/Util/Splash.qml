@@ -1,5 +1,4 @@
 import QtQuick 2.4
-import Cardirector.Device 1.0
 import QtGraphicalEffects 1.0
 import QtQuick.Particles 2.0
 
@@ -121,7 +120,7 @@ Image {
         font.pointSize: 36
         anchors.top: cardirector.bottom
         anchors.horizontalCenter: parent.horizontalCenter
-        anchors.topMargin: Device.gu(100)
+        anchors.topMargin: 100
         opacity: 0
     }
 

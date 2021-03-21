@@ -1,5 +1,4 @@
 import QtQuick 2.4
-import Cardirector.Device 1.0
 
 Rectangle {
     id: tooltip
@@ -9,8 +8,8 @@ Rectangle {
     visible: false
 
     property alias text: holder.text
-    property int verticalPadding: Device.gu(1)
-    property int horizontalPadding: Device.gu(5)
+    property int verticalPadding: 1
+    property int horizontalPadding: 5
 
 
     Text {

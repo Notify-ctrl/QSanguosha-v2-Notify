@@ -1,40 +1,16 @@
-﻿#ifndef _ROOM_SCENE_H
-#define _ROOM_SCENE_H
+﻿#ifndef ROOMSCENE_H
+#define ROOMSCENE_H
 
-//#include "photo.h"
-//#include "dashboard.h"
-//#include "table-pile.h"
-#include "card.h"
-#include "client.h"
-//#include "aux-skills.h"
-//#include "clientlogbox.h"
-//#include "chatwidget.h"
-#include "skin-bank.h"
-//#include "sprite.h"
-//#include "qsanbutton.h"
+#include <QQuickItem>
+#include "structs.h"
+#include "engine.h"
 
-class Window;
-class Button;
-class CardContainer;
-class GuanxingBox;
-class QSanButton;
-class QGroupBox;
-class BubbleChatBox;
-struct RoomLayout;
-class Photo;
-class Dashboard;
-class GenericCardContainer;
-class TablePile;
-class PlayerCardContainer;
-class ResponseSkill;
-class ShowOrPindianSkill;
-class DiscardSkill;
-class NosYijiViewAsSkill;
-class ChoosePlayerSkill;
-class ClientLogBox;
-class ChatWidget;
-class QSanSelectableItem;
-class EffectAnimation;
+class Card;
+class General;
+class Player;
+class Client;
+class ClientPlayer;
+class ViewAsSkill;
 
 #include <QQmlEngine>
 #include <QQmlContext>
@@ -176,45 +152,29 @@ public slots:
     void chooseKingdom(const QStringList &kingdoms);
     void chooseOption(const QString &skillName, const QStringList &options);
 
-    void bringToFront(QGraphicsItem *item);
-    void arrangeSeats(const QList<const ClientPlayer *> &seats);
-    void toggleDiscards();
-    void enableTargets(const Card *card);
-    void useSelectedCard();
-    void updateStatus(Client::Status oldStatus, Client::Status newStatus);
-    void killPlayer(const QString &who);
-    void revivePlayer(const QString &who);
-    void showServerInformation();
-    void surrender();
-    void saveReplayRecord();
-    void makeDamage();
-    void makeKilling();
-    void makeReviving();
-    void doScript();
-    void viewGenerals(const QString &reason, const QStringList &names);
-
-    void handleGameEvent(const QVariant &arg);
-
-    void doOkButton();
-    void doCancelButton();
-    void doDiscardButton();
-
-    void setChatBoxVisibleSlot();
-    void pause();
-
-    void addRobot();
-    void doAddRobotAction();
-    void fillRobots();
-
-protected:
-    virtual void mousePressEvent(QGraphicsSceneMouseEvent *event);
-    virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
-    virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
-    virtual void keyReleaseEvent(QKeyEvent *event);
-    //this method causes crashes
-    virtual void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
-    QMutex m_roomMutex;
-    QMutex m_zValueMutex;
+signals:
+    //Signals from C++ to QML
+    void moveCards(const QVariant &moves);
+    void enableCards(const QVariant &cardIds);
+    void setPhotoReady(bool ready);
+    void enablePhotos(const QVariant &seats);
+    void chooseGeneral(const QVariant &generals, int num);
+    void startEmotion(const QString &emotion, int seat);
+    void playAudio(const QString &path);
+    void showIndicatorLine(int from, const QVariantList &tos);
+    void showPrompt(const QString &prompt);
+    void hidePrompt();
+    void setAcceptEnabled(bool enabled);
+    void setRejectEnabled(bool enabled);
+    void setFinishEnabled(bool enabled);
+    void askToChooseCards(const QVariant &cards);
+    void clearPopupBox();
+    void askToChoosePlayerCard(const QVariant &handcards, const QVariant &equips, const QVariant &delayedTricks);
+    void showCard(int fromSeat, const QVariant &cards);
+    void showOptions(const QStringList &options);
+    void showArrangeCardBox(const QVariant &cards, const QVariant &capacities, const QVariant &names);
+    void showGameOverBox(const QVariant &winners);
+    void addLog(const QString &richText);
 
 private:
     void _getSceneSizes(QSize &minSize, QSize &maxSize);
@@ -295,19 +255,9 @@ private:
 
     struct _MoveCardsClassifier
     {
-        inline _MoveCardsClassifier(const CardsMoveStruct &move)
-        {
-            m_card_ids = move.card_ids;
-        }
-        inline bool operator ==(const _MoveCardsClassifier &other) const
-        {
-            return m_card_ids == other.m_card_ids;
-        }
-        inline bool operator <(const _MoveCardsClassifier &other) const
-        {
-            return m_card_ids.first() < other.m_card_ids.first();
-        }
-        QList<int> m_card_ids;
+        InactiveState,
+        UsingCardState,
+        RespondingCardState
     };
 
     QMap<_MoveCardsClassifier, CardsMoveStruct> m_move_cache;
@@ -433,7 +383,4 @@ signals:
     void game_over_dialog_rejected();
 };
 
-extern RoomScene *RoomSceneInstance;
-
-#endif
-
+#endif // ROOMSCENE_H

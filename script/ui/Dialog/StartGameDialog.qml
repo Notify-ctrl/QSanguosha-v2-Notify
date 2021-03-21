@@ -1,6 +1,6 @@
 import QtQuick 2.4
 import QtQuick.Layouts 1.2
-import Cardirector.Gui 1.0
+
 
 import Sanguosha.Dialogs 1.0
 

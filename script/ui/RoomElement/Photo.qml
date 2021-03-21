@@ -2,8 +2,6 @@ import QtQuick 2.4
 import QtQuick.Layouts 1.1
 import QtGraphicalEffects 1.0
 
-import Cardirector.Resource 1.0
-
 Item {
     property string headGeneral: ""
     property string deputyGeneral: ""
@@ -83,7 +81,7 @@ Item {
     }
 
     Item {
-        width: deputyGeneral != "" ? 75) : Device.gu(155
+        width: deputyGeneral != "" ? 75 : 155
         height: 182
 
         Image {

@@ -1,5 +1,5 @@
 import QtQuick 2.4
-import Cardirector.Gui 1.0
+
 
 import "../../utility.js" as Utility
 
