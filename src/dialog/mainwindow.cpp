@@ -68,7 +68,10 @@ MainWindow::MainWindow(QWidget *parent)
 
     setWindowTitle(tr("Sanguosha") + " " + Sanguosha->getVersionNumber());
 
-    scene = NULL;
+    // scene = NULL;
+    scene = new QQuickWidget(this);
+    scene->rootContext()->setContextProperty("sceneHeight", this->height());
+    scene->rootContext()->setContextProperty("sceneWidth", this->width());
 
     connection_dialog = new ConnectionDialog(this);
     connect(ui->actionStart_Game, SIGNAL(triggered()), connection_dialog, SLOT(exec()));
@@ -95,13 +98,14 @@ MainWindow::MainWindow(QWidget *parent)
 
     foreach(QAction *action, actions)
         start_scene->addButton(action);
-    view = new FitView(scene);
+    // view = new FitView(scene);
 
-    setCentralWidget(view);
+    // setCentralWidget(view);
     restoreFromConfig();
 
     BackLoader::preload();
-    gotoScene(start_scene);
+    // gotoScene(start_scene);
+    gotoScene("./script/ui/StartScene.qml");
 
     addAction(ui->actionShow_Hide_Menu);
     addAction(ui->actionFullscreen);
@@ -139,12 +143,13 @@ void MainWindow::closeEvent(QCloseEvent *)
 MainWindow::~MainWindow()
 {
     delete ui;
-    view->deleteLater();
+    // view->deleteLater();
     if (scene)
         scene->deleteLater();
     QSanSkinFactory::destroyInstance();
 }
 
+/*
 void MainWindow::gotoScene(QGraphicsScene *scene)
 {
     if (this->scene)
@@ -154,6 +159,11 @@ void MainWindow::gotoScene(QGraphicsScene *scene)
     QResizeEvent e(QSize(view->size().width(), view->size().height()), view->size());
     view->resizeEvent(&e);
     changeBackground();
+}
+*/
+
+void MainWindow::gotoScene(const QString &filename) {
+    scene->setSource(QUrl(filename));
 }
 
 void MainWindow::on_actionExit_triggered()
@@ -338,7 +348,8 @@ void MainWindow::enterRoom()
     connect(room_scene, SIGNAL(return_to_start()), this, SLOT(gotoStartScene()));
     connect(room_scene, SIGNAL(game_over_dialog_rejected()), this, SLOT(enableDialogButtons()));
 
-    gotoScene(room_scene);
+    // gotoScene(room_scene);
+    gotoScene("./script/ui/StartScene.qml");
 }
 
 void MainWindow::gotoStartScene()
@@ -355,7 +366,7 @@ void MainWindow::gotoStartScene()
         delete Self;
         Self = NULL;
     }
-
+/*
     StartScene *start_scene = new StartScene;
 
     QList<QAction *> actions;
@@ -377,7 +388,7 @@ void MainWindow::gotoStartScene()
     foreach(QAction *action, actions)
         start_scene->addButton(action);
 
-    setCentralWidget(view);
+    // setCentralWidget(view);
 
     ui->menuCheat->setEnabled(false);
     ui->actionDeath_note->disconnect();
@@ -385,10 +396,12 @@ void MainWindow::gotoStartScene()
     ui->actionRevive_wand->disconnect();
     ui->actionSend_lowlevel_command->disconnect();
     ui->actionExecute_script_at_server_side->disconnect();
-    gotoScene(start_scene);
+    // gotoScene(start_scene);
 
     addAction(ui->actionShow_Hide_Menu);
     addAction(ui->actionFullscreen);
+*/
+    gotoScene("./script/ui/StartScene.qml");
 
     if (ClientInstance) {
         ClientInstance->disconnectFromHost();
@@ -483,7 +496,7 @@ void MainWindow::on_actionAbout_triggered()
     content.append(tr("Forum: <a href='%1' style = \"color:#0072c1; \">%1</a> <br/>").arg(forum_url));
 
     Window *window = new Window(tr("About QSanguosha"), QSize(420, 470));
-    scene->addItem(window);
+    // scene->addItem(window);
     window->setZValue(32766);
 
     window->addContent(content);
@@ -507,7 +520,7 @@ void MainWindow::setBackgroundBrush(bool centerAsOrigin)
             transform.translate(-(qreal)width() / 2, -(qreal)height() / 2);
         transform.scale(sx, sy);
         brush.setTransform(transform);
-        scene->setBackgroundBrush(brush);
+        // scene->setBackgroundBrush(brush);
     }
 }
 
@@ -606,7 +619,7 @@ void MainWindow::on_actionRole_assign_table_triggered()
     content = QString("<table border='1'>%1</table").arg(content);
 
     Window *window = new Window(tr("Role assign table"), QSize(240, 450));
-    scene->addItem(window);
+    // scene->addItem(window);
 
     window->addContent(content);
     window->addCloseButton(tr("OK"));
@@ -667,7 +680,7 @@ void MainWindow::on_actionBroadcast_triggered()
 void MainWindow::on_actionAcknowledgement_triggered()
 {
     Window *window = new Window(QString(), QSize(1000, 677), "image/system/acknowledgement.png");
-    scene->addItem(window);
+    // scene->addItem(window);
 
     Button *button = window->addCloseButton(tr("OK"));
     button->moveBy(-85, -35);
@@ -869,7 +882,7 @@ void MainWindow::on_actionAbout_fmod_triggered()
 #endif
 
     Window *window = new Window(tr("About fmod"), QSize(500, 260));
-    scene->addItem(window);
+    // scene->addItem(window);
 
     window->addContent(content);
     window->addCloseButton(tr("OK"));
@@ -892,7 +905,7 @@ void MainWindow::on_actionAbout_Lua_triggered()
     content.append(LUA_COPYRIGHT);
 
     Window *window = new Window(tr("About Lua"), QSize(500, 585));
-    scene->addItem(window);
+    // scene->addItem(window);
 
     window->addContent(content);
     window->addCloseButton(tr("OK"));
@@ -912,7 +925,7 @@ void MainWindow::on_actionAbout_GPLv3_triggered()
     content.append(tr("Official site: <a href='%1' style = \"color:#0072c1; \">%1</a> <br/>").arg(address));
 
     Window *window = new Window(tr("About GPLv3"), QSize(500, 225));
-    scene->addItem(window);
+    // scene->addItem(window);
 
     window->addContent(content);
     window->addCloseButton(tr("OK"));
@@ -925,5 +938,5 @@ void MainWindow::on_actionAbout_GPLv3_triggered()
 
 QGraphicsScene* MainWindow::getScene()
 {
-	return scene;
+    // return scene;
 }
