@@ -419,18 +419,7 @@ void ShangyiCard::onEffect(const CardEffectStruct &effect) const
     QStringList choicelist;
     if (!effect.to->isKongcheng())
         choicelist.append("handcards");
-    if (room->getMode() == "04_1v3" || room->getMode() == "04_boss"
-        || room->getMode() == "06_3v3" || room->getMode() == "08_defense") {
-        ;
-    } else if (room->getMode() == "06_XMode") {
-        QStringList backup = player->tag["XModeBackup"].toStringList();
-        if (backup.length() > 0)
-            choicelist.append("remainedgenerals");
-    } else if (room->getMode() == "02_1v1") {
-        QStringList list = player->tag["1v1Arrange"].toStringList();
-        if (list.length() > 0)
-            choicelist.append("remainedgenerals");
-    } else if (Config.EnableBasara) {
+    if (Config.EnableBasara) {
         QString hidden_generals = player->property("basara_generals").toString();
         if (!hidden_generals.isEmpty())
             choicelist.append("generals");

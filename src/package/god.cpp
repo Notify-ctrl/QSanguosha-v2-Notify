@@ -520,10 +520,6 @@ public:
                     room->broadcastSkillInvoke(objectName());
 
                     shencc->setFlags("GuixinUsing");
-                    /*
-                    if (players.length() >= 4 && (shencc->getGeneralName() == "shencaocao" || shencc->getGeneral2Name() == "shencaocao"))
-                    room->doLightbox("$GuixinAnimate");
-                    */
                     if (shencc->getGeneralName() != "shencaocao" && (shencc->getGeneralName() == "pr_shencaocao" || shencc->getGeneral2Name() == "pr_shencaocao"))
                         room->doSuperLightbox("pr_shencaocao", "guixin");  // todo:pr_shencaocao's avatar
                     else

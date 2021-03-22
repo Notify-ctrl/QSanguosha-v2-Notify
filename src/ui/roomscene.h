@@ -175,9 +175,6 @@ public slots:
         bool handcard_visible, Card::HandlingMethod method, QList<int> disabled_ids);
     void chooseKingdom(const QStringList &kingdoms);
     void chooseOption(const QString &skillName, const QStringList &options);
-    void chooseOrder(QSanProtocol::Game3v3ChooseOrderCommand reason);
-    void chooseRole(const QString &scheme, const QStringList &roles);
-    void chooseDirection();
 
     void bringToFront(QGraphicsItem *item);
     void arrangeSeats(const QList<const ClientPlayer *> &seats);
@@ -293,14 +290,6 @@ private:
 
     QMap<QString, BubbleChatBox *> bubbleChatBoxes;
 
-    // for 3v3 & 1v1 mode
-    QSanSelectableItem *selector_box;
-    QList<CardItem *> general_items, up_generals, down_generals;
-    CardItem *to_change;
-    QList<QGraphicsRectItem *> arrange_rects;
-    QList<CardItem *> arrange_items;
-    Button *arrange_button;
-    KOFOrderBox *enemy_box, *self_box;
     QPointF m_tableCenterPos;
     ReplayerControlBar *m_replayControl;
 
@@ -344,8 +333,8 @@ private:
     QGraphicsPixmapItem *createDashboardButtons();
     void createReplayControlBar();
 
-    void fillGenerals1v1(const QStringList &names);
-    void fillGenerals3v3(const QStringList &names);
+    // void fillGenerals1v1(const QStringList &names);
+    // void fillGenerals3v3(const QStringList &names);
 
     void showPindianBox(const QString &from_name, int from_id, const QString &to_name, int to_id, const QString &reason);
     void setChatBoxVisible(bool show);
@@ -436,17 +425,6 @@ private slots:
 
     void doPindianAnimation();
 
-    // 3v3 mode & 1v1 mode
-    void fillGenerals(const QStringList &names);
-    void takeGeneral(const QString &who, const QString &name, const QString &rule);
-    void recoverGeneral(int index, const QString &name);
-    void startGeneralSelection();
-    void selectGeneral();
-    void startArrange(const QString &to_arrange);
-    void toggleArrange();
-    void finishArrange();
-    void changeGeneral(const QString &general);
-    void revealGeneral(bool self, const QString &general);
     void trust();
 
 signals:

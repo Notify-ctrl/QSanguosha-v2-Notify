@@ -185,10 +185,6 @@ void Dashboard::_updateFrames()
     button_widget->setX(rect.width() - getButtonWidgetWidth());
     button_widget->setY(1);
 
-    /*QRectF btnWidgetRect = button_widget->mapRectToItem(this, button_widget->boundingRect());
-    m_btnNoNullification->setPos(btnWidgetRect.left() - m_btnNoNullification->boundingRect().width(),
-                                 m_btnNoNullification->boundingRect().height() / 5);
-*/
     _paintRightFrame();
     _m_rightFrame->setX(_m_width - G_DASHBOARD_LAYOUT.m_rightWidth);
     _m_rightFrame->moveBy(0, m_middleFrameAndRightFrameHeightDiff);
@@ -280,10 +276,6 @@ void Dashboard::killPlayer()
     this->setGraphicsEffect(effect);
     refresh(true);
     _m_deathIcon->show();
-    if (ServerInfo.GameMode == "04_1v3" && !Self->isLord()) {
-        _m_votesGot = 6;
-        updateVotes(false);
-    }
 }
 
 void Dashboard::revivePlayer()

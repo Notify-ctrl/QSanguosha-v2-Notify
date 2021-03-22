@@ -185,6 +185,18 @@ public:
     void use(Room *room, ServerPlayer *source, QList<ServerPlayer *> &targets) const;
 };
 
+class HongyuanCard : public SkillCard
+{
+    Q_OBJECT
+
+public:
+    Q_INVOKABLE HongyuanCard();
+
+    bool targetsFeasible(const QList<const Player *> &targets, const Player *Self) const;
+    bool targetFilter(const QList<const Player *> &targets, const Player *to_select, const Player *Self) const;
+    void onEffect(const CardEffectStruct &effect) const;
+};
+
 class QujiCard : public SkillCard
 {
     Q_OBJECT

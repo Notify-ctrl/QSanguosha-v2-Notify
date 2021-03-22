@@ -95,7 +95,6 @@ public:
     ServerPlayer *getNext() const;
     ServerPlayer *getNextAlive(int n = 1) const;
 
-    // 3v3 methods
     void addToSelected(const QString &general);
     QStringList getSelected() const;
     QString findReasonable(const QStringList &generals, bool no_unreasonable = false);
@@ -197,7 +196,7 @@ private:
     int _m_phases_index;
     QList<PhaseStruct> _m_phases_state;
     ServerPlayer *next;
-    QStringList selected; // 3v3 mode use only
+    QStringList selected;
     QDateTime test_time;
     QString m_clientResponseString;
     QVariant _m_clientResponse;

@@ -61,7 +61,7 @@ QWidget *ServerDialog::createBasicTab()
     // add 1v1 banlist edit button
     QPushButton *edit_button = new QPushButton(tr("Banlist ..."));
     edit_button->setFixedWidth(100);
-    connect(edit_button, SIGNAL(clicked()), this, SLOT(edit1v1Banlist()));
+    // connect(edit_button, SIGNAL(clicked()), this, SLOT(edit1v1Banlist()));
 
     QFormLayout *form_layout = new QFormLayout;
     form_layout->addRow(tr("Server name"), server_name_edit);
@@ -475,10 +475,6 @@ void ServerDialog::updateButtonEnablility(QAbstractButton *button)
         second_general_checkbox->setEnabled(true);
         mini_scene_button->setEnabled(false);
     }
-    if (button->objectName() == "04_boss")
-        boss_mode_button->setEnabled(true);
-    else
-        boss_mode_button->setEnabled(false);
 }
 
 void BanlistDialog::switchTo(int item)
@@ -677,136 +673,6 @@ void BanlistDialog::saveAll()
     BanPair::loadBanPairs();
 }
 
-void ServerDialog::edit1v1Banlist()
-{
-    BanlistDialog *dialog = new BanlistDialog(this);
-    dialog->exec();
-}
-
-QGroupBox *ServerDialog::create1v1Box()
-{
-    QGroupBox *box = new QGroupBox(tr("1v1 options"));
-    box->setEnabled(Config.GameMode == "02_1v1");
-    box->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-
-    QVBoxLayout *vlayout = new QVBoxLayout;
-
-    QComboBox *officialComboBox = new QComboBox;
-    officialComboBox->addItem(tr("Classical"), "Classical");
-    officialComboBox->addItem("2013", "2013");
-    officialComboBox->addItem(tr("WZZZ"), "WZZZ");
-
-    official_1v1_ComboBox = officialComboBox;
-
-    QString rule = Config.value("1v1/Rule", "2013").toString();
-    if (rule == "2013")
-        officialComboBox->setCurrentIndex(1);
-    else if (rule == "WZZZ")
-        officialComboBox->setCurrentIndex(2);
-
-    kof_using_extension_checkbox = new QCheckBox(tr("General extensions"));
-    kof_using_extension_checkbox->setChecked(Config.value("1v1/UsingExtension", false).toBool());
-
-    kof_card_extension_checkbox = new QCheckBox(tr("Card extensions"));
-    kof_card_extension_checkbox->setChecked(Config.value("1v1/UsingCardExtension", false).toBool());
-
-    vlayout->addLayout(HLay(new QLabel(tr("Rule option")), official_1v1_ComboBox));
-
-    QHBoxLayout *hlayout = new QHBoxLayout;
-    hlayout->addWidget(new QLabel(tr("Extension setting")));
-    hlayout->addStretch();
-    hlayout->addWidget(kof_using_extension_checkbox);
-    hlayout->addWidget(kof_card_extension_checkbox);
-
-    vlayout->addLayout(hlayout);
-    box->setLayout(vlayout);
-
-    return box;
-}
-
-QGroupBox *ServerDialog::create3v3Box()
-{
-    QGroupBox *box = new QGroupBox(tr("3v3 options"));
-    box->setEnabled(Config.GameMode == "06_3v3");
-    box->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-
-    QVBoxLayout *vlayout = new QVBoxLayout;
-
-    official_3v3_radiobutton = new QRadioButton(tr("Official mode"));
-
-    QComboBox *officialComboBox = new QComboBox;
-    officialComboBox->addItem(tr("Classical"), "Classical");
-    officialComboBox->addItem("2012", "2012");
-    officialComboBox->addItem("2013", "2013");
-
-    official_3v3_ComboBox = officialComboBox;
-
-    QString rule = Config.value("3v3/OfficialRule", "2013").toString();
-    if (rule == "2012")
-        officialComboBox->setCurrentIndex(1);
-    else if (rule == "2013")
-        officialComboBox->setCurrentIndex(2);
-
-    QRadioButton *extend = new QRadioButton(tr("Extension mode"));
-    QPushButton *extend_edit_button = new QPushButton(tr("General selection ..."));
-    extend_edit_button->setEnabled(false);
-    connect(extend, SIGNAL(toggled(bool)), extend_edit_button, SLOT(setEnabled(bool)));
-    connect(extend_edit_button, SIGNAL(clicked()), this, SLOT(select3v3Generals()));
-
-    exclude_disaster_checkbox = new QCheckBox(tr("Exclude disasters"));
-    exclude_disaster_checkbox->setChecked(Config.value("3v3/ExcludeDisasters", true).toBool());
-
-    QComboBox *roleChooseComboBox = new QComboBox;
-    roleChooseComboBox->addItem(tr("Normal"), "Normal");
-    roleChooseComboBox->addItem(tr("Random"), "Random");
-    roleChooseComboBox->addItem(tr("All roles"), "AllRoles");
-
-    role_choose_ComboBox = roleChooseComboBox;
-
-    QString scheme = Config.value("3v3/RoleChoose", "Normal").toString();
-    if (scheme == "Random")
-        roleChooseComboBox->setCurrentIndex(1);
-    else if (scheme == "AllRoles")
-        roleChooseComboBox->setCurrentIndex(2);
-
-    vlayout->addLayout(HLay(official_3v3_radiobutton, official_3v3_ComboBox));
-    vlayout->addLayout(HLay(extend, extend_edit_button));
-    vlayout->addWidget(exclude_disaster_checkbox);
-    vlayout->addLayout(HLay(new QLabel(tr("Role choose")), role_choose_ComboBox));
-    box->setLayout(vlayout);
-
-    bool using_extension = Config.value("3v3/UsingExtension", false).toBool();
-    if (using_extension)
-        extend->setChecked(true);
-    else
-        official_3v3_radiobutton->setChecked(true);
-
-    return box;
-}
-
-QGroupBox *ServerDialog::createXModeBox()
-{
-    QGroupBox *box = new QGroupBox(tr("XMode options"));
-    box->setEnabled(Config.GameMode == "06_XMode");
-    box->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-
-    QComboBox *roleChooseComboBox = new QComboBox;
-    roleChooseComboBox->addItem(tr("Normal"), "Normal");
-    roleChooseComboBox->addItem(tr("Random"), "Random");
-    roleChooseComboBox->addItem(tr("All roles"), "AllRoles");
-
-    role_choose_xmode_ComboBox = roleChooseComboBox;
-
-    QString scheme = Config.value("XMode/RoleChooseX", "Normal").toString();
-    if (scheme == "Random")
-        roleChooseComboBox->setCurrentIndex(1);
-    else if (scheme == "AllRoles")
-        roleChooseComboBox->setCurrentIndex(2);
-
-    box->setLayout(HLay(new QLabel(tr("Role choose")), role_choose_xmode_ComboBox));
-    return box;
-}
-
 QGroupBox *ServerDialog::createGameModeBox()
 {
     QGroupBox *mode_box = new QGroupBox(tr("Game mode"));
@@ -824,34 +690,10 @@ QGroupBox *ServerDialog::createGameModeBox()
         button->setObjectName(itor.key());
         mode_group->addButton(button);
 
-        if (itor.key() == "02_1v1") {
-            QGroupBox *box = create1v1Box();
-            connect(button, SIGNAL(toggled(bool)), box, SLOT(setEnabled(bool)));
-
-            item_list << button << box;
-        } else if (itor.key() == "06_3v3") {
-            QGroupBox *box = create3v3Box();
-            connect(button, SIGNAL(toggled(bool)), box, SLOT(setEnabled(bool)));
-
-            item_list << button << box;
-        } else if (itor.key() == "06_XMode") {
-            QGroupBox *box = createXModeBox();
-            connect(button, SIGNAL(toggled(bool)), box, SLOT(setEnabled(bool)));
-
-            item_list << button << box;
-        } else if (itor.key() == "04_boss") {
-            boss_mode_button = new QPushButton(tr("Custom Boss Mode"));
-            boss_mode_button->setChecked(false);
-            connect(boss_mode_button, SIGNAL(clicked()), this, SLOT(doBossModeCustomAssign()));
-            item_list << HLay(button, boss_mode_button);
-        } else {
-            item_list << button;
-        }
+        item_list << button;
 
         if (itor.key() == Config.GameMode) {
             button->setChecked(true);
-            if (Config.GameMode == "04_boss")
-                boss_mode_button->setChecked(true);
         }
     }
 
@@ -933,8 +775,6 @@ QGroupBox *ServerDialog::createGameModeBox()
             QLayout *item_layout = qobject_cast<QLayout *>(item);
             side->addLayout(item_layout);
         }
-//         if (i == item_list.length() / 2 - 4)
-//             side->addStretch();
     }
     left->addStretch();
     middle->addStretch();
@@ -995,76 +835,6 @@ void ServerDialog::onServerButtonClicked()
     accept();
 }
 
-Select3v3GeneralDialog::Select3v3GeneralDialog(QDialog *parent)
-    : QDialog(parent)
-{
-    setWindowTitle(tr("Select generals in extend 3v3 mode"));
-    QStringList tmp = Config.value("3v3/ExtensionGenerals").toStringList();
-    ex_generals = QSet<QString>(tmp.begin(), tmp.end());
-    QVBoxLayout *layout = new QVBoxLayout;
-    tab_widget = new QTabWidget;
-    fillTabWidget();
-
-    QPushButton *ok_button = new QPushButton(tr("OK"));
-    connect(ok_button, SIGNAL(clicked()), this, SLOT(accept()));
-    QHBoxLayout *hlayout = new QHBoxLayout;
-    hlayout->addStretch();
-    hlayout->addWidget(ok_button);
-
-    layout->addWidget(tab_widget);
-    layout->addLayout(hlayout);
-    setLayout(layout);
-    setMinimumWidth(550);
-
-    connect(this, SIGNAL(accepted()), this, SLOT(save3v3Generals()));
-}
-
-void Select3v3GeneralDialog::fillTabWidget()
-{
-    QList<const Package *> packages = Sanguosha->findChildren<const Package *>();
-    foreach (const Package *package, packages) {
-        if (package->getType() == Package::GeneralPack) {
-            QListWidget *list = new QListWidget;
-            list->setViewMode(QListView::IconMode);
-            list->setDragDropMode(QListView::NoDragDrop);
-            fillListWidget(list, package);
-
-            tab_widget->addTab(list, Sanguosha->translate(package->objectName()));
-        }
-    }
-}
-
-void Select3v3GeneralDialog::fillListWidget(QListWidget *list, const Package *pack)
-{
-    QList<const General *> generals = pack->findChildren<const General *>();
-    foreach (const General *general, generals) {
-        if (Sanguosha->isGeneralHidden(general->objectName())) continue;
-
-        QListWidgetItem *item = new QListWidgetItem(list);
-        item->setData(Qt::UserRole, general->objectName());
-        item->setIcon(QIcon(G_ROOM_SKIN.getGeneralPixmap(general->objectName(), QSanRoomSkin::S_GENERAL_ICON_SIZE_TINY)));
-
-        bool checked = false;
-        if (ex_generals.isEmpty()) {
-            checked = (pack->objectName() == "standard" || pack->objectName() == "wind")
-                && general->objectName() != "yuji";
-        } else
-            checked = ex_generals.contains(general->objectName());
-
-        if (checked)
-            item->setCheckState(Qt::Checked);
-        else
-            item->setCheckState(Qt::Unchecked);
-    }
-
-    QAction *action = new QAction(tr("Check/Uncheck all"), list);
-    list->addAction(action);
-    list->setContextMenuPolicy(Qt::ActionsContextMenu);
-    list->setResizeMode(QListView::Adjust);
-
-    connect(action, SIGNAL(triggered()), this, SLOT(toggleCheck()));
-}
-
 void ServerDialog::doCustomAssign()
 {
     CustomAssignDialog *dialog = new CustomAssignDialog(this);
@@ -1073,161 +843,9 @@ void ServerDialog::doCustomAssign()
     dialog->exec();
 }
 
-void ServerDialog::doBossModeCustomAssign()
-{
-    BossModeCustomAssignDialog *dialog = new BossModeCustomAssignDialog(this);
-    dialog->config();
-}
-
 void ServerDialog::setMiniCheckBox()
 {
     mini_scene_ComboBox->setEnabled(false);
-}
-
-void Select3v3GeneralDialog::toggleCheck()
-{
-    QWidget *widget = tab_widget->currentWidget();
-    QListWidget *list = qobject_cast<QListWidget *>(widget);
-
-    if (list == NULL || list->item(0) == NULL) return;
-
-    bool checked = list->item(0)->checkState() != Qt::Checked;
-
-    for (int i = 0; i < list->count(); i++)
-        list->item(i)->setCheckState(checked ? Qt::Checked : Qt::Unchecked);
-}
-
-void Select3v3GeneralDialog::save3v3Generals()
-{
-    ex_generals.clear();
-
-    for (int i = 0; i < tab_widget->count(); i++) {
-        QWidget *widget = tab_widget->widget(i);
-        QListWidget *list = qobject_cast<QListWidget *>(widget);
-        if (list) {
-            for (int j = 0; j < list->count(); j++) {
-                QListWidgetItem *item = list->item(j);
-                if (item->checkState() == Qt::Checked)
-                    ex_generals << item->data(Qt::UserRole).toString();
-            }
-        }
-    }
-
-    QStringList list = ex_generals.values();
-    QVariant data = QVariant::fromValue(list);
-    Config.setValue("3v3/ExtensionGenerals", data);
-}
-
-void ServerDialog::select3v3Generals()
-{
-    QDialog *dialog = new Select3v3GeneralDialog(this);
-    dialog->exec();
-}
-
-BossModeCustomAssignDialog::BossModeCustomAssignDialog(QWidget *parent)
-    : QDialog(parent)
-{
-    setWindowTitle(tr("Custom boss mode"));
-
-    // Difficulty group box
-    QGroupBox *box = new QGroupBox(tr("Difficulty options"));
-    box->setEnabled(true);
-    box->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-
-    QVBoxLayout *boxvlayout = new QVBoxLayout;
-
-    int difficulty = Config.value("BossModeDifficulty", 0).toInt();
-
-    diff_revive_checkBox = new QCheckBox(tr("BMD Revive"));
-    diff_revive_checkBox->setToolTip(tr("Tootip of BMD Revive"));
-    diff_revive_checkBox->setChecked((difficulty & (1 << GameRule::BMDRevive)) > 0);
-
-    diff_recover_checkBox = new QCheckBox(tr("BMD Recover"));
-    diff_recover_checkBox->setToolTip(tr("Tootip of BMD Recover"));
-    diff_recover_checkBox->setChecked((difficulty & (1 << GameRule::BMDRecover)) > 0);
-
-    boxvlayout->addLayout(HLay(diff_revive_checkBox, diff_recover_checkBox));
-
-    diff_draw_checkBox = new QCheckBox(tr("BMD Draw"));
-    diff_draw_checkBox->setToolTip(tr("Tootip of BMD Draw"));
-    diff_draw_checkBox->setChecked((difficulty & (1 << GameRule::BMDDraw)) > 0);
-
-    diff_reward_checkBox = new QCheckBox(tr("BMD Reward"));
-    diff_reward_checkBox->setToolTip(tr("Tootip of BMD Reward"));
-    diff_reward_checkBox->setChecked((difficulty & (1 << GameRule::BMDReward)) > 0);
-
-    boxvlayout->addLayout(HLay(diff_draw_checkBox, diff_reward_checkBox));
-
-    diff_incMaxHp_checkBox = new QCheckBox(tr("BMD Inc Max HP"));
-    diff_incMaxHp_checkBox->setToolTip(tr("Tootip of BMD Inc Max HP"));
-    diff_incMaxHp_checkBox->setChecked((difficulty & (1 << GameRule::BMDIncMaxHp)) > 0);
-
-    diff_decMaxHp_checkBox = new QCheckBox(tr("BMD Dec Max HP"));
-    diff_decMaxHp_checkBox->setToolTip(tr("Tootip of BMD Dec Max HP"));
-    diff_decMaxHp_checkBox->setChecked((difficulty & (1 << GameRule::BMDDecMaxHp)) > 0);
-
-    boxvlayout->addLayout(HLay(diff_incMaxHp_checkBox, diff_decMaxHp_checkBox));
-
-    box->setLayout(boxvlayout);
-
-    // Other settings
-    experience_checkBox = new QCheckBox(tr("Boss Mode Experience Mode"));
-    experience_checkBox->setChecked(Config.value("BossModeExp", false).toBool());
-
-    optional_boss_checkBox = new QCheckBox(tr("Boss Mode Optional Boss"));
-    optional_boss_checkBox->setChecked(Config.value("OptionalBoss", false).toBool());
-
-    endless_checkBox = new QCheckBox(tr("Boss Mode Endless"));
-    endless_checkBox->setChecked(Config.value("BossModeEndless", false).toBool());
-
-    turn_limit_label = new QLabel(tr("Boss Mode Turn Limitation"));
-    turn_limit_spinBox = new QSpinBox(this);
-    turn_limit_spinBox->setRange(-1, 200);
-    turn_limit_spinBox->setValue(Config.value("BossModeTurnLimit", 70).toInt());
-
-    QVBoxLayout *vlayout = new QVBoxLayout;
-    vlayout->addWidget(box);
-    vlayout->addWidget(experience_checkBox);
-    vlayout->addWidget(optional_boss_checkBox);
-    vlayout->addWidget(endless_checkBox);
-    vlayout->addLayout(HLay(turn_limit_label, turn_limit_spinBox));
-
-    QPushButton *okButton = new QPushButton(tr("OK"));
-    QPushButton *cancelButton = new QPushButton(tr("Cancel"));
-    connect(okButton, SIGNAL(clicked()), this, SLOT(accept()));
-    connect(cancelButton, SIGNAL(clicked()), this, SLOT(reject()));
-    vlayout->addLayout(HLay(okButton, cancelButton));
-
-    setLayout(vlayout);
-}
-
-void BossModeCustomAssignDialog::config()
-{
-    exec();
-
-    if (result() != Accepted)
-        return;
-
-    int difficulty = 0;
-    if (diff_revive_checkBox->isChecked())
-        difficulty |= (1 << GameRule::BMDRevive);
-    if (diff_recover_checkBox->isChecked())
-        difficulty |= (1 << GameRule::BMDRecover);
-    if (diff_draw_checkBox->isChecked())
-        difficulty |= (1 << GameRule::BMDDraw);
-    if (diff_reward_checkBox->isChecked())
-        difficulty |= (1 << GameRule::BMDReward);
-    if (diff_incMaxHp_checkBox->isChecked())
-        difficulty |= (1 << GameRule::BMDIncMaxHp);
-    if (diff_decMaxHp_checkBox->isChecked())
-        difficulty |= (1 << GameRule::BMDDecMaxHp);
-    Config.setValue("BossModeDifficulty", difficulty);
-
-    Config.setValue("BossModeExp", experience_checkBox->isChecked());
-    Config.setValue("BossModeEndless", endless_checkBox->isChecked());
-    Config.setValue("OptionalBoss", optional_boss_checkBox->isChecked());
-
-    Config.setValue("BossModeTurnLimit", turn_limit_spinBox->value());
 }
 
 int ServerDialog::config()
@@ -1327,23 +945,6 @@ int ServerDialog::config()
     Config.setValue("DisableLua", disable_lua_checkbox->isChecked());
     Config.setValue("serverconfig/upnp",checkBoxUpnp->isChecked());
     Config.setValue("serverconfig/addtolistserver",checkBoxAddToListServer->isChecked());
-
-    Config.beginGroup("3v3");
-    Config.setValue("UsingExtension", !official_3v3_radiobutton->isChecked());
-    Config.setValue("RoleChoose", role_choose_ComboBox->itemData(role_choose_ComboBox->currentIndex()).toString());
-    Config.setValue("ExcludeDisaster", exclude_disaster_checkbox->isChecked());
-    Config.setValue("OfficialRule", official_3v3_ComboBox->itemData(official_3v3_ComboBox->currentIndex()).toString());
-    Config.endGroup();
-
-    Config.beginGroup("1v1");
-    Config.setValue("Rule", official_1v1_ComboBox->itemData(official_1v1_ComboBox->currentIndex()).toString());
-    Config.setValue("UsingExtension", kof_using_extension_checkbox->isChecked());
-    Config.setValue("UsingCardExtension", kof_card_extension_checkbox->isChecked());
-    Config.endGroup();
-
-    Config.beginGroup("XMode");
-    Config.setValue("RoleChooseX", role_choose_xmode_ComboBox->itemData(role_choose_xmode_ComboBox->currentIndex()).toString());
-    Config.endGroup();
 
     QSet<QString> ban_packages;
     QList<QAbstractButton *> checkboxes = extension_group->buttons();

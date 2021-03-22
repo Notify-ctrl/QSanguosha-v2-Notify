@@ -10,11 +10,9 @@ time_t ServerInfoStruct::getCommandTimeout(QSanProtocol::CommandType command, QS
     time_t timeOut;
     if (OperationTimeout == 0)
         return 0;
-    else if (command == QSanProtocol::S_COMMAND_CHOOSE_GENERAL
-        || command == QSanProtocol::S_COMMAND_ASK_GENERAL)
+    else if (command == QSanProtocol::S_COMMAND_CHOOSE_GENERAL)
         timeOut = OperationTimeout * 1500;
-    else if (command == QSanProtocol::S_COMMAND_SKILL_GUANXING
-        || command == QSanProtocol::S_COMMAND_ARRANGE_GENERAL)
+    else if (command == QSanProtocol::S_COMMAND_SKILL_GUANXING)
         timeOut = OperationTimeout * 2000;
     else if (command == QSanProtocol::S_COMMAND_NULLIFICATION)
         timeOut = NullificationCountDown * 1000;
@@ -39,10 +37,6 @@ bool ServerInfoStruct::parse(const QString &_str)
         Name = QString::fromUtf8(QByteArray::fromBase64(server_name.toLatin1()));
 
         GameMode = str.at(1);
-        if (GameMode.startsWith("02_1v1") || GameMode.startsWith("06_3v3")) {
-            GameRuleMode = GameMode.mid(6);
-            GameMode = GameMode.mid(0, 6);
-        }
         OperationTimeout = str.at(2).toInt();
         NullificationCountDown = str.at(3).toInt();
 

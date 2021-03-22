@@ -1432,16 +1432,12 @@ public:
 
     bool viewFilter(const QList<const Card *> &selected, const Card *to_select) const
     {
-        if (ServerInfo.GameMode == "04_1v3" && selected.length() + Self->getMark("nosrende") >= 2)
-            return false;
-        else
-            return !to_select->isEquipped();
+        Q_UNUSED(selected)
+        return !to_select->isEquipped();
     }
 
     bool isEnabledAtPlay(const Player *player) const
     {
-        if (ServerInfo.GameMode == "04_1v3" && player->getMark("nosrende") >= 2)
-            return false;
         return !player->isKongcheng();
     }
 

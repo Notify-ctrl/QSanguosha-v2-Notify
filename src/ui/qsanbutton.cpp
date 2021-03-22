@@ -376,7 +376,7 @@ void QSanInvokeSkillDock::setWidth(int width)
 void QSanInvokeSkillDock::update()
 {
     if (!_m_buttons.isEmpty()) {
-        QList<QSanInvokeSkillButton *> regular_buttons, lordskill_buttons/*, all_buttons*/;
+        QList<QSanInvokeSkillButton *> regular_buttons, lordskill_buttons;
         foreach (QSanInvokeSkillButton *btn, _m_buttons) {
             if (!btn->getSkill()->shouldBeVisible(Self)) {
                 btn->setVisible(false);
@@ -416,31 +416,8 @@ void QSanInvokeSkillDock::update()
         }
 
         // If the buttons in rows are 3, 1, then balance them to 2, 2
-        /*if (rows >= 2) {
-            if (btnNum[rows - 1] == 1 && btnNum[rows - 2] == 3) {
-            btnNum[rows - 1] = 2;
-            btnNum[rows - 2] = 2;
-            }
-            } else if (rows == 1 && btnNum[0] == 3 && lordskillNum == 0) {
-            btnNum[0] = 2;
-            btnNum[1] = 1;
-            rows = 2;
-            }*/
 
         int m = 0;
-        //        int x_ls = 0;
-        //        if (lordskillNum > 0) x_ls++;
-        //        if (lordskillNum > 3) x_ls++;
-        //        for (int i = 0; i < rows + x_ls; i++) {
-        //            int rowTop = (RoomSceneInstance->m_skillButtonSank) ? (-rowH - 2 * (rows + x_ls - i - 1)) :
-        //                ((-rows - x_ls + i) * rowH);
-        //            int btnWidth = _m_width / btnNum[i];
-        //            for (int j = 0; j < btnNum[i]; j++) {
-        //                QSanInvokeSkillButton *button = all_buttons[m++];
-        //                button->setButtonWidth((QSanInvokeSkillButton::SkillButtonWidth)(btnNum[i] - 1));
-        //                button->setPos(btnWidth * j, rowTop);
-        //            }
-        //        }
         for (int i = 0; i < rows; i++) {
             int rowTop = (RoomSceneInstance->m_skillButtonSank) ? (-rowH - 2 * (rows - i - 1)) :
                 ((-rows + i) * rowH);

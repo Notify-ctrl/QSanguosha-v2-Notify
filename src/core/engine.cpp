@@ -317,22 +317,15 @@ Engine::Engine(bool isManualMode)
 
     // available game modes
     modes["02p"] = tr("2 players");
-    //modes["02pbb"] = tr("2 players (using blance beam)");
-    modes["02_1v1"] = tr("2 players (KOF style)");
     modes["03p"] = tr("3 players");
     modes["04p"] = tr("4 players");
-    modes["04_1v3"] = tr("4 players (Hulao Pass)");
-    modes["04_boss"] = tr("4 players(Boss)");
     modes["05p"] = tr("5 players");
     modes["06p"] = tr("6 players");
     modes["06pd"] = tr("6 players (2 renegades)");
-    modes["06_3v3"] = tr("6 players (3v3)");
-    modes["06_XMode"] = tr("6 players (XMode)");
     modes["07p"] = tr("7 players");
     modes["08p"] = tr("8 players");
     modes["08pd"] = tr("8 players (2 renegades)");
     modes["08pz"] = tr("8 players (0 renegade)");
-    modes["08_defense"] = tr("8 players (JianGe Defense)");
     modes["09p"] = tr("9 players");
     modes["10pd"] = tr("10 players");
     modes["10p"] = tr("10 players (1 renegade)");
@@ -557,9 +550,9 @@ QString Engine::translate(const QString &to_translate) const
 
 int Engine::getRoleIndex() const
 {
-    if (ServerInfo.GameMode == "06_3v3" || ServerInfo.GameMode == "06_XMode") {
+    /*if (ServerInfo.GameMode == "06_3v3" || ServerInfo.GameMode == "06_XMode") {
         return 4;
-    } else if (ServerInfo.EnableHegemony) {
+    } else*/ if (ServerInfo.EnableHegemony) {
         return 5;
     } else
         return 1;
@@ -1007,10 +1000,6 @@ QString Engine::getSetupString() const
     QString server_name = Config.ServerName.toUtf8().toBase64();
     QStringList setup_items;
     QString mode = Config.GameMode;
-    if (mode == "02_1v1")
-        mode = mode + Config.value("1v1/Rule", "2013").toString();
-    else if (mode == "06_3v3")
-        mode = mode + Config.value("3v3/OfficialRule", "2013").toString();
     setup_items << server_name
         << mode
         << QString::number(timeout)
@@ -1054,14 +1043,6 @@ int Engine::getPlayerCount(const QString &mode) const
 QString Engine::getRoles(const QString &mode) const
 {
     int n = getPlayerCount(mode);
-
-    if (mode == "02_1v1") {
-        return "ZN";
-    } else if (mode == "04_1v3" || mode == "04_boss") {
-        return "ZFFF";
-    } else if (mode == "08_defense") {
-        return "FFFFCCCC";
-    }
 
     if (modes.contains(mode) || isNormalGameMode(mode)) { // hidden pz settings?
         static const char *table1[] = {
@@ -1264,10 +1245,6 @@ QStringList Engine::getRandomGenerals(int count, const QSet<QString> &ban_set, c
         tmp_strlist = Config.value("Banlist/Hegemony", "").toStringList();
         general_set = general_set.subtract(QSet<QString>(tmp_strlist.begin(), tmp_strlist.end()));
     }
-    if (ServerInfo.GameMode == "04_boss") {
-        tmp_strlist = Config.value("Banlist/BossMode", "").toStringList();
-        general_set = general_set.subtract(QSet<QString>(tmp_strlist.begin(), tmp_strlist.end()));
-    }
 
     if (isNormalGameMode(ServerInfo.GameMode)
         || ServerInfo.GameMode.contains("_mini_")
@@ -1291,17 +1268,6 @@ QStringList Engine::getRandomGenerals(int count, const QSet<QString> &ban_set, c
 
 QList<int> Engine::getRandomCards() const
 {
-    bool exclude_disaters = false, using_2012_3v3 = false, using_2013_3v3 = false;
-
-    if (Config.GameMode == "06_3v3") {
-        using_2012_3v3 = (Config.value("3v3/OfficialRule", "2013").toString() == "2012");
-        using_2013_3v3 = (Config.value("3v3/OfficialRule", "2013").toString() == "2013");
-        exclude_disaters = !Config.value("3v3/UsingExtension", false).toBool() || Config.value("3v3/ExcludeDisasters", true).toBool();
-    }
-
-    if (Config.GameMode == "04_1v3")
-        exclude_disaters = true;
-
     QList<int> list;
     foreach (Card *card, cards) {
         card->clearFlags();
@@ -1316,32 +1282,8 @@ QList<int> Engine::getRandomCards() const
         }
         if (removed)
             continue;
-
-        if (exclude_disaters && card->isKindOf("Disaster"))
-            continue;
-
-        if (card->getPackage() == "New3v3Card" && (using_2012_3v3 || using_2013_3v3))
-            list << card->getId();
-        else if (card->getPackage() == "New3v3_2013Card" && using_2013_3v3)
-            list << card->getId();
-
-        if (Config.GameMode == "02_1v1" && !Config.value("1v1/UsingCardExtension", false).toBool()) {
-            if (card->getPackage() == "New1v1Card")
-                list << card->getId();
-            continue;
-        }
-
-        if (Config.GameMode == "06_3v3" && !Config.value("3v3/UsingExtension", false).toBool()
-            && card->getPackage() != "standard_cards" && card->getPackage() != "standard_ex_cards")
-            continue;
         if (!getBanPackages().contains(card->getPackage()))
             list << card->getId();
-    }
-    if (using_2012_3v3 || using_2013_3v3)
-        list.removeOne(98);
-    if (using_2013_3v3) {
-        list.removeOne(53);
-        list.removeOne(54);
     }
 
     qShuffle(list);
@@ -1392,7 +1334,7 @@ const Skill *Engine::getSkill(const EquipCard *equip) const
     if (equip == NULL)
         skill = NULL;
     else
-        skill = /*Sanguosha->*/getSkill(equip->objectName());
+        skill = getSkill(equip->objectName());
 
     return skill;
 }

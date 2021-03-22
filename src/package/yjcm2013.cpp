@@ -701,24 +701,6 @@ bool XiansiSlashCard::targetFilter(const QList<const Player *> &targets, const P
 const Card *XiansiSlashCard::validate(CardUseStruct &cardUse) const
 {
     Room *room = cardUse.from->getRoom();
-    /*
-        if (cardUse.to.isEmpty()) {
-        QList<ServerPlayer *> liufengs = room->findPlayersBySkillName("xiansi");
-        foreach (ServerPlayer *liufeng, liufengs) {
-        if (liufeng->getPile("counter").length() < 2) continue;
-        if (cardUse.from->canSlash(liufeng)) {
-        cardUse.to << liufeng;
-        break;
-        }
-        }
-        if (cardUse.to.isEmpty())
-        return NULL;
-        }
-        */
-    /*
-        ServerPlayer *liufeng = cardUse.to.first();
-        if (liufeng->getPile("counter").length() < 2) return NULL;
-        */
 
     ServerPlayer *source = cardUse.from;
 
@@ -1148,7 +1130,6 @@ void MiejiCard::onEffect(const CardEffectStruct &effect) const
     CardMoveReason reason(CardMoveReason::S_REASON_PUT, effect.from->objectName(), QString(), "mieji", QString());
     room->moveCardTo(this, effect.from, NULL, Player::DrawPile, reason, true);
     
-    /*
     int trick_num = 0, nontrick_num = 0;
     foreach (const Card *c, effect.to->getCards("he")) {
         if (effect.to->canDiscard(effect.to, c->getId())) {
@@ -1161,7 +1142,6 @@ void MiejiCard::onEffect(const CardEffectStruct &effect) const
     bool discarded = room->askForDiscard(effect.to, "mieji", 1, qMin(1, trick_num), nontrick_num > 1, true, "@mieji-trick", "TrickCard");
     if (trick_num == 0 || !discarded)
         room->askForDiscard(effect.to, "mieji", 2, 2, false, true, "@mieji-nontrick", "^TrickCard");
-        */
 
     QList<const Card *> cards = effect.to->getCards("he");
     QList<const Card *> cardsCopy = cards;

@@ -1026,31 +1026,6 @@ public:
     }
 };
 
-/*
-class YanzhuTrig : public TriggerSkill
-{
-public:
-    YanzhuTrig() : TriggerSkill("yanzhu")
-    {
-        events << EventLoseSkill;
-        view_as_skill = new Yanzhu;
-    }
-
-    bool triggerable(const ServerPlayer *target) const
-    {
-        return target != NULL && target->isAlive();
-    }
-
-    bool trigger(TriggerEvent triggerEvent, Room *room, ServerPlayer *player, QVariant &data) const
-    {
-        if (data.toString() == "yanzhu")
-            room->setPlayerMark(player, "yanzhu_lost", 1);
-
-        return false;
-    }
-};
-*/
-
 XingxueCard::XingxueCard()
 {
 

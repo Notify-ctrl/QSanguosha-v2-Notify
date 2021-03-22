@@ -13,25 +13,6 @@ class QtUpnpPortMapping;
 
 class Package;
 
-class Select3v3GeneralDialog : public QDialog
-{
-    Q_OBJECT
-
-public:
-    Select3v3GeneralDialog(QDialog *parent);
-
-private:
-    QTabWidget *tab_widget;
-    QSet<QString> ex_generals;
-
-    void fillTabWidget();
-    void fillListWidget(QListWidget *list, const Package *pack);
-
-private slots:
-    void save3v3Generals();
-    void toggleCheck();
-};
-
 class BanlistDialog : public QDialog
 {
     Q_OBJECT
@@ -77,9 +58,6 @@ private:
     QLayout *createButtonLayout();
 
     QGroupBox *createGameModeBox();
-    QGroupBox *create1v1Box();
-    QGroupBox *create3v3Box();
-    QGroupBox *createXModeBox();
 
     QLineEdit *server_name_edit;
     QSpinBox *timeout_spinbox;
@@ -128,11 +106,7 @@ private:
     QSpinBox *ai_delay_ad_spinbox;
     QCheckBox *surrender_at_death_checkbox;
     QCheckBox *luck_card_checkbox;
-    QRadioButton *official_3v3_radiobutton;
-    QComboBox *official_3v3_ComboBox;
     QComboBox *role_choose_ComboBox;
-    QCheckBox *exclude_disaster_checkbox;
-    QComboBox *official_1v1_ComboBox;
     QCheckBox *kof_using_extension_checkbox;
     QCheckBox *kof_card_extension_checkbox;
     QComboBox *role_choose_xmode_ComboBox;
@@ -162,12 +136,9 @@ private slots:
     void onConsoleButtonClicked();
     void onServerButtonClicked();
     void onDetectButtonClicked();
-    void select3v3Generals();
-    void edit1v1Banlist();
     void updateButtonEnablility(QAbstractButton *button);
 
     void doCustomAssign();
-    void doBossModeCustomAssign();
     void setMiniCheckBox();
 
     void selectAllGenerals();
@@ -177,30 +148,6 @@ private slots:
     void selectAllCards();
     void deselectAllCards();
     void selectReverseCards();
-};
-
-class BossModeCustomAssignDialog : public QDialog
-{
-    Q_OBJECT
-
-public:
-    BossModeCustomAssignDialog(QWidget *parent);
-    void config();
-
-private:
-    QCheckBox *diff_revive_checkBox;
-    QCheckBox *diff_recover_checkBox;
-    QCheckBox *diff_draw_checkBox;
-    QCheckBox *diff_reward_checkBox;
-    QCheckBox *diff_incMaxHp_checkBox;
-    QCheckBox *diff_decMaxHp_checkBox;
-
-    QCheckBox *experience_checkBox;
-    QCheckBox *optional_boss_checkBox;
-    QCheckBox *endless_checkBox;
-
-    QLabel *turn_limit_label;
-    QSpinBox *turn_limit_spinBox;
 };
 
 class Scenario;

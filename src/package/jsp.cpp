@@ -218,24 +218,6 @@ public:
     }
 };
 
-/*
-class Nuzhan_tms : public TargetModSkill {
-public:
-Nuzhan_tms() : TargetModSkill("#nuzhan") {
-
-}
-
-int getResidueNum(const Player *from, const Card *card) const {
-if (from->hasSkill("nuzhan")) {
-if ((card->isVirtualCard() && card->subcardsLength() == 1 && Sanguosha->getCard(card->getSubcards().first())->isKindOf("TrickCard")) || card->hasFlag("Global_SlashAvailabilityChecker"))
-return 1000;
-}
-
-return 0;
-}
-};
-*/
-
 class JspDanqi : public PhaseChangeSkill
 {
 public:

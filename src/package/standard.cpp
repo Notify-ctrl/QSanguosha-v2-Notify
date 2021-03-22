@@ -419,28 +419,7 @@ QString Weapon::getSubtype() const
 
 void Weapon::onUse(Room *room, const CardUseStruct &card_use) const
 {
-    CardUseStruct use = card_use;
-    ServerPlayer *player = card_use.from;
-    if (room->getMode() == "04_1v3"
-        && use.card->isKindOf("Weapon")
-        && (player->isCardLimited(use.card, Card::MethodUse)
-        || (!player->getHandPile().contains(getEffectiveId())
-        && player->askForSkillInvoke("weapon_recast", QVariant::fromValue(use))))) {
-        CardMoveReason reason(CardMoveReason::S_REASON_RECAST, player->objectName());
-        reason.m_eventName = "weapon_recast";
-        room->moveCardTo(use.card, player, NULL, Player::DiscardPile, reason);
-        player->broadcastSkillInvoke("@recast");
-
-        LogMessage log;
-        log.type = "#UseCard_Recast";
-        log.from = player;
-        log.card_str = use.card->toString();
-        room->sendLog(log);
-
-        player->drawCards(1, "weapon_recast");
-        return;
-    }
-    EquipCard::onUse(room, use);
+    EquipCard::onUse(room, card_use);
 }
 
 EquipCard::Location Weapon::location() const

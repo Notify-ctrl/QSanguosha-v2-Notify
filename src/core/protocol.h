@@ -65,8 +65,6 @@ namespace QSanProtocol {
         S_COMMAND_CHOOSE_KINGDOM,
         S_COMMAND_CHOOSE_SUIT,
         S_COMMAND_CHOOSE_ROLE,
-        S_COMMAND_CHOOSE_ROLE_3V3,
-        S_COMMAND_CHOOSE_DIRECTION,
         S_COMMAND_CHOOSE_PLAYER,
         S_COMMAND_CHOOSE_ORDER,
         S_COMMAND_ASK_PEACH,
@@ -114,12 +112,6 @@ namespace QSanProtocol {
         S_COMMAND_UPDATE_BOSS_LEVEL,
         S_COMMAND_UPDATE_STATE_ITEM,
         S_COMMAND_SPEAK,
-        S_COMMAND_ASK_GENERAL, // the following 6 for 1v1 and 3v3
-        S_COMMAND_ARRANGE_GENERAL,
-        S_COMMAND_FILL_GENERAL,
-        S_COMMAND_TAKE_GENERAL,
-        S_COMMAND_RECOVER_GENERAL,
-        S_COMMAND_REVEAL_GENERAL,
         S_COMMAND_AVAILABLE_CARDS,
         S_COMMAND_ANIMATE,
         S_COMMAND_LUCK_CARD,
@@ -171,18 +163,6 @@ namespace QSanProtocol {
         S_ANIMATE_HUASHEN,
         S_ANIMATE_FIRE,
         S_ANIMATE_LIGHTNING
-    };
-
-    enum Game3v3ChooseOrderCommand
-    {
-        S_REASON_CHOOSE_ORDER_TURN,
-        S_REASON_CHOOSE_ORDER_SELECT
-    };
-
-    enum Game3v3Camp
-    {
-        S_CAMP_WARM,
-        S_CAMP_COOL
     };
 
     //static consts

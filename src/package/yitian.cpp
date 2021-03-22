@@ -435,43 +435,6 @@ public:
     }
 };
 
-// ---------- Lianli related skills
-/*
-
-LianliCard::LianliCard(){
-
-}
-
-bool LianliCard::targetFilter(const QList<const Player *> &targets, const Player *to_select, const Player *Self) const{
-return targets.isEmpty() && to_select->isMale();
-}
-
-void LianliCard::onEffect(const CardEffectStruct &effect) const{
-Room *room = effect.from->getRoom();
-
-LogMessage log;
-log.type = "#LianliConnection";
-log.from = effect.from;
-log.to << effect.to;
-room->sendLog(log);
-
-if(effect.from->getMark("@tied") == 0)
-effect.from->gainMark("@tied");
-
-if(effect.to->getMark("@tied") == 0){
-QList<ServerPlayer *> players = room->getOtherPlayers(effect.from);
-foreach(ServerPlayer *player, players){
-if(player->getMark("@tied") > 0){
-player->loseMark("@tied");
-break;
-}
-}
-
-effect.to->gainMark("@tied");
-}
-}
-*/
-
 LianliSlashCard::LianliSlashCard()
 {
 
@@ -601,27 +564,6 @@ public:
         return false;
     }
 };
-/*
-
-class LianliViewAsSkill: public ZeroCardViewAsSkill{
-public:
-LianliViewAsSkill():ZeroCardViewAsSkill("lianli"){
-
-}
-
-bool isEnabledAtPlay(const Player *player) const{
-return false;
-}
-
-bool isEnabledAtResponse(const Player *player, const QString &pattern) const{
-return pattern == "@@lianli";
-}
-
-const Card *viewAs() const{
-return new LianliCard;
-}
-};
-*/
 
 class Lianli : public PhaseChangeSkill
 {
@@ -2176,8 +2118,6 @@ YitianPackage::YitianPackage()
     General *dengshizai = new General(this, "dengshizai", "wei", 3);
     dengshizai->addSkill(new Zhenggong);
     dengshizai->addSkill(new Toudu);
-    /*dengshizai->addSkill(new SlashNoDistanceLimitSkill("toudu"));
-    related_skills.insert("toudu", "#toudu-slash-ndl");*/
 
     General *zhanggongqi = new General(this, "zhanggongqi", "qun", 3);
     zhanggongqi->addSkill(new YtYishe);
@@ -2195,7 +2135,6 @@ YitianPackage::YitianPackage()
 
     addMetaObject<YTChengxiangCard>();
     addMetaObject<JuejiCard>();
-    /*addMetaObject<LianliCard>();*/
     addMetaObject<LianliSlashCard>();
     addMetaObject<GuihanCard>();
     addMetaObject<LexueCard>();

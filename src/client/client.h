@@ -163,19 +163,6 @@ public:
     void askForSurrender(const QVariant &);
     void askForLuckCard(const QVariant &);
     void handleGameEvent(const QVariant &);
-    //3v3 & 1v1
-    void askForOrder(const QVariant &);
-    void askForRole3v3(const QVariant &);
-    void askForDirection(const QVariant &);
-
-    // 3v3 & 1v1 methods
-    void fillGenerals(const QVariant &generals);
-    void askForGeneral3v3(const QVariant &);
-    void takeGeneral(const QVariant &take_str);
-    void startArrange(const QVariant &to_arrange);
-
-    void recoverGeneral(const QVariant &);
-    void revealGeneral(const QVariant &);
 
     void attachSkill(const QVariant &skill);
     void updateSkill(const QVariant &);
@@ -280,8 +267,6 @@ private slots:
     void onPlayerChooseSuit();
     void onPlayerChooseKingdom();
     void alertFocus();
-    void onPlayerChooseOrder();
-    void onPlayerChooseRole3v3();
 
 signals:
     void version_checked(const QString &version_number, const QString &mod_name);
@@ -297,8 +282,8 @@ signals:
     void cards_got(const ClientPlayer *player, const QString &flags, const QString &reason, bool handcard_visible,
         Card::HandlingMethod method, QList<int> disabled_ids);
     void roles_got(const QString &scheme, const QStringList &roles);
-    void directions_got();
-    void orders_got(QSanProtocol::Game3v3ChooseOrderCommand reason);
+    /*void directions_got();
+    void orders_got(QSanProtocol::Game3v3ChooseOrderCommand reason);*/
 
     void seats_arranged(const QList<const ClientPlayer *> &seats);
     void hp_changed(const QString &who, int delta, DamageStruct::Nature nature, bool losthp);

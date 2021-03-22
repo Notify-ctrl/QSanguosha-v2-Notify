@@ -462,8 +462,6 @@ public:
                 if (dongzhuo->getMark("HengzhengUsed") == 0)
                     dongzhuo->setMark("HengzhengUsed", 1);
                 QList<ServerPlayer *> players = room->getOtherPlayers(dongzhuo);
-                /*if (players.length() >= 4)
-                    room->doLightbox("$HengzhengAnimate");*/
 
                 room->doSuperLightbox("heg_dongzhuo", "hengzheng");
 

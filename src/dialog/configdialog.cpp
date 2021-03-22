@@ -157,8 +157,6 @@ void ConfigDialog::saveConfig()
     enabled = ui->checkBoxRecorderNetworkOnly->isChecked();
     Config.setValue("recorder/networkonly", enabled);
 
-    /*if (RoomSceneInstance)
-        RoomSceneInstance->updateVolumeConfig();*/
     MainWindow *mw = static_cast<MainWindow*>(Sanguosha->parent());
     if (qobject_cast<RoomScene*>(mw->getScene()) == RoomSceneInstance && RoomSceneInstance != NULL)
         RoomSceneInstance->updateVolumeConfig();

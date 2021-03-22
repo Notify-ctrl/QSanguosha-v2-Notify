@@ -4,9 +4,6 @@
 class TriggerSkill;
 class ProhibitSkill;
 class Scenario;
-class RoomThread3v3;
-class RoomThreadXMode;
-class RoomThread1v1;
 class TrickCard;
 
 struct lua_State;
@@ -14,8 +11,6 @@ struct LogMessage;
 class ServerPlayer;
 class RoomThread;
 
-//#include "serverplayer.h"
-//#include "roomthread.h"
 #include "protocol.h"
 #include "room-state.h"
 
@@ -31,9 +26,6 @@ public:
     };
 
     friend class RoomThread;
-    friend class RoomThread3v3;
-    friend class RoomThreadXMode;
-    friend class RoomThread1v1;
 
     typedef void (Room::*Callback)(ServerPlayer *, const QVariant &);
     typedef bool (Room::*ResponseVerifyFunction)(ServerPlayer *, const QVariant &, void *);
@@ -279,7 +271,6 @@ public:
     void removeFixedDistance(Player *from, const Player *to, int distance);
     void insertAttackRangePair(Player *from, const Player *to);
     void removeAttackRangePair(Player *from, const Player *to);
-    void reverseFor3v3(const Card *card, ServerPlayer *player, QList<ServerPlayer *> &list);
     bool hasWelfare(const ServerPlayer *player) const;
     ServerPlayer *getFront(ServerPlayer *a, ServerPlayer *b) const;
     void signup(ServerPlayer *player, const QString &screen_name, const QString &avatar, bool is_robot);
@@ -506,9 +497,6 @@ private:
     QList<AI *> ais;
 
     RoomThread *thread;
-    RoomThread3v3 *thread_3v3;
-    RoomThreadXMode *thread_xmode;
-    RoomThread1v1 *thread_1v1;
     QSemaphore _m_semRaceRequest; // When race starts, server waits on his semaphore for the first replier
     QSemaphore _m_semRoomMutex; // Provide per-room  (rather than per-player) level protection of any shared variables
 
@@ -551,14 +539,12 @@ private:
     static QString generatePlayerName();
     void prepareForStart();
     void assignGeneralsForPlayers(const QList<ServerPlayer *> &to_assign);
-    void assignGeneralsForPlayersOfJianGeDefenseMode(const QList<ServerPlayer *> &to_assign);
     void chooseGenerals(QList<ServerPlayer *> players = QList<ServerPlayer *>());
-    void chooseGeneralsOfJianGeDefenseMode();
     AI *cloneAI(ServerPlayer *player);
     void broadcast(const QString &message, ServerPlayer *except = NULL);
     void initCallbacks();
-    QString askForOrder(ServerPlayer *player, const QString &default_choice);
-    QString askForRole(ServerPlayer *player, const QStringList &roles, const QString &scheme);
+    /*QString askForOrder(ServerPlayer *player, const QString &default_choice);
+    QString askForRole(ServerPlayer *player, const QStringList &roles, const QString &scheme);*/
 
     //process client requests
     void processRequestCheat(ServerPlayer *player, const QVariant &arg);

@@ -1169,12 +1169,6 @@ public:
         return target && target->getPhase() == Player::Judge && target->containsTrick("YanxiaoCard");
     }
 
-    /*
-        int getPriority(TriggerEvent) const{
-        return 3;
-        }
-        */
-
     bool onPhaseChange(ServerPlayer *target) const
     {
         CardsMoveStruct move;

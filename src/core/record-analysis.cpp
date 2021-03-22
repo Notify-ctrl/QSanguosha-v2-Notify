@@ -176,10 +176,6 @@ void RecAnalysis::initialize(QString dir)
             QString name = change[0].toString();
             int hp_change = change[1].toInt();
 
-            /*int nature_index = change[2].toInt();
-            DamageStruct::Nature nature = DamageStruct::Normal;
-            if (nature_index > 0) nature = (DamageStruct::Nature)nature_index;*/
-
             if (hp_change > 0)
                 getPlayer(name)->m_recover += hp_change;
 

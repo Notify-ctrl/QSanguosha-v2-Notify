@@ -79,7 +79,7 @@ Client::Client(QObject *parent, const QString &filename)
     m_interactions[S_COMMAND_CHOOSE_GENERAL] = &Client::askForGeneral;
     m_interactions[S_COMMAND_CHOOSE_PLAYER] = &Client::askForPlayerChosen;
     m_interactions[S_COMMAND_CHOOSE_ROLE] = &Client::askForAssign;
-    m_interactions[S_COMMAND_CHOOSE_DIRECTION] = &Client::askForDirection;
+    /*m_interactions[S_COMMAND_CHOOSE_DIRECTION] = &Client::askForDirection;*/
     m_interactions[S_COMMAND_EXCHANGE_CARD] = &Client::askForExchange;
     m_interactions[S_COMMAND_ASK_PEACH] = &Client::askForSinglePeach;
     m_interactions[S_COMMAND_SKILL_GUANXING] = &Client::askForGuanxing;
@@ -97,23 +97,14 @@ Client::Client(QObject *parent, const QString &filename)
     m_interactions[S_COMMAND_AMAZING_GRACE] = &Client::askForAG;
     m_interactions[S_COMMAND_PINDIAN] = &Client::askForPindian;
     m_interactions[S_COMMAND_CHOOSE_CARD] = &Client::askForCardChosen;
-    m_interactions[S_COMMAND_CHOOSE_ORDER] = &Client::askForOrder;
-    m_interactions[S_COMMAND_CHOOSE_ROLE_3V3] = &Client::askForRole3v3;
+    /*m_interactions[S_COMMAND_CHOOSE_ORDER] = &Client::askForOrder;
+    // m_interactions[S_COMMAND_CHOOSE_ROLE_3V3] = &Client::askForRole3v3;*/
     m_interactions[S_COMMAND_SURRENDER] = &Client::askForSurrender;
     m_interactions[S_COMMAND_LUCK_CARD] = &Client::askForLuckCard;
 
     m_callbacks[S_COMMAND_FILL_AMAZING_GRACE] = &Client::fillAG;
     m_callbacks[S_COMMAND_TAKE_AMAZING_GRACE] = &Client::takeAG;
     m_callbacks[S_COMMAND_CLEAR_AMAZING_GRACE] = &Client::clearAG;
-
-    // 3v3 mode & 1v1 mode
-    m_interactions[S_COMMAND_ASK_GENERAL] = &Client::askForGeneral3v3;
-    m_interactions[S_COMMAND_ARRANGE_GENERAL] = &Client::startArrange;
-
-    m_callbacks[S_COMMAND_FILL_GENERAL] = &Client::fillGenerals;
-    m_callbacks[S_COMMAND_TAKE_GENERAL] = &Client::takeGeneral;
-    m_callbacks[S_COMMAND_RECOVER_GENERAL] = &Client::recoverGeneral;
-    m_callbacks[S_COMMAND_REVEAL_GENERAL] = &Client::revealGeneral;
     m_callbacks[S_COMMAND_UPDATE_SKILL] = &Client::updateSkill;
 
     m_noNullificationThisTime = false;
@@ -1151,9 +1142,6 @@ void Client::updatePileNum()
 {
     QString pile_str = tr("Draw pile: <b>%1</b>, discard pile: <b>%2</b>, swap times: <b>%3</b>")
         .arg(pile_num).arg(discarded_list.length()).arg(swap_pile);
-    if (ServerInfo.GameMode == "04_boss") {
-        pile_str.prepend(tr("Level: <b>%1</b>,").arg(m_bossLevel + 1));
-    }
     lines_doc->setHtml(QString("<font color='%1'><p align = \"center\">" + pile_str + "</p></font>").arg(Config.TextEditColor.name()));
 }
 
@@ -1389,7 +1377,7 @@ void Client::askForCardChosen(const QVariant &ask_str)
     setStatus(ExecDialog);
 }
 
-
+/*
 void Client::askForOrder(const QVariant &arg)
 {
     if (!JsonUtils::isNumber(arg)) return;
@@ -1416,7 +1404,7 @@ void Client::askForDirection(const QVariant &)
     emit directions_got();
     setStatus(ExecDialog);
 }
-
+*/
 
 void Client::setMark(const QVariant &mark_var)
 {
@@ -1959,7 +1947,7 @@ void Client::setAttackRangePair(const QVariant &set_arg)
             from->removeAttackRangePair(to);
     }
 }
-
+/*
 void Client::fillGenerals(const QVariant &generals)
 {
     if (!generals.canConvert<JsonArray>()) return;
@@ -2043,7 +2031,7 @@ void Client::onPlayerChooseOrder()
     replyToServer(S_COMMAND_CHOOSE_ORDER, req);
     setStatus(NotActive);
 }
-
+*/
 void Client::updateStateItem(const QVariant &state)
 {
     if (!JsonUtils::isString(state)) return;

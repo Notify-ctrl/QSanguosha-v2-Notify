@@ -670,7 +670,7 @@ public:
 
     }
 
-    bool isProhibited(const Player *from, const Player *to, const Card *card, const QList<const Player *> & /* = QList<const Player *>() */) const
+    bool isProhibited(const Player *from, const Player *to, const Card *card, const QList<const Player *> &) const
     {
         if (card->isKindOf("SkillCard"))
             return false;

@@ -72,9 +72,6 @@ SOURCES += \
     src/server/generalselector.cpp \
     src/server/room.cpp \
     src/server/roomthread.cpp \
-    src/server/roomthread1v1.cpp \
-    src/server/roomthread3v3.cpp \
-    src/server/roomthreadxmode.cpp \
     src/server/server.cpp \
     src/server/serverplayer.cpp \
     src/ui/button.cpp \
@@ -114,13 +111,10 @@ SOURCES += \
     src/package/fire.cpp \
     src/package/h-formation.cpp \
     src/package/h-momentum.cpp \
-    src/package/jiange-defense.cpp \
     src/package/joy.cpp \
     src/package/ling.cpp \
     src/package/mountain.cpp \
     src/package/sp.cpp \
-    src/package/special1v1.cpp \
-    src/package/special3v3.cpp \
     src/package/wisdom.cpp \
     src/package/yitian.cpp \
     src/package/yjcm.cpp \
@@ -188,9 +182,6 @@ HEADERS += \
     src/server/generalselector.h \
     src/server/room.h \
     src/server/roomthread.h \
-    src/server/roomthread1v1.h \
-    src/server/roomthread3v3.h \
-    src/server/roomthreadxmode.h \
     src/server/server.h \
     src/server/serverplayer.h \
     src/ui/button.h \
@@ -222,13 +213,10 @@ HEADERS += \
     src/package/fire.h \
     src/package/h-formation.h \
     src/package/h-momentum.h \
-    src/package/jiange-defense.h \
     src/package/joy.h \
     src/package/ling.h \
     src/package/mountain.h \
     src/package/sp.h \
-    src/package/special1v1.h \
-    src/package/special3v3.h \
     src/package/wisdom.h \
     src/package/yitian.h \
     src/package/yjcm.h \

@@ -467,7 +467,7 @@ void PlayerCardContainer::refresh(bool)
         if (_m_faceTurnedIcon) _m_faceTurnedIcon->setVisible(!m_player->faceUp());
         if (_m_chainIcon) _m_chainIcon->setVisible(m_player->isChained());
         if (_m_actionIcon) _m_actionIcon->setVisible(m_player->hasFlag("actioned"));
-        if (_m_deathIcon && !(ServerInfo.GameMode == "04_1v3" && m_player->getGeneralName() != "shenlvbu2"))
+        if (_m_deathIcon)
             _m_deathIcon->setVisible(m_player->isDead());
     }
     updateHandcardNum();
@@ -990,12 +990,7 @@ void PlayerCardContainer::killPlayer()
     effect->setStrength(1.0);
     _m_groupMain->setGraphicsEffect(effect);
     refresh(true);
-    if (ServerInfo.GameMode == "04_1v3" && !m_player->isLord()) {
-        _m_deathIcon->hide();
-        _m_votesGot = 6;
-        updateVotes(false, true);
-    } else
-        _m_deathIcon->show();
+    _m_deathIcon->show();
 }
 
 void PlayerCardContainer::revivePlayer()

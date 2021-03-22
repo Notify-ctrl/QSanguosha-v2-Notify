@@ -51,15 +51,6 @@ public:
     ushort ServerPort;
     bool DisableLua;
 
-    QStringList BossGenerals;
-    int BossLevel;
-    QStringList BossEndlessSkills;
-    QMap<QString, int> BossExpSkills;
-
-    QMap<QString, QString> JianGeDefenseKingdoms;
-    QMap<QString, QStringList> JianGeDefenseMachine;
-    QMap<QString, QStringList> JianGeDefenseSoul;
-
     // client side
     QString HostAddress;
     QString UserName;

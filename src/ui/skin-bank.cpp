@@ -276,12 +276,7 @@ QPixmap QSanRoomSkin::getProgressBarPixmap(int percentile) const
 QPixmap QSanRoomSkin::getCardMainPixmap(const QString &cardName, bool cache) const
 {
     if (cardName == "unknown") return getPixmap("handCardBack", QString(), true);
-    QString name = cardName;
-    if (ServerInfo.GameMode == "06_3v3" && name.startsWith("vs_"))
-        name = name.mid(3);
-    else if (ServerInfo.GameMode == "02_1v1" && name.startsWith("kof_"))
-        name = name.mid(4);
-    return getPixmap(S_SKIN_KEY_HAND_CARD_MAIN_PHOTO, name, cache);
+    return getPixmap(S_SKIN_KEY_HAND_CARD_MAIN_PHOTO, cardName, cache);
 }
 
 QPixmap QSanRoomSkin::getCardSuitPixmap(Card::Suit suit) const
@@ -302,21 +297,12 @@ QPixmap QSanRoomSkin::getCardJudgeIconPixmap(const QString &judgeName) const
 
 QPixmap QSanRoomSkin::getCardAvatarPixmap(const QString &generalName) const
 {
-    QString name = generalName;
-    if (ServerInfo.GameMode == "06_3v3" && name.startsWith("vs_"))
-        name = name.mid(3);
-    else if (ServerInfo.GameMode == "02_1v1" && name.startsWith("kof_"))
-        name = name.mid(4);
-    return getGeneralPixmap(name, S_GENERAL_ICON_SIZE_TINY);
+    return getGeneralPixmap(generalName, S_GENERAL_ICON_SIZE_TINY);
 }
 
 QPixmap QSanRoomSkin::getGeneralPixmap(const QString &generalName, GeneralIconSize size) const
 {
     QString name = generalName;
-    if (ServerInfo.GameMode == "06_3v3" && name.startsWith("vs_"))
-        name = name.mid(3);
-    else if (ServerInfo.GameMode == "02_1v1" && name.startsWith("kof_"))
-        name = name.mid(4);
     if (size == S_GENERAL_ICON_SIZE_CARD)
         return getCardMainPixmap(name);
     else {
