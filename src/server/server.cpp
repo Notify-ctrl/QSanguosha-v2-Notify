@@ -260,9 +260,6 @@ QWidget *ServerDialog::createAdvancedTab()
     second_general_checkbox = new QCheckBox(tr("Enable second general"));
     second_general_checkbox->setChecked(Config.Enable2ndGeneral);
 
-    same_checkbox = new QCheckBox(tr("Enable Same"));
-    same_checkbox->setChecked(Config.EnableSame);
-
     max_hp_label = new QLabel(tr("Max HP scheme"));
     max_hp_scheme_ComboBox = new QComboBox;
     max_hp_scheme_ComboBox->addItem(tr("Sum - X"));
@@ -283,27 +280,6 @@ QWidget *ServerDialog::createAdvancedTab()
     scheme0_subtraction_spinbox->setVisible(max_hp_scheme_ComboBox->currentIndex() == 0);
 
     connect(max_hp_scheme_ComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(setMaxHpSchemeBox()));
-
-    basara_checkbox = new QCheckBox(tr("Enable Basara"));
-    basara_checkbox->setChecked(Config.EnableBasara);
-    updateButtonEnablility(mode_group->checkedButton());
-    connect(mode_group, SIGNAL(buttonClicked(QAbstractButton *)), this, SLOT(updateButtonEnablility(QAbstractButton *)));
-
-    hegemony_checkbox = new QCheckBox(tr("Enable Hegemony"));
-    hegemony_checkbox->setChecked(Config.EnableBasara && Config.EnableHegemony);
-    hegemony_checkbox->setEnabled(basara_checkbox->isChecked());
-    connect(basara_checkbox, SIGNAL(toggled(bool)), hegemony_checkbox, SLOT(setChecked(bool)));
-    connect(basara_checkbox, SIGNAL(toggled(bool)), hegemony_checkbox, SLOT(setEnabled(bool)));
-
-    hegemony_maxchoice_label = new QLabel(tr("Upperlimit for hegemony"));
-    hegemony_maxchoice_spinbox = new QSpinBox;
-    hegemony_maxchoice_spinbox->setRange(5, 21);
-    hegemony_maxchoice_spinbox->setValue(Config.value("HegemonyMaxChoice", 7).toInt());
-
-    hegemony_maxshown_label = new QLabel(tr("Max shown num for hegemony"));
-    hegemony_maxshown_spinbox = new QSpinBox;
-    hegemony_maxshown_spinbox->setRange(1, 11);
-    hegemony_maxshown_spinbox->setValue(Config.value("HegemonyMaxShown", 2).toInt());
 
     address_edit = new QLineEdit;
     address_edit->setText(Config.Address);
@@ -333,10 +309,6 @@ QWidget *ServerDialog::createAdvancedTab()
     layout->addLayout(HLay(max_hp_label, max_hp_scheme_ComboBox));
     layout->addLayout(HLay(scheme0_subtraction_label, scheme0_subtraction_spinbox));
     layout->addWidget(prevent_awaken_below3_checkbox);
-    layout->addLayout(HLay(basara_checkbox, hegemony_checkbox));
-    layout->addLayout(HLay(hegemony_maxchoice_label, hegemony_maxchoice_spinbox));
-    layout->addLayout(HLay(hegemony_maxshown_label, hegemony_maxshown_spinbox));
-    layout->addWidget(same_checkbox);
     layout->addLayout(HLay(new QLabel(tr("Address")), address_edit));
     layout->addWidget(detect_button);
     layout->addLayout(HLay(new QLabel(tr("Port")), port_edit));
@@ -360,16 +332,6 @@ QWidget *ServerDialog::createAdvancedTab()
         scheme0_subtraction_spinbox->setVisible(false);
     }
     connect(second_general_checkbox, SIGNAL(toggled(bool)), this, SLOT(setMaxHpSchemeBox()));
-
-    hegemony_maxchoice_label->setVisible(Config.EnableHegemony);
-    connect(hegemony_checkbox, SIGNAL(toggled(bool)), hegemony_maxchoice_label, SLOT(setVisible(bool)));
-    hegemony_maxchoice_spinbox->setVisible(Config.EnableHegemony);
-    connect(hegemony_checkbox, SIGNAL(toggled(bool)), hegemony_maxchoice_spinbox, SLOT(setVisible(bool)));
-
-    hegemony_maxshown_label->setVisible(Config.EnableHegemony);
-    connect(hegemony_checkbox, SIGNAL(toggled(bool)), hegemony_maxshown_label, SLOT(setVisible(bool)));
-    hegemony_maxshown_spinbox->setVisible(Config.EnableHegemony);
-    connect(hegemony_checkbox, SIGNAL(toggled(bool)), hegemony_maxshown_spinbox, SLOT(setVisible(bool)));
 
     return widget;
 }
@@ -448,16 +410,6 @@ QWidget *ServerDialog::createMiscTab()
 void ServerDialog::updateButtonEnablility(QAbstractButton *button)
 {
     if (!button) return;
-    if (button->objectName().contains("scenario")
-        || button->objectName().contains("mini")
-        || button->objectName().contains("1v1")
-        || button->objectName().contains("1v3")) {
-        basara_checkbox->setChecked(false);
-        basara_checkbox->setEnabled(false);
-    } else {
-        basara_checkbox->setEnabled(true);
-    }
-
     if (button->objectName().contains("mini")) {
         mini_scene_button->setEnabled(true);
         second_general_checkbox->setChecked(false);
@@ -482,7 +434,7 @@ BanlistDialog::BanlistDialog(QWidget *parent, bool view)
     setMinimumWidth(455);
 
     if (ban_list.isEmpty())
-        ban_list << "Roles" << "1v1" << "BossMode" << "Basara" << "Hegemony" << "Pairs" << "Cards";
+        ban_list << "Roles" << "Pairs" << "Cards";
     QVBoxLayout *layout = new QVBoxLayout;
 
     QTabWidget *tab = new QTabWidget;
@@ -862,9 +814,6 @@ int ServerDialog::config()
     Config.ForbidSIMC = forbid_same_ip_checkbox->isChecked();
     Config.DisableChat = disable_chat_checkbox->isChecked();
     Config.Enable2ndGeneral = second_general_checkbox->isChecked();
-    Config.EnableSame = same_checkbox->isChecked();
-    Config.EnableBasara = basara_checkbox->isChecked() && basara_checkbox->isEnabled();
-    Config.EnableHegemony = hegemony_checkbox->isChecked() && hegemony_checkbox->isEnabled();
     Config.MaxHpScheme = max_hp_scheme_ComboBox->currentIndex();
     if (Config.MaxHpScheme == 0) {
         Config.Scheme0Subtraction = scheme0_subtraction_spinbox->value();
@@ -919,11 +868,6 @@ int ServerDialog::config()
     Config.setValue("ForbidSIMC", Config.ForbidSIMC);
     Config.setValue("DisableChat", Config.DisableChat);
     Config.setValue("Enable2ndGeneral", Config.Enable2ndGeneral);
-    Config.setValue("EnableSame", Config.EnableSame);
-    Config.setValue("EnableBasara", Config.EnableBasara);
-    Config.setValue("EnableHegemony", Config.EnableHegemony);
-    Config.setValue("HegemonyMaxChoice", hegemony_maxchoice_spinbox->value());
-    Config.setValue("HegemonyMaxShown", hegemony_maxshown_spinbox->value());
     Config.setValue("MaxHpScheme", Config.MaxHpScheme);
     Config.setValue("Scheme0Subtraction", Config.Scheme0Subtraction);
     Config.setValue("PreventAwakenBelow3", Config.PreventAwakenBelow3);

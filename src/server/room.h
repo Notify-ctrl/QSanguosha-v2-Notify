@@ -543,8 +543,6 @@ private:
     AI *cloneAI(ServerPlayer *player);
     void broadcast(const QString &message, ServerPlayer *except = NULL);
     void initCallbacks();
-    /*QString askForOrder(ServerPlayer *player, const QString &default_choice);
-    QString askForRole(ServerPlayer *player, const QStringList &roles, const QString &scheme);*/
 
     //process client requests
     void processRequestCheat(ServerPlayer *player, const QVariant &arg);

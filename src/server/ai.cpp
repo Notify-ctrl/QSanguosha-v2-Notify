@@ -34,24 +34,6 @@ struct RoleMapping : public QMap < RolePair, AI::Relation >
     }
 };
 
-AI::Relation AI::GetRelationHegemony(const ServerPlayer *a, const ServerPlayer *b)
-{
-    const bool aShown = a->getRoom()->getTag(a->objectName()).toStringList().isEmpty();
-    const bool bShown = b->getRoom()->getTag(b->objectName()).toStringList().isEmpty();
-
-    const QString aName = aShown ? a->getGeneralName() :
-        a->getRoom()->getTag(a->objectName()).toStringList().first();
-    const QString bName = bShown ? b->getGeneralName() :
-        b->getRoom()->getTag(b->objectName()).toStringList().first();
-
-    const QString aKingdom = Sanguosha->getGeneral(aName)->getKingdom();
-    const QString bKingdom = Sanguosha->getGeneral(bName)->getKingdom();
-
-    qDebug() << aKingdom << bKingdom << aShown << bShown;
-
-    return aKingdom == bKingdom ? Friend : Enemy;
-}
-
 AI::Relation AI::GetRelation(const ServerPlayer *a, const ServerPlayer *b)
 {
     if (a == b) return Friend;
@@ -123,9 +105,6 @@ AI::Relation AI::relationTo(const ServerPlayer *other) const
     const Scenario *scenario = room->getScenario();
     if (scenario)
         return scenario->relationTo(self, other);
-
-    if (Config.EnableHegemony)
-        return GetRelationHegemony(self, other);
 
     return GetRelation(self, other);
 }

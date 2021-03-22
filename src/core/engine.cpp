@@ -550,9 +550,7 @@ QString Engine::translate(const QString &to_translate) const
 
 int Engine::getRoleIndex() const
 {
-    /*if (ServerInfo.GameMode == "06_3v3" || ServerInfo.GameMode == "06_XMode") {
-        return 4;
-    } else*/ if (ServerInfo.EnableHegemony) {
+    if (ServerInfo.EnableHegemony) {
         return 5;
     } else
         return 1;
@@ -975,12 +973,6 @@ QString Engine::getSetupString() const
         flags.append("F");
     if (Config.Enable2ndGeneral)
         flags.append("S");
-    if (Config.EnableSame)
-        flags.append("T");
-    if (Config.EnableBasara)
-        flags.append("B");
-    if (Config.EnableHegemony)
-        flags.append("H");
     if (Config.EnableAI)
         flags.append("A");
     if (Config.DisableChat)
@@ -1079,10 +1071,6 @@ QString Engine::getRoles(const QString &mode) const
         QString rolechar = table[n];
         if (mode.endsWith("z"))
             rolechar.replace("N", "C");
-        else if (Config.EnableHegemony) {
-            rolechar.replace("F", "N");
-            rolechar.replace("C", "N");
-        }
 
         return rolechar;
     } else if (mode.startsWith("@")) {
@@ -1151,8 +1139,6 @@ QStringList Engine::getLords(bool contain_banned) const
 QStringList Engine::getRandomLords() const
 {
     QStringList banlist_ban;
-    if (Config.EnableBasara)
-        banlist_ban = Config.value("Banlist/Basara").toStringList();
 
     if (Config.GameMode == "zombie_mode")
         banlist_ban.append(Config.value("Banlist/Zombie").toStringList());
@@ -1237,21 +1223,11 @@ QStringList Engine::getRandomGenerals(int count, const QSet<QString> &ban_set, c
 
     Q_ASSERT(all_generals.count() >= count);
 
-    QStringList tmp_strlist;
-    if (Config.EnableBasara) {
-        tmp_strlist = Config.value("Banlist/Basara", "").toStringList();
-        general_set = general_set.subtract(QSet<QString>(tmp_strlist.begin(), tmp_strlist.end()));
-    }
-    if (Config.EnableHegemony) {
-        tmp_strlist = Config.value("Banlist/Hegemony", "").toStringList();
-        general_set = general_set.subtract(QSet<QString>(tmp_strlist.begin(), tmp_strlist.end()));
-    }
-
     if (isNormalGameMode(ServerInfo.GameMode)
         || ServerInfo.GameMode.contains("_mini_")
         || ServerInfo.GameMode == "custom_scenario") {
-        tmp_strlist = Config.value("Banlist/Roles", "").toStringList();
-        general_set.subtract(QSet<QString>(tmp_strlist.begin(), tmp_strlist.end()));
+        QT_WARNING_DISABLE_DEPRECATED
+        general_set.subtract(Config.value("Banlist/Roles", "").toStringList().toSet());
     }
 
     godLottery(general_set);

@@ -21,19 +21,5 @@ private:
     QString getWinner(ServerPlayer *victim) const;
 };
 
-class BasaraMode : public GameRule
-{
-    Q_OBJECT
-
-public:
-    BasaraMode(QObject *parent);
-
-    virtual bool trigger(TriggerEvent triggerEvent, Room *room, ServerPlayer *player, QVariant &data = _dummy_variant) const;
-    virtual int getPriority(TriggerEvent triggerEvent) const;
-    void playerShowed(ServerPlayer *player) const;
-    void generalShowed(ServerPlayer *player, QString general_name) const;
-    static QString getMappedRole(const QString &role);
-};
-
 #endif
 

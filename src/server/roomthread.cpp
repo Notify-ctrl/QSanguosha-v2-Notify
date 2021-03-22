@@ -297,7 +297,6 @@ void RoomThread::run()
     addTriggerSkill(game_rule);
     foreach(const TriggerSkill *triggerSkill, Sanguosha->getGlobalTriggerSkills())
         addTriggerSkill(triggerSkill);
-    if (Config.EnableBasara) addTriggerSkill(new BasaraMode(this));
 
     if (room->getScenario() != NULL) {
         const ScenarioRule *rule = room->getScenario()->getRule();

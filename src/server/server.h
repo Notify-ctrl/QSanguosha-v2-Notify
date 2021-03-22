@@ -77,13 +77,6 @@ private:
     QCheckBox *forbid_same_ip_checkbox;
     QCheckBox *disable_chat_checkbox;
     QCheckBox *second_general_checkbox;
-    QCheckBox *same_checkbox;
-    QCheckBox *basara_checkbox;
-    QCheckBox *hegemony_checkbox;
-    QLabel *hegemony_maxchoice_label;
-    QSpinBox *hegemony_maxchoice_spinbox;
-    QLabel *hegemony_maxshown_label;
-    QSpinBox *hegemony_maxshown_spinbox;
     QLabel *max_hp_label;
     QComboBox *max_hp_scheme_ComboBox;
     QLabel *scheme0_subtraction_label;

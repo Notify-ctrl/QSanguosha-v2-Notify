@@ -63,7 +63,6 @@ Client::Client(QObject *parent, const QString &filename)
     m_callbacks[S_COMMAND_SET_KNOWN_CARDS] = &Client::setKnownCards;
     m_callbacks[S_COMMAND_VIEW_GENERALS] = &Client::viewGenerals;
 
-    m_callbacks[S_COMMAND_UPDATE_BOSS_LEVEL] = &Client::updateBossLevel;
     m_callbacks[S_COMMAND_UPDATE_STATE_ITEM] = &Client::updateStateItem;
     m_callbacks[S_COMMAND_AVAILABLE_CARDS] = &Client::setAvailableCards;
 
@@ -79,7 +78,6 @@ Client::Client(QObject *parent, const QString &filename)
     m_interactions[S_COMMAND_CHOOSE_GENERAL] = &Client::askForGeneral;
     m_interactions[S_COMMAND_CHOOSE_PLAYER] = &Client::askForPlayerChosen;
     m_interactions[S_COMMAND_CHOOSE_ROLE] = &Client::askForAssign;
-    /*m_interactions[S_COMMAND_CHOOSE_DIRECTION] = &Client::askForDirection;*/
     m_interactions[S_COMMAND_EXCHANGE_CARD] = &Client::askForExchange;
     m_interactions[S_COMMAND_ASK_PEACH] = &Client::askForSinglePeach;
     m_interactions[S_COMMAND_SKILL_GUANXING] = &Client::askForGuanxing;
@@ -97,8 +95,6 @@ Client::Client(QObject *parent, const QString &filename)
     m_interactions[S_COMMAND_AMAZING_GRACE] = &Client::askForAG;
     m_interactions[S_COMMAND_PINDIAN] = &Client::askForPindian;
     m_interactions[S_COMMAND_CHOOSE_CARD] = &Client::askForCardChosen;
-    /*m_interactions[S_COMMAND_CHOOSE_ORDER] = &Client::askForOrder;
-    // m_interactions[S_COMMAND_CHOOSE_ROLE_3V3] = &Client::askForRole3v3;*/
     m_interactions[S_COMMAND_SURRENDER] = &Client::askForSurrender;
     m_interactions[S_COMMAND_LUCK_CARD] = &Client::askForLuckCard;
 
@@ -1377,35 +1373,6 @@ void Client::askForCardChosen(const QVariant &ask_str)
     setStatus(ExecDialog);
 }
 
-/*
-void Client::askForOrder(const QVariant &arg)
-{
-    if (!JsonUtils::isNumber(arg)) return;
-    Game3v3ChooseOrderCommand reason = (Game3v3ChooseOrderCommand)arg.toInt();
-    emit orders_got(reason);
-    setStatus(ExecDialog);
-}
-
-void Client::askForRole3v3(const QVariant &arg)
-{
-    JsonArray ask = arg.value<JsonArray>();
-    if (ask.length() != 2 || !JsonUtils::isString(ask[0]) || !JsonUtils::isStringArray(ask[1], 0, ask[1].value<JsonArray>().length() - 1))
-        return;
-
-    QStringList roles;
-    if (!JsonUtils::tryParse(ask[1], roles)) return;
-    QString scheme = ask[0].toString();
-    emit roles_got(scheme, roles);
-    setStatus(ExecDialog);
-}
-
-void Client::askForDirection(const QVariant &)
-{
-    emit directions_got();
-    setStatus(ExecDialog);
-}
-*/
-
 void Client::setMark(const QVariant &mark_var)
 {
     JsonArray mark_str = mark_var.value<JsonArray>();
@@ -1947,101 +1914,11 @@ void Client::setAttackRangePair(const QVariant &set_arg)
             from->removeAttackRangePair(to);
     }
 }
-/*
-void Client::fillGenerals(const QVariant &generals)
-{
-    if (!generals.canConvert<JsonArray>()) return;
 
-    QStringList filled;
-    JsonUtils::tryParse(generals, filled);
-    emit generals_filled(filled);
-}
-
-void Client::askForGeneral3v3(const QVariant &)
-{
-    emit general_asked();
-    setStatus(AskForGeneralTaken);
-}
-
-void Client::takeGeneral(const QVariant &take)
-{
-    JsonArray take_array = take.value<JsonArray>();
-    if (!JsonUtils::isStringArray(take_array, 0, 2)) return;
-    QString who = take_array[0].toString();
-    QString name = take_array[1].toString();
-    QString rule = take_array[2].toString();
-
-    emit general_taken(who, name, rule);
-}
-
-void Client::startArrange(const QVariant &to_arrange)
-{
-    if (to_arrange.isNull()) {
-        emit arrange_started(QString());
-    } else {
-        if (!to_arrange.canConvert<JsonArray>()) return;
-        QStringList arrangelist;
-        JsonUtils::tryParse(to_arrange, arrangelist);
-        emit arrange_started(arrangelist.join("+"));
-    }
-    setStatus(AskForArrangement);
-}
-
-void Client::onPlayerChooseRole3v3()
-{
-    replyToServer(S_COMMAND_CHOOSE_ROLE_3V3, sender()->objectName());
-    setStatus(NotActive);
-}
-
-void Client::recoverGeneral(const QVariant &recover)
-{
-    JsonArray args = recover.value<JsonArray>();
-    if (args.size() != 2 || !JsonUtils::isNumber(args[0]) || !JsonUtils::isString(args[1])) return;
-    int index = args[0].toInt();
-    QString name = args[1].toString();
-
-    emit general_recovered(index, name);
-}
-
-void Client::revealGeneral(const QVariant &reveal)
-{
-    JsonArray args = reveal.value<JsonArray>();
-    if (args.size() != 2 || !JsonUtils::isString(args[0]) || !JsonUtils::isString(args[1])) return;
-    bool self = (args[0].toString() == Self->objectName());
-    QString general = args[1].toString();
-
-    emit general_revealed(self, general);
-}
-
-void Client::onPlayerChooseOrder()
-{
-    OptionButton *button = qobject_cast<OptionButton *>(sender());
-    QString order;
-    if (button) {
-        order = button->objectName();
-    } else {
-        if (QRandomGenerator::global()->generate() % 2 == 0)
-            order = "warm";
-        else
-            order = "cool";
-    }
-    int req;
-    if (order == "warm") req = (int)S_CAMP_WARM;
-    else req = (int)S_CAMP_COOL;
-    replyToServer(S_COMMAND_CHOOSE_ORDER, req);
-    setStatus(NotActive);
-}
-*/
 void Client::updateStateItem(const QVariant &state)
 {
     if (!JsonUtils::isString(state)) return;
     emit role_state_changed(state.toString());
-}
-
-void Client::updateBossLevel(const QVariant &arg)
-{
-    if (!JsonUtils::isNumber(arg)) return;
-    m_bossLevel = arg.toInt();
 }
 
 void Client::setAvailableCards(const QVariant &pile)

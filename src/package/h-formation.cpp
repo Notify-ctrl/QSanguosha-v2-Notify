@@ -419,11 +419,7 @@ void ShangyiCard::onEffect(const CardEffectStruct &effect) const
     QStringList choicelist;
     if (!effect.to->isKongcheng())
         choicelist.append("handcards");
-    if (Config.EnableBasara) {
-        QString hidden_generals = player->property("basara_generals").toString();
-        if (!hidden_generals.isEmpty())
-            choicelist.append("generals");
-    } else if (!player->isLord()) {
+    if (!player->isLord()) {
         choicelist.append("role");
     }
     if (choicelist.isEmpty()) return;

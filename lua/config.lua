@@ -90,39 +90,8 @@ config = {
 	roles_ban = {
 	},
 
-	kof_ban = {
-		"sunquan",
-	},
-
-	bossmode_ban = {
-		"caopi",
-		"manchong",
-		"xusheng",
-		"yuji",
-		"caiwenji",
-		"zuoci",
-		"lusu",
-		"bgm_diaochan",
-		"shenguanyu",
-		"nos_yuji",
-		"nos_zhuran"
-	},
-
-	basara_ban = {
-		"dongzhuo",
-		"zuoci",
-		"shenzhugeliang",
-		"shenlvbu",
-		"bgm_lvmeng",
-		"zhanggongqi"
-	},
-
-	hegemony_ban = {
-		"xiahoujuan"
-	},
-
 	pairs_ban = {
-		"huatuo", "zuoci", "bgm_pangtong", "kof_nos_huatuo", "nos_huatuo",
+		"huatuo", "zuoci", "bgm_pangtong", "nos_huatuo",
 		"simayi+dengai",
 		"xiahoudun+luxun", "xiahoudun+zhurong", "xiahoudun+zhangchunhua", "xiahoudun+nos_luxun", "xiahoudun+nos_zhangchunhua",
 		"caoren+shenlvbu", "caoren+caozhi", "caoren+bgm_diaochan", "caoren+bgm_caoren", "caoren+nos_caoren",
@@ -150,7 +119,7 @@ config = {
 		"yuanshao+nos_huangyueying", "yuanshao+nos_huanggai",
 		"yanliangwenchou+zhangchunhua", "yanliangwenchou+nos_huangyueying", "yanliangwenchou+nos_huanggai", "yanliangwenchou+nos_luxun",
 			"yanliangwenchou+nos_zhangchunhua",
-		"dongzhuo+shenzhaoyun", "dongzhuo+wangyi", "dongzhuo+diy_wangyuanji", "dongzhuo+nos_huanggai", "dongzhuo+nos_zhangchunhua", "dongzhuo+nos_wangyi",
+		"dongzhuo+shenzhaoyun", "dongzhuo+wangyi", "dongzhuo+nos_huanggai", "dongzhuo+nos_zhangchunhua", "dongzhuo+nos_wangyi",
 		"st_huaxiong+nos_huanggai",
 		"shencaocao+caozhi",
 		"shenlvbu+caozhi", "shenlvbu+liaohua", "shenlvbu+bgm_diaochan", "shenlvbu+bgm_caoren", "shenlvbu+nos_caoren",
@@ -158,8 +127,8 @@ config = {
 		"caozhi+bgm_diaochan", "caozhi+bgm_caoren", "caozhi+nos_caoren",
 		"gaoshun+zhangchunhua", "gaoshun+nos_zhangchunhua",
 		"wuguotai+zhangchunhua", "wuguotai+caochong", "wuguotai+nos_huanggai", "wuguotai+nos_zhangchunhua", "wuguotai+nos_caochong",
-		"zhangchunhua+guanxingzhangbao", "zhangchunhua+guanping", "zhangchunhua+guyong", "zhangchunhua+xiahouba", "zhangchunhua+zhugeke",
-			"zhangchunhua+heg_luxun", "zhangchunhua+neo_zhangfei", "zhangchunhua+nos_liubei", "zhangchunhua+nos_zhangfei",
+		"zhangchunhua+guanxingzhangbao", "zhangchunhua+guanping", "zhangchunhua+guyong", "zhangchunhua+xiahouba",
+			"zhangchunhua+heg_luxun", "zhangchunhua+nos_liubei", "zhangchunhua+nos_zhangfei",
 			"zhangchunhua+nos_yuji", "zhangchunhua+nos_guanxingzhangbao",
 		"guanxingzhangbao+bgm_zhangfei", "guanxingzhangbao+heg_sunce", "guanxingzhangbao+nos_huanggai", "guanxingzhangbao+nos_luxun", "guanxingzhangbao+nos_zhangchunhua",
 		"huaxiong+nos_huanggai",
@@ -169,16 +138,13 @@ config = {
 		"guyong+nos_luxun", "guyong+nos_zhangchunhua",
 		"yuanshu+nos_lvmeng",
 		"xiahouba+nos_huanggai", "xiahouba+nos_zhangchunhua",
-		"zhugedan+diy_wangyuanji", "zhugedan+nos_zhangchunhua", "zhugedan+nos_wangyi",
-		"zhugeke+nos_zhangchunhua",
+		"zhugedan+nos_zhangchunhua", "zhugedan+nos_wangyi",
 		"bgm_diaochan+bgm_caoren", "bgm_diaochan+nos_caoren",
 		"bgm_caoren+nos_caoren",
 		"bgm_zhangfei+nos_guanxingzhangbao",
-		"diy_wangyuanji+heg_dongzhuo",
 		"hetaihou+nos_zhuran",
 		"heg_sunce+nos_guanxingzhangbao",
 		"heg_dongzhuo+nos_zhangchunhua", "heg_dongzhuo+nos_wangyi",
-		"neo_zhangfei+nos_huanggai", "neo_zhangfei+nos_zhangchunhua",
 		"nos_liubei+nos_luxun", "nos_liubei+nos_zhangchunhua",
 		"nos_zhangfei+nos_huanggai", "nos_zhangfei+nos_zhangchunhua",
 		"nos_huangyueying+nos_huanggai",
@@ -248,7 +214,6 @@ config = {
 		"yuanshu->tw_yuanshu",
 		"sp_yuejin->yuejin",
 		"zhenji->sp_zhenji|heg_zhenji|tw_zhenji",
-		"zhugeke->diy_zhugeke",
 		"zhugeliang->heg_zhugeliang|tw_zhugeliang",
 		"zhugejin->sp_zhugejin" ,
 		"sp_ganfuren->ganfuren"
