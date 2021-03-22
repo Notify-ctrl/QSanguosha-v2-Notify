@@ -4,7 +4,6 @@
 #include "engine.h"
 #include "detector.h"
 #include "skin-bank.h"
-#include "mainwindowserverlist.h"
 
 static const int ShrinkWidth = 285;
 static const int ExpandWidth = 826;
@@ -129,16 +128,6 @@ void ConnectionDialog::setAddress(const QString &address)
 {
     ui->hostComboBox->setCurrentText(address);
 }
-
-void ConnectionDialog::on_pushButtonFindServer_clicked()
-{
-    if(!mwServerList)
-    {
-        mwServerList=new MainWindowServerList(this);
-    }
-    mwServerList->initWindow();
-}
-
 // -----------------------------------
 
 UdpDetectorDialog::UdpDetectorDialog(QDialog *parent)

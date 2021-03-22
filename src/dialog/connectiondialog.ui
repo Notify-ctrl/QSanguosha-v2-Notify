@@ -67,7 +67,7 @@
     <property name="geometry">
      <rect>
       <x>140</x>
-      <y>188</y>
+      <y>140</y>
       <width>121</width>
       <height>23</height>
      </rect>
@@ -108,7 +108,7 @@
       <x>10</x>
       <y>17</y>
       <width>251</width>
-      <height>51</height>
+      <height>69</height>
      </rect>
     </property>
     <layout class="QFormLayout" name="formLayout">
@@ -140,19 +140,6 @@
       </widget>
      </item>
     </layout>
-   </widget>
-   <widget class="QPushButton" name="pushButtonFindServer">
-    <property name="geometry">
-     <rect>
-      <x>140</x>
-      <y>140</y>
-      <width>121</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>查找服务器...</string>
-    </property>
    </widget>
   </widget>
   <widget class="QListWidget" name="avatarList">

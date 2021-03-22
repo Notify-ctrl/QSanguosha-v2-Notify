@@ -110,8 +110,6 @@ private:
     QCheckBox *kof_card_extension_checkbox;
     QComboBox *role_choose_xmode_ComboBox;
     QCheckBox *disable_lua_checkbox;
-    QCheckBox *checkBoxUpnp;
-    QCheckBox *checkBoxAddToListServer;
     QPushButton *select_all_generals_button;
     QPushButton *deselect_all_generals_button;
     QPushButton *select_reverse_generals_button;
@@ -183,12 +181,6 @@ private slots:
     void processRequest(const char *request);
     void cleanup();
     void gameOver();
-
-    void upnpFinished();
-    void upnpTimeout();
-    void listServerReply();
-    void addToListServer();
-    void sendListServerRequest();
 
 signals:
     void server_message(const QString &);

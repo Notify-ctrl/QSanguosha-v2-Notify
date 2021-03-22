@@ -127,9 +127,7 @@ SOURCES += \
     src/package/tw.cpp \
     src/package/ol.cpp \
     src/package/jsp.cpp \
-    src/dialog/mainwindowserverlist.cpp \
-    src/dialog/dialogslsettings.cpp \
-    src/server/qtupnpportmapping.cpp
+    src/dialog/dialogslsettings.cpp
 
 HEADERS += \
     src/client/aux-skills.h \
@@ -240,10 +238,8 @@ HEADERS += \
     src/package/ol.h \
     src/package/jsp.h \
     src/pch.h \
-    src/dialog/mainwindowserverlist.h \
     src/dialog/dialogslsettings.h \
-    src/core/defines.h \
-    src/server/qtupnpportmapping.h
+    src/core/defines.h
 
 FORMS += \
     src/dialog/cardoverview.ui \
@@ -251,7 +247,6 @@ FORMS += \
     src/dialog/connectiondialog.ui \
     src/dialog/generaloverview.ui \
     src/dialog/mainwindow.ui \
-    src/dialog/mainwindowserverlist.ui \
     src/dialog/dialogslsettings.ui
 
 

@@ -30,7 +30,6 @@ private slots:
     void on_avatarList_itemDoubleClicked(QListWidgetItem *item);
     void on_changeAvatarButton_clicked();
     void on_connectButton_clicked();
-    void on_pushButtonFindServer_clicked();
 };
 
 class UdpDetectorDialog : public QDialog

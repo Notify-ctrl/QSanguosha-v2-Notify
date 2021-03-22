@@ -183,8 +183,6 @@ void MainWindow::on_actionStart_Server_triggered()
         return;
     }
 
-    server->checkUpnpAndListServer();
-
     if (accept_type == 1) {
         server->daemonize();
 
