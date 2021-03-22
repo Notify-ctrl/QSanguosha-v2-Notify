@@ -36,11 +36,9 @@ class ChatWidget;
 class QSanSelectableItem;
 class EffectAnimation;
 
-#ifndef Q_OS_WINRT
 #include <QQmlEngine>
 #include <QQmlContext>
 #include <QQmlComponent>
-#endif
 
 class ScriptExecutor : public QDialog
 {
@@ -380,12 +378,10 @@ private:
 
     void recorderAutoSave();
 
-#ifndef Q_OS_WINRT
     // for animation effects
     QQmlEngine *_m_animationEngine;
     QQmlContext *_m_animationContext;
     QQmlComponent *_m_animationComponent;
-#endif
 
 private slots:
     void fillCards(const QList<int> &card_ids, const QList<int> &disabled_ids = QList<int>());

@@ -16,9 +16,7 @@
 #include <QtGui>
 #include <QtWidgets>
 
-#ifndef Q_OS_WINRT
 #include <QtQml>
-#endif
 
 #ifdef AUDIO_SUPPORT
 #include <fmod.hpp>

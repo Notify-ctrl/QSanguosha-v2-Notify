@@ -384,11 +384,9 @@ RoomScene::RoomScene(QMainWindow *main_window)
     _m_superDragStarted = false;
 
 
-#ifndef Q_OS_WINRT
     _m_animationEngine = new QQmlEngine(this);
     _m_animationContext = new QQmlContext(_m_animationEngine->rootContext(), this);
     _m_animationComponent = new QQmlComponent(_m_animationEngine, QUrl::fromLocalFile("ui-script/animation.qml"), this);
-#endif
 }
 
 RoomScene::~RoomScene()
@@ -4074,7 +4072,6 @@ void RoomScene::doLightboxAnimation(const QString &, const QStringList &args)
             connect(pma, SIGNAL(finished()), this, SLOT(removeLightBox()));
         }
     }
-#ifndef Q_OS_WINRT
     /*
     else if (word.startsWith("skill=")) {
         const QString hero = word.mid(6);
@@ -4091,7 +4088,6 @@ void RoomScene::doLightboxAnimation(const QString &, const QStringList &args)
         bringToFront(object);
     }
     */
-#endif
     else {
         QFont font = Config.BigFont;
         if (pixelSize > 0) font.setPixelSize(pixelSize);

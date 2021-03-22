@@ -3,7 +3,7 @@
 # -------------------------------------------------
 TARGET = QSanguosha
 QT += network widgets
-!winrt: QT += qml
+QT += qml
 TEMPLATE = app
 
 CONFIG(release,debug|release){
@@ -292,54 +292,10 @@ macx{
 }
 
 LIBS += -L.
-win32-msvc*{
-    DEFINES += _CRT_SECURE_NO_WARNINGS
-    !contains(QMAKE_HOST.arch, x86_64) {
-        DEFINES += WIN32
-        LIBS += -L"$$_PRO_FILE_PWD_/lib/win/x86"
-    } else {
-        DEFINES += WIN64
-        LIBS += -L"$$_PRO_FILE_PWD_/lib/win/x64"
-    }
-    CONFIG(debug, debug|release) {
-        !winrt:INCLUDEPATH += include/vld
-    } else {
-        QMAKE_LFLAGS_RELEASE = $$QMAKE_LFLAGS_RELEASE_WITH_DEBUGINFO
-        DEFINES += USE_BREAKPAD
-
-        SOURCES += src/breakpad/client/windows/crash_generation/client_info.cc \
-            src/breakpad/client/windows/crash_generation/crash_generation_client.cc \
-            src/breakpad/client/windows/crash_generation/crash_generation_server.cc \
-            src/breakpad/client/windows/crash_generation/minidump_generator.cc \
-            src/breakpad/client/windows/handler/exception_handler.cc \
-            src/breakpad/common/windows/guid_string.cc
-
-        HEADERS += src/breakpad/client/windows/crash_generation/client_info.h \
-            src/breakpad/client/windows/crash_generation/crash_generation_client.h \
-            src/breakpad/client/windows/crash_generation/crash_generation_server.h \
-            src/breakpad/client/windows/crash_generation/minidump_generator.h \
-            src/breakpad/client/windows/handler/exception_handler.h \
-            src/breakpad/common/windows/guid_string.h
-
-        INCLUDEPATH += src/breakpad
-        INCLUDEPATH += src/breakpad/client/windows
-    }
-}
 win32-g++{
     DEFINES += WIN32
     LIBS += -L"$$_PRO_FILE_PWD_/lib/win/MinGW"
     DEFINES += GPP
-}
-winrt{
-    DEFINES += _CRT_SECURE_NO_WARNINGS
-    DEFINES += WINRT
-    !winphone {
-        LIBS += -L"$$_PRO_FILE_PWD_/lib/winrt/x64"
-    } else {
-        DEFINES += WINPHONE
-        contains($$QMAKESPEC, arm): LIBS += -L"$$_PRO_FILE_PWD_/lib/winphone/arm"
-        else : LIBS += -L"$$_PRO_FILE_PWD_/lib/winphone/x86"
-    }
 }
 macx{
     DEFINES += MAC
