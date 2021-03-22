@@ -2842,13 +2842,6 @@ void RoomScene::onGameOver()
     QString win_effect;
     if (victory) {
         win_effect = "win";
-        foreach (const Player *player, ClientInstance->getPlayers()) {
-            if (player->property("win").toBool() && player->getGeneralName().contains("caocao")) {
-                Audio::stop();
-                win_effect = "win-cc";
-                break;
-            }
-        }
     } else
         win_effect = "lose";
 

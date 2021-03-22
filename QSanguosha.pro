@@ -105,27 +105,18 @@ SOURCES += \
     src/ui/table-pile.cpp \
     src/ui/timed-progressbar.cpp \
     src/ui/ui-utils.cpp \
-    src/package/assassins.cpp \
     src/package/bgm.cpp \
-    src/package/boss.cpp \
     src/package/fire.cpp \
     src/package/h-formation.cpp \
     src/package/h-momentum.cpp \
-    src/package/joy.cpp \
-    src/package/ling.cpp \
     src/package/mountain.cpp \
     src/package/sp.cpp \
-    src/package/wisdom.cpp \
-    src/package/yitian.cpp \
     src/package/yjcm.cpp \
     src/package/yjcm2012.cpp \
     src/package/yjcm2013.cpp \
     src/package/yjcm2014.cpp \
-    src/package/yjcm2015.cpp \
     swig/sanguosha_wrap.cxx \
     src/dialog/banipdialog.cpp \
-    src/package/tw.cpp \
-    src/package/ol.cpp \
     src/package/jsp.cpp \
     src/dialog/dialogslsettings.cpp
 
@@ -205,23 +196,16 @@ HEADERS += \
     src/core/record-analysis.h \
     src/package/hegemony.h \
     src/scenario/fancheng-scenario.h \
-    src/package/assassins.h \
     src/package/bgm.h \
-    src/package/boss.h \
     src/package/fire.h \
     src/package/h-formation.h \
     src/package/h-momentum.h \
-    src/package/joy.h \
-    src/package/ling.h \
     src/package/mountain.h \
     src/package/sp.h \
-    src/package/wisdom.h \
-    src/package/yitian.h \
     src/package/yjcm.h \
     src/package/yjcm2012.h \
     src/package/yjcm2013.h \
     src/package/yjcm2014.h \
-    src/package/yjcm2015.h \
     src/core/room-state.h \
     src/core/wrapped-card.h \
     src/ui/bubblechatbox.h \
@@ -234,8 +218,6 @@ HEADERS += \
     src/package/thicket.h \
     src/package/wind.h \
     src/dialog/banipdialog.h \
-    src/package/tw.h \
-    src/package/ol.h \
     src/package/jsp.h \
     src/pch.h \
     src/dialog/dialogslsettings.h \

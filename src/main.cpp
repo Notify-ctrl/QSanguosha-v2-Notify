@@ -8,29 +8,8 @@
 #include "serverplayer.h"
 #include "engine.h"
 
-#if defined(WIN32) && defined(VS2010)
-#include "breakpad/client/windows/handler/exception_handler.h"
-
-using namespace google_breakpad;
-
-static bool callback(const wchar_t *dump_path, const wchar_t *id,
-    void *, EXCEPTION_POINTERS *,
-    MDRawAssertionInfo *,
-    bool succeeded) {
-    if (succeeded)
-        qWarning("Dump file created in %s, dump guid is %ws\n", dump_path, id);
-    else
-        qWarning("Dump failed\n");
-    return succeeded;
-}
-
-int main(int argc, char *argv[]) {
-    ExceptionHandler eh(L"./dmp", NULL, callback, NULL,
-        ExceptionHandler::HANDLER_ALL);
-#else
 int main(int argc, char *argv[])
 {
-#endif
     if (argc > 1 && strcmp(argv[1], "-server") == 0) {
         new QCoreApplication(argc, argv);
     } else if (argc > 1 && strcmp(argv[1], "-manual") == 0) {
