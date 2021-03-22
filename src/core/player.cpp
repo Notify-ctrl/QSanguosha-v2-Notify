@@ -1053,8 +1053,8 @@ QSet<const TriggerSkill *> Player::getTriggerSkills() const
 
 QSet<const Skill *> Player::getSkills(bool include_equip, bool visible_only) const
 {
-    QList<const Skill *> tmp = getSkillList(include_equip, visible_only);
-    return QSet<const Skill *>(tmp.begin(), tmp.end());
+    QT_WARNING_DISABLE_DEPRECATED
+    return getSkillList(include_equip, visible_only).toSet();
 }
 
 QList<const Skill *> Player::getSkillList(bool include_equip, bool visible_only) const
@@ -1074,8 +1074,7 @@ QList<const Skill *> Player::getSkillList(bool include_equip, bool visible_only)
 
 QSet<const Skill *> Player::getVisibleSkills(bool include_equip) const
 {
-    QList<const Skill *> tmp = getVisibleSkillList(include_equip);
-    return QSet<const Skill *>(tmp.begin(), tmp.end());
+    return getVisibleSkillList(include_equip).toSet();
 }
 
 QList<const Skill *> Player::getVisibleSkillList(bool include_equip) const

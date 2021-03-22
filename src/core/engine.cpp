@@ -1231,8 +1231,9 @@ QStringList Engine::getLimitedGeneralNames(const QString &kingdom) const
 
 QStringList Engine::getRandomGenerals(int count, const QSet<QString> &ban_set, const QString &kingdom) const
 {
+    QT_WARNING_DISABLE_DEPRECATED
     QStringList all_generals = getLimitedGeneralNames(kingdom);
-    QSet<QString> general_set = QSet<QString>(all_generals.begin(), all_generals.end());
+    QSet<QString> general_set = all_generals.toSet();
 
     Q_ASSERT(all_generals.count() >= count);
 
@@ -1507,5 +1508,5 @@ void Engine::godLottery(QSet<QString> &generalSet) const
 {
     QStringList list = generalSet.values();
 	godLottery(list);
-    generalSet = QSet<QString>(list.begin(), list.end());
+    generalSet = list.toSet();
 }

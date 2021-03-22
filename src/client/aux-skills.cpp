@@ -124,7 +124,8 @@ public:
 
     void setPlayerNames(const QStringList &names)
     {
-        set = QSet<QString>(names.begin(), names.end());
+        QT_WARNING_DISABLE_DEPRECATED
+        set = names.toSet();
     }
 
     bool targetFilter(const QList<const Player *> &targets, const Player *to_select, const Player *) const
@@ -186,7 +187,7 @@ public:
 
     void setPlayerNames(const QStringList &names)
     {
-        set = QSet<QString>(names.begin(), names.end());
+        set = names.toSet();
     }
 
     bool targetFilter(const QList<const Player *> &targets, const Player *to_select, const Player *) const

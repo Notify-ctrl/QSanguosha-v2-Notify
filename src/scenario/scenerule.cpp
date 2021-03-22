@@ -15,8 +15,9 @@ int SceneRule::getPriority(TriggerEvent) const
 
 bool SceneRule::trigger(TriggerEvent triggerEvent, Room* room, ServerPlayer *player, QVariant &data) const
 {
+    QT_WARNING_DISABLE_DEPRECATED
     QStringList extensions = Sanguosha->getExtensions();
-    QSet<QString> ban_packages(Config.BanPackages.begin(), Config.BanPackages.end());
+    QSet<QString> ban_packages = Config.BanPackages.toSet();
 
     if (!player && triggerEvent == GameStart) {
         foreach (QString extension, extensions) {

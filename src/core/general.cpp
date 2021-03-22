@@ -123,7 +123,8 @@ QList<const Skill *> General::getVisibleSkillList() const
 
 QSet<const Skill *> General::getVisibleSkills() const
 {
-    return QSet<const Skill *>(getVisibleSkillList().begin(), getVisibleSkillList().end());
+    QT_WARNING_DISABLE_DEPRECATED
+    return getVisibleSkillList().toSet();
 }
 
 QSet<const TriggerSkill *> General::getTriggerSkills() const

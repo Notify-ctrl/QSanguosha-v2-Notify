@@ -86,8 +86,9 @@ QWidget *ServerDialog::createPackageTab()
     extension_group = new QButtonGroup;
     extension_group->setExclusive(false);
 
+    QT_WARNING_DISABLE_DEPRECATED
     QStringList extensions = Sanguosha->getExtensions();
-    QSet<QString> ban_packages(Config.BanPackages.begin(), Config.BanPackages.end());
+    QSet<QString> ban_packages = Config.BanPackages.toSet();
 
     QGroupBox *box1 = new QGroupBox(tr("General package"));
     QGroupBox *box2 = new QGroupBox(tr("Card package"));

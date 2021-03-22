@@ -1247,8 +1247,8 @@ void Client::gameOver(const QVariant &arg)
         return;
     }
 
-    QStringList winners_strlist = winner.split("+");
-    QSet<QString> winners(winners_strlist.begin(), winners_strlist.end());
+    QT_WARNING_DISABLE_DEPRECATED
+    QSet<QString> winners = winner.split("+").toSet();
     foreach (const ClientPlayer *player, players) {
         QString role = player->getRole();
         bool win = winners.contains(player->objectName()) || winners.contains(role);

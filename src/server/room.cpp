@@ -4812,10 +4812,9 @@ void Room::askForGuanxing(ServerPlayer *zhuge, const QList<int> &cards, Guanxing
         }
     }
 
+    QT_WARNING_DISABLE_DEPRECATED
     bool length_equal = top_cards.length() + bottom_cards.length() == cards.length();
-    bool result_equal = QSet<int>(top_cards.begin(), top_cards.end())
-            + QSet<int>(bottom_cards.begin(), bottom_cards.end())
-            == QSet<int>(cards.begin(), cards.end());
+    bool result_equal = top_cards.toSet() + bottom_cards.toSet() == cards.toSet();
     if (!length_equal || !result_equal) {
         if (guanxing_type == GuanxingDownOnly) {
             bottom_cards = cards;
