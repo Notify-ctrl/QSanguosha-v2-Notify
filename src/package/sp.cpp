@@ -3510,6 +3510,7 @@ SPPackage::SPPackage()
 
     General *sp_zhugejin = new General(this, "sp_zhugejin", "wu", 3); // SP 027
     sp_zhugejin->addSkill(new Hongyuan);
+    sp_zhugejin->addSkill(new HongyuanDraw);
     sp_zhugejin->addSkill(new Huanshi);
     sp_zhugejin->addSkill(new Mingzhe);
 
