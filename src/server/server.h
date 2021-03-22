@@ -7,7 +7,6 @@ class QLabel;
 class QRadioButton;
 class ServerSocket;
 class ClientSocket;
-class QtUpnpPortMapping;
 
 #include "src/pch.h"
 
@@ -140,6 +139,7 @@ private slots:
 
     void doCustomAssign();
     void setMiniCheckBox();
+    void editBanlist();
 
     void selectAllGenerals();
     void deselectAllGenerals();
@@ -167,7 +167,6 @@ public:
     void daemonize();
     Room *createNewRoom();
     void signupPlayer(ServerPlayer *player);
-    void checkUpnpAndListServer();
 
 private:
     ServerSocket *server;
@@ -178,12 +177,6 @@ private:
     QMultiHash<QString, QString> name2objname;
     bool created_successfully;
 	int playerCount;
-
-    QtUpnpPortMapping *upnpPortMapping;
-    QNetworkAccessManager networkAccessManager;
-    QNetworkReply *networkReply;
-    bool serverListFirstReg;
-    int tryTimes;
 
 private slots:
     void processNewConnection(ClientSocket *socket);

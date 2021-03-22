@@ -61,7 +61,7 @@ QWidget *ServerDialog::createBasicTab()
     // add 1v1 banlist edit button
     QPushButton *edit_button = new QPushButton(tr("Banlist ..."));
     edit_button->setFixedWidth(100);
-    // connect(edit_button, SIGNAL(clicked()), this, SLOT(edit1v1Banlist()));
+    connect(edit_button, SIGNAL(clicked()), this, SLOT(editBanlist()));
 
     QFormLayout *form_layout = new QFormLayout;
     form_layout->addRow(tr("Server name"), server_name_edit);
@@ -672,6 +672,12 @@ void BanlistDialog::saveAll()
         save();
     }
     BanPair::loadBanPairs();
+}
+
+void ServerDialog::editBanlist()
+{
+    BanlistDialog *dialog = new BanlistDialog(this);
+    dialog->exec();
 }
 
 QGroupBox *ServerDialog::createGameModeBox()
