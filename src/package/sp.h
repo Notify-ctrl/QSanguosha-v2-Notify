@@ -221,17 +221,6 @@ public:
     void onEffect(const CardEffectStruct &effect) const;
 };
 
-class XintanCard : public SkillCard
-{
-    Q_OBJECT
-
-public:
-    Q_INVOKABLE XintanCard();
-
-    bool targetFilter(const QList<const Player *> &targets, const Player *, const Player *) const;
-    void onEffect(const CardEffectStruct &effect) const;
-};
-
 class MeibuFilter : public FilterSkill
 {
 public:

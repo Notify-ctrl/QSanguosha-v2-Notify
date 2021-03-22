@@ -6787,11 +6787,6 @@ dofile "lua/ai/maneuvering-ai.lua"
 dofile "lua/ai/classical-ai.lua"
 dofile "lua/ai/standard-ai.lua"
 dofile "lua/ai/chat-ai.lua"
-dofile "lua/ai/basara-ai.lua"
-dofile "lua/ai/hegemony-ai.lua"
-dofile "lua/ai/hulaoguan-ai.lua"
-dofile "lua/ai/jiange-defense-ai.lua"
-dofile "lua/ai/boss-ai.lua"
 
 local loaded = "standard|standard_cards|maneuvering|sp"
 
@@ -6809,7 +6804,6 @@ for _, aextension in ipairs(sgs.Sanguosha:getExtensions()) do
 end
 
 dofile "lua/ai/sp-ai.lua"
-dofile "lua/ai/special3v3-ai.lua"
 
 for _, ascenario in ipairs(sgs.Sanguosha:getModScenarioNames()) do
     if not loaded:match(ascenario) then
