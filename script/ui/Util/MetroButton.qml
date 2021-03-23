@@ -59,7 +59,7 @@ Item {
         Text {
             id: title
             font.pixelSize: 18
-            font.family: "WenQuanYi Micro Hei"
+            // font.family: "WenQuanYi Micro Hei"
             anchors.verticalCenter: parent.verticalCenter
             text: ""
             color: "white"

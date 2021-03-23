@@ -18,7 +18,7 @@ int LuaTriggerSkill::getPriority(TriggerEvent triggerEvent) const
     else
         return priority;
 }
-
+/*
 QDialog *LuaTriggerSkill::getDialog() const
 {
     if (guhuo_type == "")
@@ -26,7 +26,7 @@ QDialog *LuaTriggerSkill::getDialog() const
     GuhuoDialog *guhuo = GuhuoDialog::getInstance(this->objectName(), guhuo_type.contains("l"), guhuo_type.contains("r"), !guhuo_type.startsWith("!"), guhuo_type.contains("s"), guhuo_type.contains("d"));
     return guhuo;
 }
-
+*/
 LuaProhibitSkill::LuaProhibitSkill(const char *name)
     : ProhibitSkill(name), is_prohibited(0)
 {
@@ -41,7 +41,7 @@ LuaViewAsSkill::LuaViewAsSkill(const char *name, const char *response_pattern, b
     this->expand_pile = expand_pile;
     this->guhuo_type = "";
 }
-
+/*
 QDialog *LuaViewAsSkill::getDialog() const
 {
     if (guhuo_type == "")
@@ -49,7 +49,7 @@ QDialog *LuaViewAsSkill::getDialog() const
     GuhuoDialog *guhuo = GuhuoDialog::getInstance(this->objectName(), guhuo_type.contains("l"), guhuo_type.contains("r"), !guhuo_type.startsWith("!"), guhuo_type.contains("s"), guhuo_type.contains("d"));
     return guhuo;
 }
-
+*/
 LuaFilterSkill::LuaFilterSkill(const char *name)
     : FilterSkill(name), view_filter(0), view_as(0)
 {

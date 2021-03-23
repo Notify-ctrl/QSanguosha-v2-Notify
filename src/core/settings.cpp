@@ -1,5 +1,5 @@
 #include "settings.h"
-#include "photo.h"
+// #include "photo.h"
 #include "card.h"
 #include "engine.h"
 

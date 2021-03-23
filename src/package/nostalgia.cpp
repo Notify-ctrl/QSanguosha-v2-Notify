@@ -2018,7 +2018,7 @@ public:
             room->enterDying(player, NULL);
     }
 };
-
+/*
 NosGuhuoCard::NosGuhuoCard()
 {
     mute = true;
@@ -2345,7 +2345,7 @@ public:
         return !player->isKongcheng() && !player->getHandPile().isEmpty();
     }
 };
-
+*/
 NostalStandardPackage::NostalStandardPackage()
     : Package("nostal_standard")
 {
@@ -2450,11 +2450,11 @@ NostalWindPackage::NostalWindPackage()
     nos_zhangjiao->addSkill(new NosLeiji);
     nos_zhangjiao->addSkill("guidao");
     nos_zhangjiao->addSkill("huangtian");
-
+/*
     General *nos_yuji = new General(this, "nos_yuji", "qun", 3);
     nos_yuji->addSkill(new NosGuhuo);
 
-    addMetaObject<NosGuhuoCard>();
+    addMetaObject<NosGuhuoCard>(); */
 }
 
 NostalYJCMPackage::NostalYJCMPackage()

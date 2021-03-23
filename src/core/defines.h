@@ -6,5 +6,11 @@
 #define SERVERLIST_VERSION_SERVERLIST 1
 #define SERVERLIST_OFFICIALSERVER "115.159.24.202"
 
+#define REGISTER_QMLTYPE(uri, versionMajor, versionMinor, qmlName) static void __cRegisterQmlType__ ## qmlName()\
+{\
+    qmlRegisterType<qmlName>(uri, versionMajor, versionMinor, #qmlName);\
+}\
+Q_COREAPP_STARTUP_FUNCTION(__cRegisterQmlType__ ## qmlName)
+
 #endif // DEFINES_H
 

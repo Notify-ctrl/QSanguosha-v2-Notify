@@ -1,7 +1,11 @@
 import QtQuick 2.15
+import QtQuick.Controls 2.5
 
-Item {
+ApplicationWindow {
     id: root
+    visible: true
+    width: 1366
+    height: 768
 
     Loader {
         id: startSceneLoader
@@ -36,7 +40,7 @@ Item {
             }
         }
 
-        if (skip_splash) {
+        if (true) { //(skip_splash) {
             startSceneLoader.source = "ui/StartScene.qml";
         } else {
             splashLoader.source = "ui/Splash.qml";

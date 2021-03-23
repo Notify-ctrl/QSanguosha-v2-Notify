@@ -36,7 +36,7 @@ public:
 
     void onEffect(const CardEffectStruct &effect) const;
 };
-
+/*
 class GuhuoCard : public SkillCard
 {
     Q_OBJECT
@@ -86,7 +86,7 @@ private:
 signals:
     void onButtonClick();
 };
-
+*/
 class Jushou : public PhaseChangeSkill
 {
 public:

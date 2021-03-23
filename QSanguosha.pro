@@ -3,7 +3,7 @@
 # -------------------------------------------------
 TARGET = QSanguosha
 QT += network widgets
-QT += qml quick quickwidgets multimedia
+QT += qml quick
 TEMPLATE = app
 
 CONFIG(release,debug|release){
@@ -37,18 +37,6 @@ SOURCES += \
     src/core/skill.cpp \
     src/core/structs.cpp \
     src/core/util.cpp \
-    src/dialog/cardeditor.cpp \
-    src/dialog/cardoverview.cpp \
-    src/dialog/choosegeneraldialog.cpp \
-    src/dialog/configdialog.cpp \
-    src/dialog/connectiondialog.cpp \
-    src/dialog/customassigndialog.cpp \
-    src/dialog/distanceviewdialog.cpp \
-    src/dialog/generaloverview.cpp \
-    src/dialog/mainwindow.cpp \
-    src/dialog/playercarddialog.cpp \
-    src/dialog/roleassigndialog.cpp \
-    src/dialog/scenario-overview.cpp \
     src/package/exppattern.cpp \
     src/package/god.cpp \
     src/package/maneuvering.cpp \
@@ -74,18 +62,11 @@ SOURCES += \
     src/server/roomthread.cpp \
     src/server/server.cpp \
     src/server/serverplayer.cpp \
-    src/ui/roomscene.cpp \
     src/package/hegemony.cpp \
     src/scenario/fancheng-scenario.cpp \
     src/core/room-state.cpp \
     src/core/wrapped-card.cpp \
-    src/ui/bubblechatbox.cpp \
-    src/ui/generic-cardcontainer-ui.cpp \
-    src/ui/qsan-selectable-item.cpp \
-    src/ui/skin-bank.cpp \
-    src/ui/table-pile.cpp \
-    src/ui/timed-progressbar.cpp \
-    src/ui/ui-utils.cpp \
+    src/core/record-analysis.cpp \
     src/package/bgm.cpp \
     src/package/fire.cpp \
     src/package/h-formation.cpp \
@@ -96,10 +77,13 @@ SOURCES += \
     src/package/yjcm2012.cpp \
     src/package/yjcm2013.cpp \
     src/package/yjcm2014.cpp \
+    src/ui/pcconsolestartdialog.cpp \
+    src/ui/startserverdialog.cpp \
     swig/sanguosha_wrap.cxx \
-    src/dialog/banipdialog.cpp \
     src/package/jsp.cpp \
-    src/dialog/dialogslsettings.cpp
+    src/util/detector.cpp \
+    src/util/nativesocket.cpp \
+    src/util/recorder.cpp
 
 HEADERS += \
     src/client/aux-skills.h \
@@ -120,18 +104,6 @@ HEADERS += \
     src/core/skill.h \
     src/core/structs.h \
     src/core/util.h \
-    src/dialog/cardeditor.h \
-    src/dialog/cardoverview.h \
-    src/dialog/choosegeneraldialog.h \
-    src/dialog/configdialog.h \
-    src/dialog/connectiondialog.h \
-    src/dialog/customassigndialog.h \
-    src/dialog/distanceviewdialog.h \
-    src/dialog/generaloverview.h \
-    src/dialog/mainwindow.h \
-    src/dialog/playercarddialog.h \
-    src/dialog/roleassigndialog.h \
-    src/dialog/scenario-overview.h \
     src/package/exppattern.h \
     src/package/god.h \
     src/package/maneuvering.h \
@@ -154,7 +126,8 @@ HEADERS += \
     src/server/roomthread.h \
     src/server/server.h \
     src/server/serverplayer.h \
-    src/ui/roomscene.h \
+    src/ui/pcconsolestartdialog.h \
+    src/ui/startserverdialog.h \
     src/util/detector.h \
     src/util/nativesocket.h \
     src/util/recorder.h \
@@ -176,19 +149,11 @@ HEADERS += \
     src/core/wrapped-card.h \
     src/package/thicket.h \
     src/package/wind.h \
-    src/dialog/banipdialog.h \
     src/package/jsp.h \
     src/pch.h \
-    src/dialog/dialogslsettings.h \
     src/core/defines.h
 
-FORMS += \
-    src/dialog/cardoverview.ui \
-    src/dialog/configdialog.ui \
-    src/dialog/connectiondialog.ui \
-    src/dialog/generaloverview.ui \
-    src/dialog/mainwindow.ui \
-    src/dialog/dialogslsettings.ui
+FORMS +=
 
 OTHER_FILES += \
     script/* \

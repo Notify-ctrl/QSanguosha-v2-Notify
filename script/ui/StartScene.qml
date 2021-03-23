@@ -3,7 +3,7 @@ import "Util"
 
 Image {
     id: startScene
-    source: "../../image/system/backdrop/new-version.jpg"
+    source: "../../image/background/bg"
     anchors.fill: parent
 
     FitInView {

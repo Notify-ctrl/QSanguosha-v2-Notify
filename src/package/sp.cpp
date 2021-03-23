@@ -2704,7 +2704,7 @@ public:
         return false;
     }
 };
-
+/*
 ShefuCard::ShefuCard()
 {
     will_throw = false;
@@ -2972,7 +2972,7 @@ public:
         return;
     }
 };
-
+*/
 class Fulu : public OneCardViewAsSkill
 {
 public:
@@ -3547,13 +3547,13 @@ SPPackage::SPPackage()
     General *maliang = new General(this, "maliang", "shu", 3); // SP 035
     maliang->addSkill(new Xiemu);
     maliang->addSkill(new Naman);
-
+/*
     General *chengyu = new General(this, "chengyu", "wei", 3);
     chengyu->addSkill(new Shefu);
     chengyu->addSkill(new ShefuCancel);
     chengyu->addSkill(new Benyu);
     related_skills.insert("shefu", "#shefu-cancel");
-
+*/
     General *sp_ganfuren = new General(this, "sp_ganfuren", "shu", 3, false); // SP 037
     sp_ganfuren->addSkill("shushen");
     sp_ganfuren->addSkill("shenzhi");
@@ -3583,7 +3583,7 @@ SPPackage::SPPackage()
     addMetaObject<QiangwuCard>();
     addMetaObject<YinbingCard>();
     addMetaObject<XiemuCard>();
-    addMetaObject<ShefuCard>();
+//    addMetaObject<ShefuCard>();
     addMetaObject<QujiCard>();
     addMetaObject<HongyuanCard>();
 

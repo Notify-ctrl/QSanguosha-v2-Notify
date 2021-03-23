@@ -4,7 +4,7 @@
 #include "skill.h"
 #include "engine.h"
 #include "standard.h"
-#include "generaloverview.h"
+// #include "generaloverview.h"
 #include "clientplayer.h"
 #include "client.h"
 #include "ai.h"
@@ -1102,7 +1102,7 @@ public:
         return false;
     }
 };
-
+/*
 class Huashen : public GameStartSkill
 {
 public:
@@ -1391,7 +1391,7 @@ public:
         }
     }
 };
-
+*/
 MountainPackage::MountainPackage()
     : Package("mountain")
 {
@@ -1422,7 +1422,7 @@ MountainPackage::MountainPackage()
     General *erzhang = new General(this, "erzhang", "wu", 3); // WU 015
     erzhang->addSkill(new Zhijian);
     erzhang->addSkill(new Guzheng);
-
+/*
     General *zuoci = new General(this, "zuoci", "qun", 3); // QUN 009
     zuoci->addSkill(new Huashen);
     zuoci->addSkill(new HuashenSelect);
@@ -1430,7 +1430,7 @@ MountainPackage::MountainPackage()
     zuoci->addSkill(new Xinsheng);
     related_skills.insert("huashen", "#huashen-select");
     related_skills.insert("huashen", "#huashen-clear");
-
+*/
     General *caiwenji = new General(this, "caiwenji", "qun", 3, false); // QUN 012
     caiwenji->addSkill(new Beige);
     caiwenji->addSkill(new Duanchang);

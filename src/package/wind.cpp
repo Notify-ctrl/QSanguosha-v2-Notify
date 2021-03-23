@@ -717,7 +717,7 @@ public:
         return false;
     }
 };
-
+/*
 GuhuoDialog *GuhuoDialog::getInstance(const QString &object, bool left, bool right,
     bool play_only, bool slash_combined, bool delayed_tricks)
 {
@@ -1357,7 +1357,7 @@ public:
             || player->getHp() != 1 || skill->isAttachedLordSkill();
     }
 };
-
+*/
 WindPackage::WindPackage()
     :Package("wind")
 {
@@ -1394,20 +1394,20 @@ WindPackage::WindPackage()
     zhangjiao->addSkill(new Leiji);
     zhangjiao->addSkill(new Guidao);
     zhangjiao->addSkill(new Huangtian);
-
+/*
     General *yuji = new General(this, "yuji", "qun", 3); // QUN 011
     yuji->addSkill(new Guhuo);
     yuji->addSkill(new GuhuoClear);
     related_skills.insert("guhuo", "#guhuo-clear");
     yuji->addRelateSkill("chanyuan");
-
+*/
     addMetaObject<ShensuCard>();
     addMetaObject<TianxiangCard>();
     addMetaObject<HuangtianCard>();
-    addMetaObject<GuhuoCard>();
+ //   addMetaObject<GuhuoCard>();
 
-    skills << new HuangtianViewAsSkill << new Chanyuan << new ChanyuanInvalidity;
-    related_skills.insert("chanyuan", "#chanyuan-inv");
+    skills << new HuangtianViewAsSkill; // <<new Chanyuan << new ChanyuanInvalidity;
+    //related_skills.insert("chanyuan", "#chanyuan-inv");
 }
 
 ADD_PACKAGE(Wind)

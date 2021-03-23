@@ -3,7 +3,7 @@
 
 #include "package.h"
 #include "card.h"
-#include "generaloverview.h"
+// #include "generaloverview.h"
 
 class QiaobianCard : public SkillCard
 {
@@ -71,8 +71,8 @@ public:
     bool targetFilter(const QList<const Player *> &targets, const Player *to_select, const Player *Self) const;
     void onEffect(const CardEffectStruct &effect) const;
 };
-
-class HuashenDialog : public GeneralOverview
+/*
+class HuashenDialog : public QObject //GeneralOverview
 {
     Q_OBJECT
 
@@ -80,9 +80,9 @@ public:
     HuashenDialog();
 
 public slots:
-    void popup();
+    // void popup();
 };
-
+*/
 class MountainPackage : public Package
 {
     Q_OBJECT

@@ -172,7 +172,7 @@ public:
     void use(Room *room, ServerPlayer *source, QList<ServerPlayer *> &targets) const;
     void onEffect(const CardEffectStruct &effect) const;
 };
-
+/*
 class NosGuhuoCard : public SkillCard
 {
     Q_OBJECT
@@ -188,7 +188,7 @@ public:
     const Card *validate(CardUseStruct &card_use) const;
     const Card *validateInResponse(ServerPlayer *user) const;
 };
-
+*/
 class NosYiji : public MasochismSkill
 {
 public:

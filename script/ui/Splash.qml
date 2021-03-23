@@ -37,7 +37,7 @@ Rectangle {
                 id: qsan
                 text: qsTr("QSanguosha")
                 color: "#ffffff"
-                font.family: "微软雅黑"
+                font.family: "DroidSansFallback"
                 font.pixelSize: 40
                 opacity: 0
             }
@@ -50,7 +50,7 @@ Rectangle {
                     id: free
                     text: qsTr("Free")
                     color: "#ffffff"
-                    font.family: "微软雅黑"
+                    font.family: "DroidSansFallback"
                     font.pixelSize: 20
                     opacity: 0
                     Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
@@ -60,7 +60,7 @@ Rectangle {
                     id: open
                     text: qsTr("Open")
                     color: "#ffffff"
-                    font.family: "微软雅黑"
+                    font.family: "DroidSansFallback"
                     font.pixelSize: 20
                     opacity: 0
                     Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
@@ -70,7 +70,7 @@ Rectangle {
                     id: flexible
                     text: qsTr("Flexible")
                     color: "#ffffff"
-                    font.family: "微软雅黑"
+                    font.family: "DroidSansFallback"
                     font.pixelSize: 20
                     opacity: 0
                     Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
@@ -84,7 +84,7 @@ Rectangle {
         text: qsTr("Press Any Key...")
         color: "#ffffff"
         opacity: 0
-        font.family: "微软雅黑"
+        font.family: "DroidSansFallback"
         font.pointSize: 15
         horizontalAlignment: Text.AlignHCenter
         anchors.horizontalCenter: parent.horizontalCenter
@@ -151,7 +151,7 @@ Rectangle {
     Text {
         text: qsTr("Powered by Mogara")
         color: "#f39292"
-        font.family: "Segoe Script"
+        font.family: "DroidSansFallback"
         font.pixelSize: 20
         anchors.bottom: parent.bottom
         anchors.right: parent.right

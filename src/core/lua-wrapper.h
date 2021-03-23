@@ -37,7 +37,7 @@ public:
     int getPriority(TriggerEvent triggerEvent) const;
     bool triggerable(const ServerPlayer *target, Room *room) const;
     bool trigger(TriggerEvent triggerEvent, Room *room, ServerPlayer *player, QVariant &data) const;
-    QDialog *getDialog() const;
+    // QDialog *getDialog() const;
     Frequency getFrequency(const Player *target) const;
 
     LuaFunction on_trigger;
@@ -93,7 +93,7 @@ public:
     bool isEnabledAtPlay(const Player *player) const;
     bool isEnabledAtResponse(const Player *player, const QString &pattern) const;
     bool isEnabledAtNullification(const ServerPlayer *player) const;
-    QDialog *getDialog() const;
+    // QDialog *getDialog() const;
 private:
     QString guhuo_type;
 };

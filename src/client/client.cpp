@@ -1,7 +1,7 @@
 #include "client.h"
 #include "settings.h"
 #include "engine.h"
-#include "choosegeneraldialog.h"
+// #include "choosegeneraldialog.h"
 #include "nativesocket.h"
 #include "recorder.h"
 #include "json.h"

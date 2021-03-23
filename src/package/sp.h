@@ -163,7 +163,7 @@ public:
 
     void use(Room *room, ServerPlayer *source, QList<ServerPlayer *> &targets) const;
 };
-
+/*
 class ShefuCard : public SkillCard
 {
     Q_OBJECT
@@ -184,7 +184,7 @@ protected:
     explicit ShefuDialog(const QString &object);
     bool isButtonEnabled(const QString &button_name) const;
 };
-
+*/
 class ZhoufuCard : public SkillCard
 {
     Q_OBJECT

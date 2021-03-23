@@ -3,7 +3,7 @@
 #include "standard-skillcards.h"
 #include "clientplayer.h"
 #include "client.h"
-#include "carditem.h"
+// #include "carditem.h"
 #include "general.h"
 #include "wrapped-card.h"
 #include "room.h"

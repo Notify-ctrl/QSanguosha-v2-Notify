@@ -123,6 +123,9 @@ public:
     QString findConvertFrom(const QString &general_name) const;
     bool isGeneralHidden(const QString &general_name) const;
 
+    Q_INVOKABLE QVariant getConfig(const QString &);
+    Q_INVOKABLE void setConfig(const QString &, QVariant &);
+
 private:
     void _loadMiniScenarios();
     void _loadModScenarios();

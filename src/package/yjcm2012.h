@@ -12,7 +12,7 @@ class YJCM2012Package : public Package
 public:
     YJCM2012Package();
 };
-
+/*
 class QiceCard : public SkillCard
 {
     Q_OBJECT
@@ -26,7 +26,7 @@ public:
 
     const Card *validate(CardUseStruct &card_use) const;
 };
-
+*/
 class GongqiCard : public SkillCard
 {
     Q_OBJECT

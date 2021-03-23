@@ -5,7 +5,7 @@ public:
     void setViewAsSkill(ViewAsSkill *view_as_skill);
     void setGlobal(bool global);
     void insertPriorityTable(TriggerEvent triggerEvent, int priority);
-    void setGuhuoDialog(const char *type);
+    //void setGuhuoDialog(const char *type);
     
     virtual Frequency getFrequency(const Player *target) const;
 
@@ -135,7 +135,7 @@ public:
     LuaFunction enabled_at_response;
     LuaFunction enabled_at_nullification;
 
-    void setGuhuoDialog(const char *type);
+    //void setGuhuoDialog(const char *type);
 };
 
 class OneCardViewAsSkill: public ViewAsSkill {

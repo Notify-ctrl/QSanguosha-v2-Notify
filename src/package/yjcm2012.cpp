@@ -113,7 +113,7 @@ public:
         return false;
     }
 };
-
+/*
 QiceCard::QiceCard()
 {
     will_throw = false;
@@ -248,7 +248,7 @@ public:
         }
     }
 };
-
+*/
 class Jiangchi : public DrawCardsSkill
 {
 public:
@@ -1087,12 +1087,12 @@ YJCM2012Package::YJCM2012Package()
     General *wangyi = new General(this, "wangyi", "wei", 3, false); // YJ 110
     wangyi->addSkill(new Zhenlie);
     wangyi->addSkill(new Miji);
-
+/*
     General *xunyou = new General(this, "xunyou", "wei", 3); // YJ 111
     xunyou->addSkill(new Qice);
     xunyou->addSkill(new Zhiyu);
 
-    addMetaObject<QiceCard>();
+    addMetaObject<QiceCard>();*/
     addMetaObject<ChunlaoCard>();
     addMetaObject<ChunlaoWineCard>();
     addMetaObject<GongqiCard>();

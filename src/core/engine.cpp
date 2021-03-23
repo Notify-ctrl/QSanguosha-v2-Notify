@@ -728,7 +728,17 @@ bool Engine::isGeneralHidden(const QString &general_name) const
     const General *general = getGeneral(general_name);
     if (!general) return true;
     return (general->isHidden() && !removed_hidden_generals.contains(general_name))
-        || extra_hidden_generals.contains(general_name);
+            || extra_hidden_generals.contains(general_name);
+}
+
+QVariant Engine::getConfig(const QString &name)
+{
+    return Config.value(name);
+}
+
+void Engine::setConfig(const QString &key, QVariant &value)
+{
+    Config.setValue(key, value);
 }
 
 WrappedCard *Engine::getWrappedCard(int cardId)
