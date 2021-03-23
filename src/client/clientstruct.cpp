@@ -141,7 +141,7 @@ void ServerInfoWidget::fill(const ServerInfoStruct &info, const QString &address
     game_mode_label->setText(Sanguosha->getModeName(info.GameMode));
     int player_count = Sanguosha->getPlayerCount(info.GameMode);
     player_count_label->setText(QString::number(player_count));
-    port_label->setText(QString::number(Config.ServerPort));
+    port_label->setText(QString::number(Config.value("ServerPort").toInt()));
     two_general_label->setText(info.Enable2ndGeneral ? tr("Enabled") : tr("Disabled"));
     same_label->setText(info.EnableSame ? tr("Enabled") : tr("Disabled"));
     basara_label->setText(info.EnableBasara ? tr("Enabled") : tr("Disabled"));

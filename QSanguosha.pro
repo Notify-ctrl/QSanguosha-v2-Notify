@@ -78,6 +78,8 @@ SOURCES += \
     src/package/yjcm2013.cpp \
     src/package/yjcm2014.cpp \
     src/ui/pcconsolestartdialog.cpp \
+    src/ui/roomscene.cpp \
+    src/ui/startgamedialog.cpp \
     src/ui/startserverdialog.cpp \
     swig/sanguosha_wrap.cxx \
     src/package/jsp.cpp \
@@ -127,6 +129,8 @@ HEADERS += \
     src/server/server.h \
     src/server/serverplayer.h \
     src/ui/pcconsolestartdialog.h \
+    src/ui/roomscene.h \
+    src/ui/startgamedialog.h \
     src/ui/startserverdialog.h \
     src/util/detector.h \
     src/util/nativesocket.h \
@@ -154,13 +158,6 @@ HEADERS += \
     src/core/defines.h
 
 FORMS +=
-
-OTHER_FILES += \
-    script/* \
-    script/ui/* \
-    script/ui/Util/* \
-    script/ui/RoomElement/* \
-    script/ui/Dialog/*
 
 OTHER_FILES += \
     script/* \

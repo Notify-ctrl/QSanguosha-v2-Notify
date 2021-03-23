@@ -1,8 +1,9 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.5
+import "ui/Util"
 
 ApplicationWindow {
-    id: root
+    id: rootWindow
     visible: true
     width: 1366
     height: 768

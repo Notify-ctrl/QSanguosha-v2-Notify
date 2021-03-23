@@ -27,7 +27,7 @@ public:
     ~Engine();
 
     void addTranslationEntry(const char *key, const char *value);
-    QString translate(const QString &to_translate) const;
+    Q_INVOKABLE QString translate(const QString &to_translate) const;
     lua_State *getLuaState() const;
 
     int getMiniSceneCounts();
@@ -63,7 +63,7 @@ public:
     QList<const Skill *> getRelatedSkills(const QString &skill_name) const;
     const Skill *getMainSkill(const QString &skill_name) const;
 
-    QStringList getModScenarioNames() const;
+    Q_INVOKABLE QStringList getModScenarioNames() const;
     void addScenario(Scenario *scenario);
     const Scenario *getScenario(const QString &name) const;
     void addPackage(const QString &name);
@@ -123,14 +123,13 @@ public:
     QString findConvertFrom(const QString &general_name) const;
     bool isGeneralHidden(const QString &general_name) const;
 
-    Q_INVOKABLE QVariant getConfig(const QString &);
-    Q_INVOKABLE void setConfig(const QString &, QVariant &);
+    Q_INVOKABLE QVariant getConfig(const QString &, QVariant defaultValue = QVariant());
+    Q_INVOKABLE void setConfig(const QString &, QVariant);
+    Q_INVOKABLE QStringList getMiniScenarioNames();
 
 private:
     void _loadMiniScenarios();
     void _loadModScenarios();
-    void godLottery(QStringList &) const;
-	void godLottery(QSet<QString> &) const;
 
     QMutex m_mutex;
     QHash<QString, QString> translations;
@@ -185,7 +184,6 @@ public slots:
 private:
 	QFile logFile;
 #endif // LOGNETWORK
-
 };
 
 static inline QVariant GetConfigFromLuaState(lua_State *L, const char *key)

@@ -1,5 +1,7 @@
 import QtQuick 2.4
 import QtQuick.Layouts 1.2
+import QtQuick.Controls 2.12
+import Sanguosha.Dialogs 1.0
 import "../Util"
 
 StartGameDialog {
@@ -8,95 +10,187 @@ StartGameDialog {
     signal accepted
     signal rejected
 
-    property alias serverAddress: serverAddressInput.text
-    property alias screenName: screenNameInput.text
-
-    onLobbyEntered: dialogLoader.setSource("../Lobby.qml");
+    onEnterRoom: dialogLoader.setSource("../RoomScene.qml");
 
     onAccepted: {
-        signup(screenName, "");
-        connectToServer(serverAddress);
+        config()
+        connectToServer();
     }
 
     onRejected: dialogLoader.source = "";
 
     Image {
-        source: config.backgroundImage
+        source: "../../../image/background/bg"
         anchors.fill: parent
     }
 
-    RowLayout {
-        width: 600
-        height: 270
+    Rectangle {
+        color: "#88888888"
         anchors.centerIn: parent
-        spacing: 22
-
-        GridLayout {
-            columns: 2
-
-            Text {
-                text: qsTr("Server Address")
-                color: "white"
-                font.pixelSize: 20
-                width: 50
-                height: 22
-            }
-
+        height: 480
+        width: 800
+        Flickable {
+            width: parent.width - 40
+            height: parent.height - 20
+            anchors.centerIn: parent
+            contentWidth: dialog.width
+            contentHeight: dialog.height
+            ScrollBar.vertical: ScrollBar {}
+            clip: true
+            flickableDirection: Flickable.VerticalFlick
             Rectangle {
-                color: Qt.rgba(0xFF, 0xFF, 0xFF, 0.3)
-                Layout.fillWidth: true
-                height: 42
-                TextInput {
-                    id: serverAddressInput
-                    anchors.fill: parent
-                    anchors.margins: 11
-                    font.pixelSize: 20
-                    color: "white"
-                    clip: true
-                    text: "127.0.0.1:5927"
+                id: dialog
+                color: "transparent"
+                height: childrenRect.height + 64
+                width: childrenRect.width
+                Column {
+                    x: 32
+                    y: 20
+                    spacing: 20
+
+                    GridLayout {
+                        columns: 2
+                        rowSpacing: 8
+                        columnSpacing: 16
+                        Text {
+                            text: qsTr("Name")
+                        }
+
+                        TextField {
+                            id: userName
+                            selectByMouse: true
+                            text: Sanguosha.getConfig("UserName", "sgsfans")
+                        }
+
+                        Text {
+                            text: qsTr("Host Address")
+                        }
+
+                        ComboBox {
+                            id: hostAddress
+                            editable: true
+                            width: 128 /*
+                            function getModel() {
+                                let ret = []
+                                let history = Sanguosha.getConfig("HistoryIPs", "")
+                                if (history instanceof Array)
+                                    for (let i = 0; i < history.length; i++)
+                                        ret.push(history[i])
+                                else
+                                    ret.push(history)
+                                if (ret.length === 0)
+                                    ret.push("localhost")
+                                return ret
+                            }
+
+                            model: getModel()*/
+                            model: ["localhost"]
+                        }
+                    }
+
+                    RowLayout {
+                        TextField {
+                            id: userAvatar
+                            selectByMouse: true
+                            text: Sanguosha.getConfig("UserAvatar", "nos_zhangliao")
+
+                            onAccepted: {
+                                avatarImg.source = "../../../image/general/full/" + text;
+                            }
+                        }
+
+                        MetroButton {
+                            text: qsTr("Apply")
+                            onClicked: avatarImg.source = "../../../image/general/full/" + userAvatar.text;
+                        }
+                    }
+
+                    Image {
+                        id: avatarImg
+                        Component.onCompleted: {
+                            source = "../../../image/general/full/" + userAvatar.text;
+                        }
+                    }
+
+                    RowLayout {
+                        anchors.rightMargin: 8
+                        spacing: 16
+                        CheckBox {
+                            id: reconnect
+                            text: "Reconnect"
+                            checked: Sanguosha.getConfig("EnableReconnection", false)
+                        }
+
+                        MetroButton {
+                            text: qsTr("Start Game")
+                            enabled: avatarImg.height == 292 && userName.length > 0
+                            onClicked: {
+                                startGameDialog.accepted()
+                            }
+                        }
+                        MetroButton {
+                            text: qsTr("Cancel")
+                            onClicked: {
+                                startGameDialog.rejected()
+                            }
+                        }
+                    }
                 }
-            }
-
-            Text {
-                text: qsTr("Screen Name")
-                color: "white"
-                font.pixelSize: 20
-                width: 50
-                height: 22
-
-                Component.onCompleted: forceActiveFocus();
-            }
-
-            Rectangle {
-                color: Qt.rgba(0xFF, 0xFF, 0xFF, 0.3)
-                Layout.fillWidth: true
-                height: 42
-                TextInput {
-                    id: screenNameInput
-                    anchors.fill: parent
-                    anchors.margins: 11
-                    font.pixelSize: 20
-                    color: "white"
-                    clip: true
-                }
-            }
-        }
-
-        ColumnLayout {
-            spacing: 20
-
-            MetroButton {
-                width: 160
-                height: 50
-                text: qsTr("Connect")
-                onClicked: startGameDialog.accepted();
-            }
-            MetroButton {
-                width: 160
-                height: 50
-                text: qsTr("Cancel")
-                onClicked: startGameDialog.rejected();
             }
         }
     }
+
+    Rectangle {
+        id: toast
+        opacity: 0
+        anchors.horizontalCenter: parent.horizontalCenter
+        y: parent.height * 0.8
+        radius: 16
+        color: "#F2808A87"
+        height: toast_text.height + 20
+        width: toast_text.width + 40
+        Text {
+            id: toast_text
+            text: "QSanguosha"
+            anchors.centerIn: parent
+            color: "white"
+        }
+        Behavior on opacity {
+            NumberAnimation {
+                duration: 240
+                easing.type: Easing.InOutQuad
+            }
+        }
+        SequentialAnimation {
+            id: keepAnim
+            running: toast.opacity == 1
+            PauseAnimation {
+                duration: 1500
+            }
+
+            ScriptAction {
+                script: {
+                    toast.opacity = 0
+                }
+            }
+        }
+
+        function show(text) {
+            opacity = 1
+            toast_text.text = text
+        }
+    }
+
+
+    function config() {
+        Sanguosha.setConfig("UserName", userName.text)
+        Sanguosha.setConfig("HostAddress", hostAddress.currentText)
+        Sanguosha.getConfig("UserAvatar", userAvatar.text)
+        Sanguosha.setConfig("EnableReconnection", reconnect.checked)
+    }
+
+    onErrorGet: {
+        toast.show(error_msg)
+    }
+
 }

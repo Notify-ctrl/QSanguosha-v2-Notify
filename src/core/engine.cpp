@@ -529,7 +529,7 @@ void Engine::addBanPackage(const QString &package_name)
 QStringList Engine::getBanPackages() const
 {
     if (qApp->arguments().contains("-server"))
-        return Config.BanPackages;
+        return Config.value("BanPackages").toStringList();
     else
         return ban_package.values();
 }
@@ -731,14 +731,26 @@ bool Engine::isGeneralHidden(const QString &general_name) const
             || extra_hidden_generals.contains(general_name);
 }
 
-QVariant Engine::getConfig(const QString &name)
+QVariant Engine::getConfig(const QString &name, QVariant defaultValue)
 {
-    return Config.value(name);
+    return Config.value(name, defaultValue);
 }
 
-void Engine::setConfig(const QString &key, QVariant &value)
+void Engine::setConfig(const QString &key, QVariant value)
 {
     Config.setValue(key, value);
+}
+
+QStringList Engine::getMiniScenarioNames()
+{
+    int stage = qMin(Sanguosha->getMiniSceneCounts(), Config.value("MiniSceneStage", 1).toInt());
+    QStringList ret;
+
+    for (int i = 1; i <= stage; i++) {
+        ret << Sanguosha->translate(QString(MiniScene::S_KEY_MINISCENE).arg(QString::number(i)));
+    }
+
+    return ret;
 }
 
 WrappedCard *Engine::getWrappedCard(int cardId)
@@ -973,39 +985,39 @@ QStringList Engine::getChattingEasyTexts() const
 
 QString Engine::getSetupString() const
 {
-    int timeout = Config.OperationNoLimit ? 0 : Config.OperationTimeout;
+    int timeout = Config.value("OperationNoLimit").toBool() ? 0 : Config.value("OperationTimeout").toInt();
     QString flags;
-    if (Config.RandomSeat)
+    if (Config.value("RandomSeat").toBool())
         flags.append("R");
-    if (Config.EnableCheat)
+    if (Config.value("EnableCheat").toBool())
         flags.append("C");
-    if (Config.EnableCheat && Config.FreeChoose)
+    if (Config.value("EnableCheat").toBool() && Config.value("FreeChoose").toBool())
         flags.append("F");
-    if (Config.Enable2ndGeneral)
+    if (Config.value("Enable2ndGeneral").toBool())
         flags.append("S");
-    if (Config.EnableAI)
+    if (Config.value("EnableAI").toBool())
         flags.append("A");
-    if (Config.DisableChat)
+    if (Config.value("DisableChat").toBool())
         flags.append("M");
 
-    if (Config.MaxHpScheme == 1)
+    if (Config.value("MaxHpScheme").toInt() == 1)
         flags.append("1");
-    else if (Config.MaxHpScheme == 2)
+    else if (Config.value("MaxHpScheme").toInt() == 2)
         flags.append("2");
-    else if (Config.MaxHpScheme == 3)
+    else if (Config.value("MaxHpScheme").toInt() == 3)
         flags.append("3");
-    else if (Config.MaxHpScheme == 0) {
-        char c = Config.Scheme0Subtraction + 5 + 'a'; // from -5 to 12
+    else if (Config.value("MaxHpScheme").toInt() == 0) {
+        char c = Config.value("Scheme0Subtraction").toInt() + 5 + 'a'; // from -5 to 12
         flags.append(c);
     }
 
-    QString server_name = Config.ServerName.toUtf8().toBase64();
+    QString server_name = Config.value("ServerName").toString().toUtf8().toBase64();
     QStringList setup_items;
-    QString mode = Config.GameMode;
+    QString mode = Config.value("GameMode").toString();
     setup_items << server_name
         << mode
         << QString::number(timeout)
-        << QString::number(Config.NullificationCountDown)
+        << QString::number(Config.value("NullificationCountDown").toInt())
         << Sanguosha->getBanPackages().join("+")
         << flags;
 
@@ -1137,7 +1149,7 @@ QStringList Engine::getLords(bool contain_banned) const
                 || ServerInfo.GameMode == "custom_scenario")
                 if (Config.value("Banlist/Roles", "").toStringList().contains(lord))
                     continue;
-            if (Config.Enable2ndGeneral && BanPair::isBanned(lord))
+            if (Config.value("Enable2ndGeneral").toBool() && BanPair::isBanned(lord))
                 continue;
         }
         lords << lord;
@@ -1150,9 +1162,9 @@ QStringList Engine::getRandomLords() const
 {
     QStringList banlist_ban;
 
-    if (Config.GameMode == "zombie_mode")
+    if (Config.value("GameMode").toString() == "zombie_mode")
         banlist_ban.append(Config.value("Banlist/Zombie").toStringList());
-    else if (isNormalGameMode(Config.GameMode))
+    else if (isNormalGameMode(Config.value("GameMode").toString()))
         banlist_ban.append(Config.value("Banlist/Roles").toStringList());
 
     QStringList lords;
@@ -1176,15 +1188,13 @@ QStringList Engine::getRandomLords() const
         const General *general = generals.value(nonlord);
         if (getBanPackages().contains(general->getPackage()))
             continue;
-        if (Config.Enable2ndGeneral && BanPair::isBanned(general->objectName()))
+        if (Config.value("Enable2ndGeneral").toBool() && BanPair::isBanned(general->objectName()))
             continue;
         if (banlist_ban.contains(general->objectName()))
             continue;
 
         nonlord_list << nonlord;
     }
-
-    godLottery(nonlord_list);
 
     qShuffle(nonlord_list);
 
@@ -1240,8 +1250,6 @@ QStringList Engine::getRandomGenerals(int count, const QSet<QString> &ban_set, c
         general_set.subtract(Config.value("Banlist/Roles", "").toStringList().toSet());
     }
 
-    godLottery(general_set);
-
     all_generals = general_set.subtract(ban_set).values();
 
     // shuffle them
@@ -1291,7 +1299,7 @@ void Engine::playSystemAudioEffect(const QString &name, bool superpose) const
 void Engine::playAudioEffect(const QString &filename, bool superpose) const
 {
 #ifdef AUDIO_SUPPORT
-    if (!Config.EnableEffects)
+    if (!Config.value("EnableEffects").toBool())
         return;
     if (filename.isNull())
         return;
@@ -1461,38 +1469,3 @@ void Engine::handleNetworkMessage(QString s)
     out << s << "\n";
 }
 #endif // LOGNETWORK
-
-void Engine::godLottery(QStringList &list) const
-{
-	qDebug("godLottery");
-    if(!getBanPackages().contains("god"))
-        return;
-
-    QList<const Package *> packages=getPackages();
-	foreach(const Package *package, packages) {
-        if(package->objectName()=="god") {
-            QList<General*> generals=package->findChildren<General*>();
-            General *general;
-            // qsrand(QDateTime::currentMSecsSinceEpoch());
-            Config.beginGroup("godlottery");
-            foreach (general, generals) {
-                int p=Config.value(general->objectName(),0).toInt();
-                if(QRandomGenerator::global()->generate()%10000 < (unsigned)p) {
-                    list.append(general->objectName());
-                    qDebug((general->objectName()+"被抽中").toUtf8().data());
-                }
-                else
-                    qDebug((general->objectName()+"没中").toUtf8().data());
-            }
-            Config.endGroup();
-            break;
-        }
-    }
-}
-
-void Engine::godLottery(QSet<QString> &generalSet) const
-{
-    QStringList list = generalSet.values();
-	godLottery(list);
-    generalSet = list.toSet();
-}

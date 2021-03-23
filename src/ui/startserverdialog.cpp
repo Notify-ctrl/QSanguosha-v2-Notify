@@ -19,8 +19,6 @@ void StartServerDialog::createServer()
 
     m_server->daemonize();
     printServerInfo();
-    printServerInfo();
-    printServerInfo();
     connect(m_server, &Server::server_message, this, &StartServerDialog::messageLogged);
 }
 
@@ -61,20 +59,20 @@ void StartServerDialog::printServerInfo()
             emit messageLogged(tr("Your other address: %1, if this is a public IP, that will be available for all cases").arg(item));
     }
 
-    emit messageLogged(tr("Binding port number is %1").arg(Config.ServerPort));
-    emit messageLogged(tr("Game mode is %1").arg(Sanguosha->getModeName(Config.GameMode)));
-    emit messageLogged(tr("Player count is %1").arg(Sanguosha->getPlayerCount(Config.GameMode)));
-    emit messageLogged(Config.OperationNoLimit ?
+    emit messageLogged(tr("Binding port number is %1").arg(Config.value("ServerPort").toInt()));
+    emit messageLogged(tr("Game mode is %1").arg(Sanguosha->getModeName(Config.value("GameMode").toString())));
+    emit messageLogged(tr("Player count is %1").arg(Sanguosha->getPlayerCount(Config.value("GameMode").toString())));
+    emit messageLogged(Config.value("OperationNoLimit").toBool() ?
         tr("There is no time limit") :
-        tr("Operation timeout is %1 seconds").arg(Config.OperationTimeout));
-    emit messageLogged(Config.EnableCheat ? tr("Cheat is enabled") : tr("Cheat is disabled"));
-    if (Config.EnableCheat)
-        emit messageLogged(Config.FreeChoose ? tr("Free choose is enabled") : tr("Free choose is disabled"));
+        tr("Operation timeout is %1 seconds").arg(Config.value("OperationTimeout").toInt()));
+    emit messageLogged(Config.value("EnableCheat").toBool() ? tr("Cheat is enabled") : tr("Cheat is disabled"));
+    if (Config.value("EnableCheat").toBool())
+        emit messageLogged(Config.value("FreeChoose").toBool() ? tr("Free choose is enabled") : tr("Free choose is disabled"));
 
     if (Config.Enable2ndGeneral) {
         QString scheme_str;
-        switch (Config.MaxHpScheme) {
-        case 0: scheme_str = QString(tr("Sum - %1")).arg(Config.Scheme0Subtraction); break;
+        switch (Config.value("MaxHpScheme").toInt()) {
+        case 0: scheme_str = QString(tr("Sum - %1")).arg(Config.value("Scheme0Subtraction").toInt()); break;
         case 1: scheme_str = tr("Minimum"); break;
         case 2: scheme_str = tr("Maximum"); break;
         case 3: scheme_str = tr("Average"); break;

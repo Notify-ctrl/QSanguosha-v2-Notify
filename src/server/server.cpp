@@ -52,7 +52,7 @@ void Server::daemonize()
 
 Room *Server::createNewRoom()
 {
-    Room *new_room = new Room(this, Config.GameMode);
+    Room *new_room = new Room(this, Config.value("GameMode").toString());
     if (!new_room->getLuaState()) {
         delete new_room;
         return NULL;
@@ -76,7 +76,7 @@ void Server::processNewConnection(ClientSocket *socket)
         return;
     }
 
-	if (Config.ForbidSIMC) {
+    if (Config.value("ForbidSIMC").toBool()) {
 		if (addresses.contains(addr)) {
 			socket->disconnectFromHost();
 			emit server_message(tr("Forbid the connection of address %1").arg(addr));
@@ -149,7 +149,7 @@ void Server::cleanup()
 {
 	playerCount--;
     const ClientSocket *socket = qobject_cast<const ClientSocket *>(sender());
-    if (Config.ForbidSIMC)
+    if (Config.value("ForbidSIMC").toBool())
         addresses.remove(socket->peerAddress());
 }
 

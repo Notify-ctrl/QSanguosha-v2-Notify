@@ -109,7 +109,7 @@ void RecAnalysis::initialize(QString dir)
 
             if (who == S_PLAYER_SELF_REFERENCE_ID) {
                 if (property == "objectName") {
-                    getPlayer(value, S_PLAYER_SELF_REFERENCE_ID)->m_screenName = Config.UserName;
+                    getPlayer(value, S_PLAYER_SELF_REFERENCE_ID)->m_screenName = Config.value("UserName").toString();
                 } else if (property == "role") {
                     getPlayer(S_PLAYER_SELF_REFERENCE_ID)->m_role = value;
                 } else if (property == "general") {
