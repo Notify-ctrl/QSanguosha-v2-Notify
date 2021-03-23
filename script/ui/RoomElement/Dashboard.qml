@@ -1,7 +1,6 @@
 import QtQuick 2.4
 import QtQuick.Layouts 1.1
-
-import Cardirector.Resource 1.0
+import "../Util"
 
 RowLayout {
     property string headGeneralName: ""
@@ -82,7 +81,7 @@ RowLayout {
                     }
 
                     Image {
-                        source: root.phase != "inactive" ? "image://root/phase/" + root.phase + ".png" : ""
+                        source: root.phase != "inactive" ? "../../../image/system/phase/" + root.phase + ".png" : ""
                         y: -height - 5
                         x: parent.width - width
                         visible: root.phase != "inactive"
@@ -90,7 +89,9 @@ RowLayout {
 
                     Connections {
                         target: root
-                        onPhaseChanged: handcardArea.enableCards([]);
+                        function onPhaseChanged() {
+                            handcardArea.enableCards([]);
+                        }
                     }
                 }
 
@@ -109,7 +110,7 @@ RowLayout {
 
             Image {
                 id: platter
-                source: "image://root/dashboard/platter"
+                source: "../../../image/dashboard/platter"
 
                 IrregularButton {
                     id: acceptButtonItem
@@ -142,7 +143,7 @@ RowLayout {
                 }
 
                 Image {
-                    source: "image://root/kingdom/" + userRole
+                    source: "../../../image/system/role/" + userRole
                     x: 70
                     y: 3
                 }
@@ -150,7 +151,7 @@ RowLayout {
                 Image {
                     x: 71
                     y: 117
-                    source: seatNumber > 0 ? "image://root/dashboard/seatnum/" + seatNumber : ""
+                    source: seatNumber > 0 ? "../../../image/dashboard/seatnum/" + seatNumber : ""
                     visible: seatNumber > 0
                 }
             }
@@ -162,11 +163,11 @@ RowLayout {
         Layout.preferredHeight: 149
 
         Image {
-            source: "image://root/dashboard/base"
+            source: "../../../image/dashboard/base"
         }
 
         Image {
-            source: "image://root/dashboard/hpbase"
+            source: "../../../image/dashboard/hpbase"
             anchors.bottom: parent.bottom
             anchors.right: parent.right
             anchors.rightMargin: 3
@@ -183,7 +184,7 @@ RowLayout {
         }
 
         Image {
-            source: "image://root/dashboard/avatarbg"
+            source: "../../../image/dashboard/avatarbg"
         }
 
         GeneralAvatar {
@@ -231,7 +232,7 @@ RowLayout {
         }
 
         Image {
-            source: "image://root/chain"
+            source: "../../../image/system/chain"
             visible: root.chained
             anchors.horizontalCenter: headGeneralItem.right
             anchors.verticalCenter: headGeneralItem.verticalCenter

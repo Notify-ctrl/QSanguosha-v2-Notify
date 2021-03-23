@@ -7,6 +7,7 @@
 #include "audio.h"
 #include "serverplayer.h"
 #include "engine.h"
+#include "clientstruct.h"
 
 int main(int argc, char *argv[])
 {

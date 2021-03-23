@@ -1,11 +1,9 @@
 import QtQuick 2.4
 
-import "../../engine.js" as Engine
-
 Item {
-    property string name: null
-    property string suit: null
-    property int number: null
+    property string name: ""
+    property string suit: ""
+    property int number: 0
     property bool selectable: false
     property bool selected: false
 
@@ -15,11 +13,11 @@ Item {
     opacity: 0
 
     Image {
-        source: name ? "image://root/card/equip/" + name : ""
+        source: name ? "../../../image/card/equip/" + name : ""
     }
 
     Image {
-        source: suit ? "image://root/card/suit/" + suit : ""
+        source: suit ? "../../../image/card/suit/" + suit : ""
         x: parent.width - width
         y: Math.round((parent.height - height) / 2)
     }
@@ -48,7 +46,7 @@ Item {
 
         Connections {
             target: root
-            onSelectedChanged: {
+            function onSelectedChanged() {
                 if (root.selected)
                     border.start();
                 else

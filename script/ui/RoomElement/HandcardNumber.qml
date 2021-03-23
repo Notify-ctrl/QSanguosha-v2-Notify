@@ -5,7 +5,7 @@ Image {
     property string kingdom
     property int value
 
-    source: "image://root/handcard/" + (kingdom != "" && kingdom != "hidden" ? kingdom : "qun")
+    source: "../../../image/kingdom/handcard/" + (kingdom != "" && kingdom != "hidden" ? kingdom : "qun")
 
     GlowText {
         id: handcardNumText

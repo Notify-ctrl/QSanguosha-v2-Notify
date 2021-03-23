@@ -22,7 +22,7 @@ Item {
             model: cards
 
             Image {
-                source: "image://root/card/icon/" + name
+                source: "../../../image/card/icon/" + name
             }
         }
     }

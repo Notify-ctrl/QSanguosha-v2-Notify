@@ -11,7 +11,7 @@ Image {
 
     width: columns === 1 ? 120 : 59
     height: 26
-    source: "image://root/skill/button/" + type + "/" + columns + "-" + (enabled ? status : "disabled")
+    source: "../../../image/button/skill/" + type + "/" + columns + "-" + (enabled ? status : "disabled")
     clip: true
 
     onEnabledChanged: {

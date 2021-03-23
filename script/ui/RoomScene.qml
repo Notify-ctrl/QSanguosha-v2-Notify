@@ -26,7 +26,7 @@ RoomScene {
     }
 
     Image {
-        source: config.tableImage
+        source: "../../image/background/default.jpg"
         anchors.fill: parent
         focus: true
     }
@@ -113,7 +113,9 @@ RoomScene {
 
                     Connections {
                         target: roomScene
-                        onAddLog: logBox.append(richText);
+                        function onAddLog(richText) {
+                            logBox.append(richText);
+                        }
                     }
                 }
 
@@ -144,7 +146,7 @@ RoomScene {
 
             Connections {
                 target: roomScene
-                onDashboardModelChanged: {
+                function onDashboardModelChanged() {
                     var model = dashboardModel[0];
                     dashboard.seatNumber = Qt.binding(function(){return model.seat});
                     dashboard.phase = Qt.binding(function(){return model.phase});
@@ -161,19 +163,31 @@ RoomScene {
                     dashboard.deputySkills = Qt.binding(function(){return model.deputySkills;});
                 }
 
-                onSetAcceptEnabled: dashboard.acceptButton.enabled = enabled;
-                onSetRejectEnabled: dashboard.rejectButton.enabled = enabled;
-                onSetFinishEnabled: dashboard.finishButton.enabled = enabled;
+                function onSetAcceptEnabled() {
+                    dashboard.acceptButton.enabled = enabled;
+                }
+
+                function onSetRejectEnabled() {
+                    dashboard.rejectButton.enabled = enabled;
+                }
+
+                function onSetFinishEnabled() {
+                    dashboard.finishButton.enabled = enabled;
+                }
             }
 
             Connections {
                 target: dashboard.handcardArea
-                onCardSelected: roomScene.onCardSelected(cardId, selected);
+                function onCardSelected(cardId, selected) {
+                    roomScene.onCardSelected(cardId, selected);
+                }
             }
 
             Connections {
                 target: dashboard.equipArea
-                onCardSelected: roomScene.onCardSelected(cardId, selected);
+                function onCardSelected(cardId, selected) {
+                    roomScene.onCardSelected(cardId, selected);
+                }
             }
         }
     }

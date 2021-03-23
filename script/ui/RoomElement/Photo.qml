@@ -87,7 +87,7 @@ Item {
         Image {
             anchors.fill: parent
             fillMode: Image.PreserveAspectCrop
-            source: "image://root/general/fullphoto/" + (headGeneral != "" ? headGeneral : "blank")
+            source: "../../../image/general/full/" + (headGeneral != "" ? headGeneral : "anjiang")
         }
     }
 
@@ -99,7 +99,7 @@ Item {
         Image {
             anchors.fill: parent
             fillMode: Image.PreserveAspectCrop
-            source: deputyGeneral != "" ? "image://root/general/fullphoto/" + deputyGeneral : ""
+            source: deputyGeneral != "" ? "../../../image/general/full/" + deputyGeneral : ""
         }
     }
 
@@ -110,14 +110,14 @@ Item {
     }
 
     Image {
-        source: "image://root/photo/circle-photo"
+        source: "../../../image/general/circle-photo"
         visible: deputyGeneral != ""
     }
 
     Image {
         id: faceTurnedCover
         anchors.fill: parent
-        source: "image://root/photo/faceturned"
+        source: "../../../image/general/faceturned"
         visible: false
     }
 
@@ -160,7 +160,7 @@ Item {
         clip: true
 
         Image {
-            source: "image://root/magatama/bg"
+            source: "../../../image/general/magatamas/bg"
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.top: parent.top
             visible: hpBar.visible
@@ -234,13 +234,13 @@ Item {
     }
 
     Image {
-        source: "image://root/chain"
+        source: "../../../image/system/chain"
         anchors.centerIn: parent
         visible: parent.chained
     }
 
     Image {
-        source: "image://root/photo/save-me"
+        source: "../../../image/system/death/save-me"
         anchors.centerIn: parent
         visible: parent.dying
     }
@@ -261,7 +261,7 @@ Item {
     }
 
     Image {
-        source: root.phase != "inactive" ? "image://root/phase/" + root.phase + ".png" : ""
+        source: root.phase != "inactive" ? "../../../image/system/phase/" + root.phase + ".png" : ""
         width: parent.width * 0.9
         height: implicitHeight / implicitWidth * width
         x: (parent.width - width) / 2

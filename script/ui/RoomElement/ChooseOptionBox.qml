@@ -1,7 +1,5 @@
 import QtQuick 2.4
-
-
-import "../../engine.js" as Engine
+import "../Util"
 
 GraphicsBox {
     property var options: []
@@ -9,7 +7,7 @@ GraphicsBox {
 
     id: root
     title.text: qsTr("Please choose")
-    width: Math.max(140), body.width + 20
+    width: Math.max(140, body.width + 20)
     height: body.height + title.height + 20
 
     Column {

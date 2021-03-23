@@ -1,7 +1,5 @@
 import QtQuick 2.4
 
-import "../../engine.js" as Engine
-
 Item {
     property point start: Qt.point(0, 0)
     property var end: []

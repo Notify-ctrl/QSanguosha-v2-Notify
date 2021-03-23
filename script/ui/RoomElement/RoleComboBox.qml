@@ -6,14 +6,14 @@ Image {
     property var options: ["unknown", "loyalist", "rebel", "renegade"]
 
     id: root
-    source: visible ? "image://root/role/" + value : ""
+    source: visible ? "../../../image/system/role/" + value : ""
     visible: value != "hidden"
 
     Image {
         property string value: "unknown"
 
         id: assumptionBox
-        source: "image://root/role/" + value
+        source: "../../../image/system/role/" + value
         visible: root.value == "unknown"
 
         MouseArea {
@@ -31,7 +31,7 @@ Image {
             model: options
 
             Image {
-                source: "image://root/role/" + modelData
+                source: "../../../image/system/role/" + modelData
 
                 MouseArea {
                     anchors.fill: parent
