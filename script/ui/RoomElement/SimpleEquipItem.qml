@@ -43,7 +43,7 @@ Rectangle {
     GlowText {
         id: numberItem
         visible: number > 0 && number < 14
-        text: Engine.convertNumber(number)
+        text: roomScene.convertNumber(number)
         font.weight: Font.Bold
         font.pixelSize: 10
         glow.color: "#FFFFBE"

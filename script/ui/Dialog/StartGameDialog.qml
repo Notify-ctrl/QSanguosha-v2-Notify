@@ -140,52 +140,11 @@ StartGameDialog {
         }
     }
 
-    Rectangle {
-        id: toast
-        opacity: 0
-        anchors.horizontalCenter: parent.horizontalCenter
-        y: parent.height * 0.8
-        radius: 16
-        color: "#F2808A87"
-        height: toast_text.height + 20
-        width: toast_text.width + 40
-        Text {
-            id: toast_text
-            text: "QSanguosha"
-            anchors.centerIn: parent
-            color: "white"
-        }
-        Behavior on opacity {
-            NumberAnimation {
-                duration: 240
-                easing.type: Easing.InOutQuad
-            }
-        }
-        SequentialAnimation {
-            id: keepAnim
-            running: toast.opacity == 1
-            PauseAnimation {
-                duration: 1500
-            }
-
-            ScriptAction {
-                script: {
-                    toast.opacity = 0
-                }
-            }
-        }
-
-        function show(text) {
-            opacity = 1
-            toast_text.text = text
-        }
-    }
-
-
     function config() {
+        toast.show("Trying to connect to the host...")
         Sanguosha.setConfig("UserName", userName.text)
-        Sanguosha.setConfig("HostAddress", hostAddress.currentText)
-        Sanguosha.getConfig("UserAvatar", userAvatar.text)
+        Sanguosha.setConfig("HostAddress", hostAddress.editText)
+        Sanguosha.setConfig("UserAvatar", userAvatar.text)
         Sanguosha.setConfig("EnableReconnection", reconnect.checked)
     }
 

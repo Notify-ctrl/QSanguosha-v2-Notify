@@ -26,6 +26,48 @@ ApplicationWindow {
         focus: true
     }
 
+    Rectangle {
+        id: toast
+        opacity: 0
+        z: 999
+        anchors.horizontalCenter: parent.horizontalCenter
+        y: parent.height * 0.8
+        radius: 16
+        color: "#F2808A87"
+        height: toast_text.height + 20
+        width: toast_text.width + 40
+        Text {
+            id: toast_text
+            text: "QSanguosha"
+            anchors.centerIn: parent
+            color: "white"
+        }
+        Behavior on opacity {
+            NumberAnimation {
+                duration: 240
+                easing.type: Easing.InOutQuad
+            }
+        }
+        SequentialAnimation {
+            id: keepAnim
+            running: toast.opacity == 1
+            PauseAnimation {
+                duration: 2800
+            }
+
+            ScriptAction {
+                script: {
+                    toast.opacity = 0
+                }
+            }
+        }
+
+        function show(text) {
+            opacity = 1
+            toast_text.text = text
+        }
+    }
+
     Component.onCompleted: {
         var skip_splash = false;
         for (var i = 0; i < Qt.application.arguments.length; i++) {

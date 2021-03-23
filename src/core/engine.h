@@ -5,6 +5,8 @@
 #include "skill.h"
 #include "structs.h"
 #include "util.h"
+#include "client.h"
+#include "clientplayer.h"
 
 class AI;
 class Scenario;
@@ -52,7 +54,7 @@ public:
 
     QMap<QString, QString> getAvailableModes() const;
     QString getModeName(const QString &mode) const;
-    int getPlayerCount(const QString &mode) const;
+    Q_INVOKABLE int getPlayerCount(const QString &mode) const;
     QString getRoles(const QString &mode) const;
     QStringList getRoleList(const QString &mode) const;
     int getRoleIndex() const;
@@ -126,6 +128,7 @@ public:
     Q_INVOKABLE QVariant getConfig(const QString &, QVariant defaultValue = QVariant());
     Q_INVOKABLE void setConfig(const QString &, QVariant);
     Q_INVOKABLE QStringList getMiniScenarioNames();
+    Q_INVOKABLE QVariant getServerInfo(const QString &);
 
 private:
     void _loadMiniScenarios();

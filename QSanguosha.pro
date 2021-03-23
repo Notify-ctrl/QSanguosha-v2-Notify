@@ -96,6 +96,7 @@ HEADERS += \
     src/core/banpair.h \
     src/core/card.h \
     src/core/compiler-specific.h \
+    src/core/defines.h \
     src/core/engine.h \
     src/core/general.h \
     src/core/json.h \
@@ -106,6 +107,7 @@ HEADERS += \
     src/core/skill.h \
     src/core/structs.h \
     src/core/util.h \
+    src/main.h \
     src/package/exppattern.h \
     src/package/god.h \
     src/package/maneuvering.h \
@@ -154,8 +156,7 @@ HEADERS += \
     src/package/thicket.h \
     src/package/wind.h \
     src/package/jsp.h \
-    src/pch.h \
-    src/core/defines.h
+    src/pch.h
 
 FORMS +=
 

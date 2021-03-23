@@ -1,10 +1,12 @@
 import QtQuick 2.4
 import QtQuick.Layouts 1.1
 import QtGraphicalEffects 1.0
+import Sanguosha 1.0
 
 Item {
     property string headGeneral: ""
     property string deputyGeneral: ""
+    property string clientPlayer: ""
     property alias screenName: screenNameItem.text
     property alias faceTurned: faceTurnedCover.visible
     property string userRole: "unknown"
@@ -205,7 +207,7 @@ Item {
         wrapMode: Text.WrapAnywhere
         lineHeight: 1.5
         horizontalAlignment: Text.AlignHCenter
-        text: qsTr(headGeneral)
+        text: Sanguosha.translate(headGeneral)
 
         glow.color: "black"
         glow.spread: 0.7
@@ -225,7 +227,7 @@ Item {
         wrapMode: Text.WrapAnywhere
         lineHeight: 1.5
         horizontalAlignment: Text.AlignHCenter
-        text: qsTr(deputyGeneral)
+        text: Sanguosha.translate(deputyGeneral)
 
         glow.color: "black"
         glow.spread: 0.7

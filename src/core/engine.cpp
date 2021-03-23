@@ -753,6 +753,32 @@ QStringList Engine::getMiniScenarioNames()
     return ret;
 }
 
+QVariant Engine::getServerInfo(const QString &key)
+{
+    static QVariantMap ServerInfoMap;
+    if (ServerInfoMap.isEmpty()) {
+        ServerInfoMap.insert("Name", ServerInfo.Name);
+        ServerInfoMap.insert("GameMode", ServerInfo.GameMode);
+        ServerInfoMap.insert("GameRuleMode", ServerInfo.GameRuleMode);
+        ServerInfoMap.insert("OperationTimeout", ServerInfo.OperationTimeout);
+        ServerInfoMap.insert("NullificationCountDown", ServerInfo.NullificationCountDown);
+        ServerInfoMap.insert("Extensions", ServerInfo.Extensions);
+        ServerInfoMap.insert("RandomSeat", ServerInfo.RandomSeat);
+        ServerInfoMap.insert("EnableCheat", ServerInfo.EnableCheat);
+        ServerInfoMap.insert("FreeChoose", ServerInfo.FreeChoose);
+        ServerInfoMap.insert("Enable2ndGeneral", ServerInfo.Enable2ndGeneral);
+        ServerInfoMap.insert("EnableSame", ServerInfo.EnableSame);
+        ServerInfoMap.insert("EnableBasara", ServerInfo.EnableBasara);
+        ServerInfoMap.insert("EnableHegemony", ServerInfo.EnableHegemony);
+        ServerInfoMap.insert("EnableAI", ServerInfo.EnableAI);
+        ServerInfoMap.insert("DisableChat", ServerInfo.DisableChat);
+        ServerInfoMap.insert("MaxHpScheme", ServerInfo.MaxHpScheme);
+        ServerInfoMap.insert("Scheme0Subtraction", ServerInfo.Scheme0Subtraction);
+        ServerInfoMap.insert("DuringGame", ServerInfo.DuringGame);
+    }
+    return ServerInfoMap[key];
+}
+
 WrappedCard *Engine::getWrappedCard(int cardId)
 {
     Card *card = getCard(cardId);

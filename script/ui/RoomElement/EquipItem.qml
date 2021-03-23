@@ -35,7 +35,7 @@ Item {
     }
 
     PixmapAnimation {
-        id: border
+        id: equip_border
         visible: false
         source: "equip_border"
         loop: true
@@ -48,9 +48,9 @@ Item {
             target: root
             function onSelectedChanged() {
                 if (root.selected)
-                    border.start();
+                    equip_border.start();
                 else
-                    border.stop();
+                    equip_border.stop();
             }
         }
     }
@@ -118,7 +118,7 @@ Item {
         easing.type: Easing.Linear
         from: 0
         to: 10
-        onStarted: border.visible = true;
+        onStarted: equip_border.visible = true;
     }
 
     NumberAnimation {
@@ -129,7 +129,7 @@ Item {
         easing.type: Easing.Linear
         from: 10
         to: 0
-        onStopped: border.visible = false;
+        onStopped: equip_border.visible = false;
     }
 
     onSelectedChanged: {
@@ -149,3 +149,9 @@ Item {
         hideAnime.start();
     }
 }
+
+/*##^##
+Designer {
+    D{i:0;autoSize:true;height:480;width:640}
+}
+##^##*/

@@ -381,6 +381,11 @@ Player::Role Player::getRoleEnum() const
     return role_map.value(role);
 }
 
+QString Player::getAvatar() const
+{
+    return property("avatar").toString();
+}
+
 const General *Player::getAvatarGeneral() const
 {
     if (general)

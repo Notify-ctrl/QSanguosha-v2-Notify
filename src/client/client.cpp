@@ -9,6 +9,7 @@
 #include "clientstruct.h"
 #include "util.h"
 #include "wrapped-card.h"
+#include "src/main.h"
 
 using namespace std;
 using namespace QSanProtocol;
@@ -108,6 +109,7 @@ Client::Client(QObject *parent, const QString &filename)
     m_respondingUseFixedTarget = NULL;
 
     Self = new ClientPlayer(this);
+    main_window->rootContext()->setContextProperty("Self", Self);
     Self->setScreenName(Config.value("UserName").toString());
     Self->setProperty("avatar", Config.value("UserAvatar").toString());
     connect(Self, SIGNAL(phase_changed()), this, SLOT(alertFocus()));
