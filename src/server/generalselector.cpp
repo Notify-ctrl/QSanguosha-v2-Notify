@@ -129,14 +129,6 @@ QString GeneralSelector::selectHighest(const QHash<QString, int> &table, const Q
     return max_general;
 }
 
-static bool CompareByMaxHp(const QString &a, const QString &b)
-{
-    const General *g1 = Sanguosha->getGeneral(a);
-    const General *g2 = Sanguosha->getGeneral(b);
-
-    return g1->getMaxHp() < g2->getMaxHp();
-}
-
 void GeneralSelector::loadFirstGeneralTable()
 {
     loadFirstGeneralTable("loyalist");

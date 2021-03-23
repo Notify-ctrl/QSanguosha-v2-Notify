@@ -11,19 +11,19 @@ Item {
     height: 153
 
     Image {
-        source: "image://root/general/fullphoto/" + avatar
+        source: "../../../image/general/full/" + avatar
         anchors.fill: parent
     }
 
     Image {
-        source: "image://root/dashboard/avatar"
+        source: "../../../image/dashboard/avatar"
         anchors.fill: parent
     }
 
     Image {
         x: 2
         y: 2
-        source: "image://root/dashboard/title/" + (kingdom != "" && kingdom != "hidden" ? kingdom : "god")
+        source: "../../../image/kingdom/icon/" + (kingdom != "" && kingdom != "hidden" ? kingdom : "god")
         visible: kingdom != ""
 
         Item {
@@ -49,6 +49,6 @@ Item {
     }
 
     Image {
-        source: "image://root/dashboard/" + generalPosition
+        source: "../../../image/dashboard/" + generalPosition
     }
 }

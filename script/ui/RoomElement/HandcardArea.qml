@@ -1,7 +1,5 @@
 import QtQuick 2.4
 
-import "../../utility.js" as Utility
-
 Item {
     property alias cards: cardArea.cards
     property alias length: cardArea.length

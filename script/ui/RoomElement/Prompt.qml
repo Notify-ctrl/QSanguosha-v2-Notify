@@ -6,7 +6,7 @@ Image {
 
     width: 480
     height: 200
-    source: "image://root/prompt"
+    source: "../../../image/system/tip"
 
     signal finished()
 

@@ -6,8 +6,7 @@ MouseArea {
     anchors.fill: parent
     hoverEnabled: true
 
-    property alias tip: tip
-    property alias text: tip.text
+    property string text: ""
     property alias hideDelay: hideTimer.interval
     property alias showDelay: showTimer.interval
 
@@ -16,18 +15,21 @@ MouseArea {
         interval: 1000
         running: text.length !== 0 && mouseArea.containsMouse && !tip.visible
         onTriggered: {
-            tip.show(mouseX, mouseY);
+            let p = mapToItem(rootWindowItem, mouseX, mouseY)
+            p.x += rootWindow.x + 5
+            p.y += rootWindow.y + 5
+            tip.opacity = 1
+            tip.appear(p, text);
         }
     }
 
     Timer {
         id: hideTimer
-        interval: 100
+        interval: 10000
         running: !mouseArea.containsMouse && tip.visible
-        onTriggered: tip.hide();
-    }
-
-    ToolTip {
-        id: tip
+        onTriggered: {
+            tip.opacity = 0
+            tip.hide();
+        }
     }
 }

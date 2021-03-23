@@ -372,7 +372,7 @@ void Room::killPlayer(ServerPlayer *victim, DamageStruct *reason)
     victim->detachAllSkills();
     thread->trigger(BuryVictim, this, victim, data);
 
-    if (!victim->isAlive() && Config.EnableAI) {
+    if (!victim->isAlive() && Config.value("EnableAI").toBool()) {
         bool expose_roles = true;
         foreach (ServerPlayer *player, m_alivePlayers) {
             if (!player->isOffline()) {
@@ -387,7 +387,7 @@ void Room::killPlayer(ServerPlayer *victim, DamageStruct *reason)
             }
 
             if (Config.AlterAIDelayAD)
-                Config.AIDelay = Config.AIDelayAD;
+                Config.setValue("AIDelay", Config.value("AIDelayAD"));
             if (victim->isOnline() && Config.SurrenderAtDeath && mode != "02_1v1" && mode != "06_XMode"
                 && askForSkillInvoke(victim, "surrender", "yes"))
                 makeSurrender(victim);
@@ -486,7 +486,7 @@ void Room::gameOver(const QString &winner)
             }
         }
     }
-    Config.AIDelay = Config.OriginAIDelay;
+    Config.setValue("AIDelay", Config.value("OriginAIDelay"));
 
     if (!getTag("NextGameMode").toString().isNull()) {
         QString name = getTag("NextGameMode").toString();
@@ -496,7 +496,6 @@ void Room::gameOver(const QString &winner)
     }
     if (!getTag("NextGameSecondGeneral").isNull()) {
         bool enable = getTag("NextGameSecondGeneral").toBool();
-        Config.Enable2ndGeneral = enable;
         Config.setValue("Enable2ndGeneral", enable);
         removeTag("NextGameSecondGeneral");
     }
@@ -2115,7 +2114,7 @@ void Room::prepareForStart()
             else
                 notifyProperty(player, player, "role");
         }
-    } else if (Config.EnableCheat && Config.value("FreeAssign", false).toBool()) {
+    } else if (Config.value("EnableCheat").toBool() && Config.value("FreeAssign", false).toBool()) {
         ServerPlayer *owner = getOwner();
         notifyMoveFocus(owner, S_COMMAND_CHOOSE_ROLE);
         if (owner && owner->isOnline()) {
@@ -2285,7 +2284,7 @@ void Room::pauseCommand(ServerPlayer *player, const QVariant &arg)
 void Room::processRequestCheat(ServerPlayer *player, const QVariant &arg)
 {
     player->m_cheatArgs = QVariant();
-    if (!Config.EnableCheat)
+    if (!Config.value("EnableCheat").toBool())
         return;
     if (!arg.canConvert<JsonArray>() || !arg.value<JsonArray>().value(0).canConvert(QVariant::Int))
         return;
@@ -2500,7 +2499,7 @@ void Room::assignGeneralsForPlayers(const QList<ServerPlayer *> &to_assign)
         if (player->getGeneral2())
             existed << player->getGeneral2Name();
     }
-    if (Config.Enable2ndGeneral) {
+    if (Config.value("Enable2ndGeneral").toBool()) {
         foreach(QString name, BanPair::getAllBanSet())
             existed << name;
         if (to_assign.first()->getGeneral()) {
@@ -2568,7 +2567,7 @@ void Room::chooseGenerals(QList<ServerPlayer *> players)
             _setPlayerGeneral(player, _chooseDefaultGeneral(player), true);
     }
 
-    if (Config.Enable2ndGeneral) {
+    if (Config.value("Enable2ndGeneral").toBool()) {
         QList<ServerPlayer *> to_assign = players;
         assignGeneralsForPlayers(to_assign);
         foreach(ServerPlayer *player, to_assign)
@@ -2588,7 +2587,7 @@ void Room::run()
 {
     // initialize random seed for later use
     // qsrand(QTime(0, 0, 0).secsTo(QTime::currentTime()));
-    Config.AIDelay = Config.OriginAIDelay;
+    Config.setValue("AIDelay", Config.value("OriginAIDelay"));
 
     foreach (ServerPlayer *player, m_players) {
         //Ensure that the game starts with all player's mutex locked
@@ -2607,7 +2606,7 @@ void Room::run()
 #endif
 
     if (using_countdown) {
-        for (int i = Config.CountDownSeconds; i >= 0; i--) {
+        for (int i = Config.value("CountDownSeconds").toInt(); i >= 0; i--) {
             doBroadcastNotify(S_COMMAND_START_IN_X_SECONDS, i);
             sleep(1);
         }
@@ -2732,7 +2731,7 @@ bool Room::_setPlayerGeneral(ServerPlayer *player, const QString &generalName, b
     const General *general = Sanguosha->getGeneral(generalName);
     if (general == NULL)
         return false;
-    else if (!Config.FreeChoose && !player->getSelected().contains(generalName))
+    else if (!Config.value("FreeChoose").toBool() && !player->getSelected().contains(generalName))
         return false;
 
     if (isFirst) {
@@ -2760,7 +2759,7 @@ void Room::speakCommand(ServerPlayer *player, const QVariant &arg)
                                    doNotify(player, S_COMMAND_SPEAK, nbbody);\
                                }
     bool broadcast = true;
-    if (player && Config.EnableCheat) {
+    if (player && Config.value("EnableCheat").toBool()) {
         QString sentence = QString::fromUtf8(QByteArray::fromBase64(arg.toString().toLatin1()));
         if (sentence == ".BroadcastRoles") {
             _NO_BROADCAST_SPEAKING
@@ -2863,7 +2862,6 @@ void Room::speakCommand(ServerPlayer *player, const QVariant &arg)
                 bool ok = false;
             int delay = sentence.mid(12).toInt(&ok);
             if (ok) {
-                Config.AIDelay = Config.OriginAIDelay = delay;
                 Config.setValue("OriginAIDelay", delay);
             }
         } else if (sentence.startsWith(".SetGameMode=")) {
@@ -3116,8 +3114,8 @@ bool Room::changeMaxHpForAwakenSkill(ServerPlayer *player, int magnitude)
     addPlayerMark(player, "@waked");
     int n = player->getMark("@waked");
     if (magnitude < 0) {
-        if (Config.Enable2ndGeneral && player->getGeneral() && player->getGeneral2()
-            && Config.MaxHpScheme > 0 && Config.PreventAwakenBelow3
+        if (Config.value("Enable2ndGeneral").toBool() && player->getGeneral() && player->getGeneral2()
+            && Config.value("MaxHpScheme").toInt() > 0 && Config.value("PreventAwakenBelow3").toBool()
             && player->getMaxHp() <= 3) {
             setPlayerMark(player, "AwakenLostMaxHp", 1);
         } else {
@@ -3415,7 +3413,7 @@ void Room::startGame()
         if (!player->isLord())
             broadcastProperty(player, "general");
 
-        if (Config.Enable2ndGeneral)
+        if (Config.value("Enable2ndGeneral").toBool())
             broadcastProperty(player, "general2");
 
         broadcastProperty(player, "hp");
@@ -4029,14 +4027,14 @@ void Room::broadcastSkillInvoke(const QString &skill_name, bool isMale, int type
 
 void Room::doLightbox(const QString &lightboxName, int duration, int pixelSize)
 {
-    if (Config.AIDelay == 0) return;
+    if (Config.value("AIDelay").toInt() == 0) return;
     doAnimate(S_ANIMATE_LIGHTBOX, lightboxName, QString("%1:%2").arg(duration).arg(pixelSize));
     thread->delay(duration / 1.2);
 }
 
 void Room::doSuperLightbox(const QString &heroName, const QString &skillName)
 {
-    if (Config.AIDelay == 0)
+    if (Config.value("AIDelay").toInt() == 0)
         return;
 
     doAnimate(S_ANIMATE_LIGHTBOX, "skill=" + heroName, skillName);
@@ -4279,7 +4277,7 @@ void Room::activate(ServerPlayer *player, CardUseStruct &card_use)
         card_use.from = player;
         ai->activate(card_use);
 
-        qint64 diff = Config.AIDelay - timer.elapsed();
+        qint64 diff = Config.value("AIDelay").toInt() - timer.elapsed();
         if (diff > 0) thread->delay(diff);
     } else {
         bool success = doRequest(player, S_COMMAND_PLAY_CARD, player->objectName(), true);
@@ -4290,7 +4288,7 @@ void Room::activate(ServerPlayer *player, CardUseStruct &card_use)
             if (!game_finished)
                 return activate(player, card_use);
         } else {
-            if (Config.EnableCheat && makeCheat(player)) {
+            if (Config.value("EnableCheat").toBool() && makeCheat(player)) {
                 if (player->isAlive()) return activate(player, card_use);
                 return;
             }
@@ -5034,7 +5032,7 @@ QString Room::askForGeneral(ServerPlayer *player, const QStringList &generals, Q
         bool success = doRequest(player, S_COMMAND_CHOOSE_GENERAL, options, true);
 
         QVariant clientResponse = player->getClientReply();
-        bool free = Config.FreeChoose || mode.startsWith("_mini_") || mode == "custom_scenario";
+        bool free = Config.value("FreeChoose").toBool() || mode.startsWith("_mini_") || mode == "custom_scenario";
         if (!success || !JsonUtils::isString(clientResponse) || (!free && !generals.contains(clientResponse.toString())))
             return default_choice;
         else

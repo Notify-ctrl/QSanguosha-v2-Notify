@@ -1,10 +1,14 @@
 import QtQuick 2.4
 import QtQuick.Layouts 1.1
-
+import "../Util"
 
 
 Rectangle {
     color: Qt.rgba(0, 0, 0, 0.6)
+
+    function append(chatter) {
+        chatLogBox.append(chatter)
+    }
 
     ColumnLayout {
         anchors.fill: parent
@@ -40,7 +44,8 @@ Rectangle {
 
                 onAccepted: {
                     if (text != "") {
-                        chatLogBox.append(text);
+                        // chatLogBox.append(text);
+                        roomScene.chat(text);
                         text = "";
                     }
                 }

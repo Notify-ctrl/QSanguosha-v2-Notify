@@ -13,6 +13,9 @@ RoomScene {
     id: roomScene
     anchors.fill: parent
 
+    // signal chat
+    signal return_to_start
+
     FontLoader {
         source: "../../font/simli.ttf"
     }
@@ -26,7 +29,7 @@ RoomScene {
     }
 
     Image {
-        source: config.tableImage
+        source: "../../image/background/default.jpg"
         anchors.fill: parent
         focus: true
     }
@@ -57,6 +60,7 @@ RoomScene {
                         model: photoModel
                         Photo {
                             screenName: modelData.screenName
+                            clientPlayer: modelData.clientPlayer
                             hp: modelData.hp
                             maxHp: modelData.maxHp
                             headGeneral: modelData.headGeneralName
@@ -113,13 +117,23 @@ RoomScene {
 
                     Connections {
                         target: roomScene
-                        onAddLog: logBox.append(richText);
+                        function onAddLog(richText) {
+                            logBox.append(richText);
+                        }
                     }
                 }
 
                 ChatBox {
+                    id: chatBox
                     Layout.fillWidth: true
                     Layout.preferredHeight: 200
+
+                    Connections {
+                        target: roomScene
+                        function onAddChatter(chatter) {
+                            chatBox.append(chatter);
+                        }
+                    }
                 }
             }
         }
@@ -144,7 +158,7 @@ RoomScene {
 
             Connections {
                 target: roomScene
-                onDashboardModelChanged: {
+                function onDashboardModelChanged() {
                     var model = dashboardModel[0];
                     dashboard.seatNumber = Qt.binding(function(){return model.seat});
                     dashboard.phase = Qt.binding(function(){return model.phase});
@@ -161,19 +175,31 @@ RoomScene {
                     dashboard.deputySkills = Qt.binding(function(){return model.deputySkills;});
                 }
 
-                onSetAcceptEnabled: dashboard.acceptButton.enabled = enabled;
-                onSetRejectEnabled: dashboard.rejectButton.enabled = enabled;
-                onSetFinishEnabled: dashboard.finishButton.enabled = enabled;
+                function onSetAcceptEnabled() {
+                    dashboard.acceptButton.enabled = enabled;
+                }
+
+                function onSetRejectEnabled() {
+                    dashboard.rejectButton.enabled = enabled;
+                }
+
+                function onSetFinishEnabled() {
+                    dashboard.finishButton.enabled = enabled;
+                }
             }
 
             Connections {
                 target: dashboard.handcardArea
-                onCardSelected: roomScene.onCardSelected(cardId, selected);
+                function onCardSelected(cardId, selected) {
+                    roomScene.onCardSelected(cardId, selected);
+                }
             }
 
             Connections {
                 target: dashboard.equipArea
-                onCardSelected: roomScene.onCardSelected(cardId, selected);
+                function onCardSelected(cardId, selected) {
+                    roomScene.onCardSelected(cardId, selected);
+                }
             }
         }
     }
@@ -211,6 +237,83 @@ RoomScene {
         visible: false
 
         onFinished: visible = false;
+    }
+
+    ColumnLayout {
+        id: buttons
+        // visible: !Sanguosha.getServerInfo("DuringGame")
+        anchors.verticalCenter: roomScene.verticalCenter
+        x: roomScene.width / 2 - width / 2 - logBox.width / 2
+        MetroButton {
+            id: addRobotButton
+            text: qsTr("Add a Robot")
+            width: 190
+            height: 50
+            visible: Sanguosha.getServerInfo("EnableAI")
+            // opacity: Self.owner ? 1 : 0
+            ToolTipArea {
+                anchors.fill: parent
+                text: qsTr("Press F7 to fill robots")
+            }
+        }
+        MetroButton {
+            id: returnToStart
+            text: qsTr("Return to Start")
+            width: 190
+            height: 50
+            onClicked: {
+                roomScene.returnToStart()
+            }
+        }
+    }
+
+    onAddPlayer: {
+        for (let i = 0; i < photoModel.length; i++) {
+            if (photoModel[i].clientPlayer === "") {
+                photoModel[i].clientPlayer = player.objectName
+                photoModel[i] = {
+                    screenName: player.screenname,
+                    clientPlayer: player.objectName,
+                    hp: 0,
+                    maxHp: 0,
+                    headGeneralName: player.getAvatar(),
+                    deputyGeneralName: "",
+                    phase: "inactive",
+                    seat: i + 2,
+                    chained: false,
+                    dying: false,
+                    alive: true,
+                    drunk: false,
+                    role: "unknown",
+                    kingdom : "qun",
+                }
+
+                photos.model = photoModel
+                arrangePhotos()
+
+                /*if (!Self->hasFlag("marshalling"))
+                    Sanguosha->playSystemAudioEffect("add-player", false);*/
+
+                return;
+            }
+        }
+    }
+
+    onRemovePlayer: {
+        let photo = null
+        for (var i = 0; i < photoModel.length; i++) {
+            if (photoModel[i].clientPlayer === player_name) {
+                photoModel[i].clientPlayer = ""
+                photoModel[i].headGeneralName = "anjiang"
+                photoModel[i].screenName = ""
+                photos.model = photoModel
+                arrangePhotos()
+            }
+        }
+    }
+
+    onReturnToStart: {
+        dialogLoader.setSource("")
     }
 
     onChooseGeneral: {
@@ -512,5 +615,62 @@ RoomScene {
         } else if (popupBox.item) {
             popupBox.item.close();
         }
+    }
+
+    function convertNumber(number) {
+        if (number === 1)
+            return "A";
+        if (number >= 2 && number <= 10)
+            return number;
+        if (number >= 11 && number <= 13) {
+            var strs = ["J", "Q", "K"];
+            return strs[number - 11];
+        }
+        return "";
+    }
+
+    Component.onCompleted: {
+        toast.show(qsTr("Sucesessfully entered room."))
+        dashboardModel = [{
+            seatNumber: 0,
+            phase: "start",
+            hp: 0,
+            maxHp: 0,
+            headGeneralName: Self.getAvatar(),
+            deputyGeneralName: "",
+            headGeneralKingdom: "qun",
+            chained: false,
+            dying: false,
+            alive: false,
+            drunk: false,
+            headSkills: [],
+            deputySkills: []
+        }]
+
+        let player_num = Sanguosha.getPlayerCount(Sanguosha.getServerInfo("GameMode"));
+
+        // create photos
+        for (let i = 0; i < player_num - 1; i++) {
+            photoModel.push(
+                        {
+                            screenName: "",
+                            clientPlayer: "",
+                            hp: 0,
+                            maxHp: 0,
+                            headGeneralName: "anjiang",
+                            deputyGeneralName: "",
+                            phase: "inactive",
+                            seat: i + 2,
+                            chained: false,
+                            dying: false,
+                            alive: true,
+                            drunk: false,
+                            role: "unknown",
+                            kingdom : "qun",
+                        });
+        }
+        photos.model = photoModel
+
+        playerNum = player_num
     }
 }

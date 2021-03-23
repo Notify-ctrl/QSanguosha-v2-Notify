@@ -449,9 +449,9 @@ void RoomThread::addTriggerSkill(const TriggerSkill *skill)
 
 void RoomThread::delay(long secs)
 {
-    if (secs == -1) secs = Config.AIDelay;
+    if (secs == -1) secs = Config.value("AIDelay").toInt();
     Q_ASSERT(secs >= 0);
-    if (room->property("to_test").toString().isEmpty() && Config.AIDelay > 0)
+    if (room->property("to_test").toString().isEmpty() && Config.value("AIDelay").toInt() > 0)
         msleep(secs);
 }
 

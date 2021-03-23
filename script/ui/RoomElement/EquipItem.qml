@@ -1,11 +1,9 @@
 import QtQuick 2.4
 
-import "../../engine.js" as Engine
-
 Item {
-    property string name: null
-    property string suit: null
-    property int number: null
+    property string name: ""
+    property string suit: ""
+    property int number: 0
     property bool selectable: false
     property bool selected: false
 
@@ -15,11 +13,11 @@ Item {
     opacity: 0
 
     Image {
-        source: name ? "image://root/card/equip/" + name : ""
+        source: name ? "../../../image/card/equip/" + name : ""
     }
 
     Image {
-        source: suit ? "image://root/card/suit/" + suit : ""
+        source: suit ? "../../../image/card/suit/" + suit : ""
         x: parent.width - width
         y: Math.round((parent.height - height) / 2)
     }
@@ -37,7 +35,7 @@ Item {
     }
 
     PixmapAnimation {
-        id: border
+        id: equip_border
         visible: false
         source: "equip_border"
         loop: true
@@ -48,11 +46,11 @@ Item {
 
         Connections {
             target: root
-            onSelectedChanged: {
+            function onSelectedChanged() {
                 if (root.selected)
-                    border.start();
+                    equip_border.start();
                 else
-                    border.stop();
+                    equip_border.stop();
             }
         }
     }
@@ -120,7 +118,7 @@ Item {
         easing.type: Easing.Linear
         from: 0
         to: 10
-        onStarted: border.visible = true;
+        onStarted: equip_border.visible = true;
     }
 
     NumberAnimation {
@@ -131,7 +129,7 @@ Item {
         easing.type: Easing.Linear
         from: 10
         to: 0
-        onStopped: border.visible = false;
+        onStopped: equip_border.visible = false;
     }
 
     onSelectedChanged: {
@@ -151,3 +149,9 @@ Item {
         hideAnime.start();
     }
 }
+
+/*##^##
+Designer {
+    D{i:0;autoSize:true;height:480;width:640}
+}
+##^##*/

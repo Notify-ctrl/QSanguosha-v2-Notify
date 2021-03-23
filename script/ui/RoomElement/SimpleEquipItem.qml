@@ -1,7 +1,5 @@
 import QtQuick 2.4
 
-import "../../engine.js" as Engine
-
 Rectangle {
     property int cid: 0
     property string name: ""
@@ -20,9 +18,9 @@ Rectangle {
         anchors.verticalCenter: parent.verticalCenter
         x: 1
 
-        source: "image://root/card/equip/icon/background"
+        source: "../../../image/card/equip/icon/background"
         Image {
-            source: icon ? "image://root/card/equip/icon/" + icon : ""
+            source: icon ? "../../../image/card/equip/icon/" + icon : ""
             anchors.centerIn: parent
         }
     }
@@ -45,7 +43,7 @@ Rectangle {
     GlowText {
         id: numberItem
         visible: number > 0 && number < 14
-        text: Engine.convertNumber(number)
+        text: roomScene.convertNumber(number)
         font.weight: Font.Bold
         font.pixelSize: 10
         glow.color: "#FFFFBE"
@@ -59,7 +57,7 @@ Rectangle {
     Image {
         id: suitItem
         anchors.right: parent.right
-        source: suit ? "image://root/card/suit/" + suit : ""
+        source: suit ? "../../../image/card/suit/" + suit : ""
         width: implicitWidth / implicitHeight * height
         height: parent.height
     }

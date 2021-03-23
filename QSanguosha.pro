@@ -78,6 +78,8 @@ SOURCES += \
     src/package/yjcm2013.cpp \
     src/package/yjcm2014.cpp \
     src/ui/pcconsolestartdialog.cpp \
+    src/ui/roomscene.cpp \
+    src/ui/startgamedialog.cpp \
     src/ui/startserverdialog.cpp \
     swig/sanguosha_wrap.cxx \
     src/package/jsp.cpp \
@@ -94,6 +96,7 @@ HEADERS += \
     src/core/banpair.h \
     src/core/card.h \
     src/core/compiler-specific.h \
+    src/core/defines.h \
     src/core/engine.h \
     src/core/general.h \
     src/core/json.h \
@@ -104,6 +107,7 @@ HEADERS += \
     src/core/skill.h \
     src/core/structs.h \
     src/core/util.h \
+    src/main.h \
     src/package/exppattern.h \
     src/package/god.h \
     src/package/maneuvering.h \
@@ -127,6 +131,8 @@ HEADERS += \
     src/server/server.h \
     src/server/serverplayer.h \
     src/ui/pcconsolestartdialog.h \
+    src/ui/roomscene.h \
+    src/ui/startgamedialog.h \
     src/ui/startserverdialog.h \
     src/util/detector.h \
     src/util/nativesocket.h \
@@ -150,17 +156,9 @@ HEADERS += \
     src/package/thicket.h \
     src/package/wind.h \
     src/package/jsp.h \
-    src/pch.h \
-    src/core/defines.h
+    src/pch.h
 
 FORMS +=
-
-OTHER_FILES += \
-    script/* \
-    script/ui/* \
-    script/ui/Util/* \
-    script/ui/RoomElement/* \
-    script/ui/Dialog/*
 
 OTHER_FILES += \
     script/* \

@@ -1,7 +1,5 @@
 import QtQuick 2.4
-
-
-import "../../utility.js" as Utility
+import "../Util"
 
 GraphicsBox {
     property alias model: generalList
@@ -52,7 +50,7 @@ GraphicsBox {
 
             Image {
                 anchors.centerIn: parent
-                source: "image://root/choosegeneralbox/split-line"
+                source: "../../../image/choosegeneralbox/split-line"
             }
         }
 

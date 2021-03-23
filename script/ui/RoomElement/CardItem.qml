@@ -49,13 +49,13 @@ Item {
 
     Image {
         id: cardItem
-        source: name != "" ? "image://root/card/" + name : ""
+        source: name != "" ? "../../../image/card/" + name : ""
         anchors.fill: parent
     }
 
     Image {
         id: suitItem
-        source: suit != "" ? "image://root/card/suit/" + suit : ""
+        source: suit != "" ? "../../../image/card/suit/" + suit : ""
         x: 3
         y: 19
         width: 21
@@ -64,7 +64,7 @@ Item {
 
     Image {
         id: numberItem
-        source: (color != "" && number > 0) ? "image://root/card/number/" + color + "/" + number : ""
+        source: (color != "" && number > 0) ? "../../../image/card/number/" + color + "/" + number : ""
         x: 0
         y: 2
         width: 27

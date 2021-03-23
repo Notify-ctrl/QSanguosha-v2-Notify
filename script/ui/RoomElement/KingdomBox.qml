@@ -47,7 +47,7 @@ Item {
 
     Image {
         id: expandingBox
-        source: "image://root/kingdom/expanding"
+        source: "../../../image/kingdom/expanding"
         focus: true
         visible: false
 
@@ -57,28 +57,28 @@ Item {
         }
 
         Image {
-            source: "image://root/kingdom/expandingmask/wei"
+            source: "../../../image/kingdom/expandingmask/wei"
             x: 3
             y: 3
             visible: !wei.included
         }
 
         Image {
-            source: "image://root/kingdom/expandingmask/qun"
+            source: "../../../image/kingdom/expandingmask/qun"
             x: 23
             y: 3
             visible: !qun.included
         }
 
         Image {
-            source: "image://root/kingdom/expandingmask/shu"
+            source: "../../../image/kingdom/expandingmask/shu"
             x: 3
             y: 23
             visible: !shu.included
         }
 
         Image {
-            source: "image://root/kingdom/expandingmask/wu"
+            source: "../../../image/kingdom/expandingmask/wu"
             x: 23
             y: 23
             visible: !wu.included
@@ -114,7 +114,7 @@ Item {
     }
 
     Image {
-        source: value && value != "hidden" ? "image://root/kingdom/" + value : ""
+        source: value && value != "hidden" ? "../../../image/kingdom/" + value : ""
         visible: value != "unknown" && value != "hidden"
         anchors.centerIn: parent
     }

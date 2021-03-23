@@ -7,6 +7,9 @@
 #include "audio.h"
 #include "serverplayer.h"
 #include "engine.h"
+#include "defines.h"
+
+QQmlApplicationEngine *main_window;
 
 int main(int argc, char *argv[])
 {
@@ -71,12 +74,12 @@ int main(int argc, char *argv[])
     Audio::init();
 #endif
 
-    QQmlApplicationEngine main_window;
+    main_window = new QQmlApplicationEngine;
 
-    Sanguosha->setParent(&main_window);
-    main_window.rootContext()->setContextProperty("Sanguosha", Sanguosha);
-    main_window.load(QUrl(QStringLiteral("script/main.qml")));
-    if (main_window.rootObjects().isEmpty())
+    Sanguosha->setParent(main_window);
+    main_window->rootContext()->setContextProperty("Sanguosha", Sanguosha);
+    main_window->load(QUrl(QStringLiteral("script/main.qml")));
+    if (main_window->rootObjects().isEmpty())
         return -1;
 
     foreach (QString arg, qApp->arguments()) {

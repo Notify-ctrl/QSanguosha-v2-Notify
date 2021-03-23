@@ -26,7 +26,7 @@ Item {
         model: fileModel.count
 
         Image {
-            source: "image://root/animation/" + root.source + "/" + index
+            source: "../../../image/animation/" + root.source + "/" + index
             visible: false
             onStatusChanged: {
                 if (status == Image.Ready) {

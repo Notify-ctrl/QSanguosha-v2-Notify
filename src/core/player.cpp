@@ -381,6 +381,11 @@ Player::Role Player::getRoleEnum() const
     return role_map.value(role);
 }
 
+QString Player::getAvatar() const
+{
+    return property("avatar").toString();
+}
+
 const General *Player::getAvatarGeneral() const
 {
     if (general)
@@ -759,7 +764,7 @@ int Player::getMaxCards() const
     if (origin < 0)
         origin = qMax(hp, 0);
     int rule = 0, total = 0, extra = 0;
-    if (Config.MaxHpScheme == 3 && general2) {
+    if (Config.value("MaxHpScheme").toInt() == 3 && general2) {
         total = general->getMaxHp() + general2->getMaxHp();
         if (total % 2 != 0 && getMark("AwakenLostMaxHp") == 0)
             rule = 1;

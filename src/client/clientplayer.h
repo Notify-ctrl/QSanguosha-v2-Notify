@@ -3,6 +3,7 @@
 
 #include "player.h"
 //#include "clientstruct.h"
+#include "defines.h"
 
 class Client;
 class QTextDocument;
@@ -44,6 +45,8 @@ signals:
 };
 
 extern ClientPlayer *Self;
+
+Q_DECLARE_METATYPE(ClientPlayer *)
 
 #endif
 

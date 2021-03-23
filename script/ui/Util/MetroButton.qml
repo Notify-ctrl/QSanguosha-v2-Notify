@@ -41,7 +41,7 @@ Item {
         id: mouse
         anchors.fill: parent
         hoverEnabled: parent.enabled
-        onReleased: parent.clicked()
+        onReleased: if (parent.enabled) parent.clicked()
     }
 
     Row {

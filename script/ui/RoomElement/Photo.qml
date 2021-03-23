@@ -1,10 +1,12 @@
 import QtQuick 2.4
 import QtQuick.Layouts 1.1
 import QtGraphicalEffects 1.0
+import Sanguosha 1.0
 
 Item {
     property string headGeneral: ""
     property string deputyGeneral: ""
+    property string clientPlayer: ""
     property alias screenName: screenNameItem.text
     property alias faceTurned: faceTurnedCover.visible
     property string userRole: "unknown"
@@ -87,7 +89,7 @@ Item {
         Image {
             anchors.fill: parent
             fillMode: Image.PreserveAspectCrop
-            source: "image://root/general/fullphoto/" + (headGeneral != "" ? headGeneral : "blank")
+            source: "../../../image/general/full/" + (headGeneral != "" ? headGeneral : "anjiang")
         }
     }
 
@@ -99,7 +101,7 @@ Item {
         Image {
             anchors.fill: parent
             fillMode: Image.PreserveAspectCrop
-            source: deputyGeneral != "" ? "image://root/general/fullphoto/" + deputyGeneral : ""
+            source: deputyGeneral != "" ? "../../../image/general/full/" + deputyGeneral : ""
         }
     }
 
@@ -110,14 +112,14 @@ Item {
     }
 
     Image {
-        source: "image://root/photo/circle-photo"
+        source: "../../../image/general/circle-photo"
         visible: deputyGeneral != ""
     }
 
     Image {
         id: faceTurnedCover
         anchors.fill: parent
-        source: "image://root/photo/faceturned"
+        source: "../../../image/general/faceturned"
         visible: false
     }
 
@@ -160,7 +162,7 @@ Item {
         clip: true
 
         Image {
-            source: "image://root/magatama/bg"
+            source: "../../../image/general/magatamas/bg"
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.top: parent.top
             visible: hpBar.visible
@@ -205,7 +207,7 @@ Item {
         wrapMode: Text.WrapAnywhere
         lineHeight: 1.5
         horizontalAlignment: Text.AlignHCenter
-        text: qsTr(headGeneral)
+        text: Sanguosha.translate(headGeneral)
 
         glow.color: "black"
         glow.spread: 0.7
@@ -225,7 +227,7 @@ Item {
         wrapMode: Text.WrapAnywhere
         lineHeight: 1.5
         horizontalAlignment: Text.AlignHCenter
-        text: qsTr(deputyGeneral)
+        text: Sanguosha.translate(deputyGeneral)
 
         glow.color: "black"
         glow.spread: 0.7
@@ -234,13 +236,13 @@ Item {
     }
 
     Image {
-        source: "image://root/chain"
+        source: "../../../image/system/chain"
         anchors.centerIn: parent
         visible: parent.chained
     }
 
     Image {
-        source: "image://root/photo/save-me"
+        source: "../../../image/system/death/save-me"
         anchors.centerIn: parent
         visible: parent.dying
     }
@@ -261,7 +263,7 @@ Item {
     }
 
     Image {
-        source: root.phase != "inactive" ? "image://root/phase/" + root.phase + ".png" : ""
+        source: root.phase != "inactive" ? "../../../image/system/phase/" + root.phase + ".png" : ""
         width: parent.width * 0.9
         height: implicitHeight / implicitWidth * width
         x: (parent.width - width) / 2

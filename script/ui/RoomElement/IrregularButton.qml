@@ -10,7 +10,7 @@ Item {
     id: button
 
     Image {
-        source: "image://root/button/" + name + "/" + (enabled ? mouseState : "disabled")
+        source: "../../../image/button/" + name + "/" + (enabled ? mouseState : "disabled")
 
         MouseArea {
             anchors.fill: parent
