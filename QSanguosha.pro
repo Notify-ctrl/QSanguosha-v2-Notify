@@ -162,6 +162,13 @@ OTHER_FILES += \
     script/ui/RoomElement/* \
     script/ui/Dialog/*
 
+OTHER_FILES += \
+    script/* \
+    script/ui/* \
+    script/ui/Util/* \
+    script/ui/RoomElement/* \
+    script/ui/Dialog/*
+
 
 CONFIG(buildbot) {
     DEFINES += USE_BUILDBOT
