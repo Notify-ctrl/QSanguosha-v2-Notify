@@ -21,6 +21,7 @@ Item {
     property alias card: cardItem
     property bool isClicked: false
     property bool moveAborted: false
+    property bool isKnown: true
 
     signal toggleDiscards()
     signal clicked()
@@ -49,12 +50,13 @@ Item {
 
     Image {
         id: cardItem
-        source: name != "" ? "../../../image/card/" + name : ""
+        source: isKnown ? (name != "" ? "../../../image/card/" + name : "") : "../../../image/card/card-back"
         anchors.fill: parent
     }
 
     Image {
         id: suitItem
+        visible: isKnown
         source: suit != "" ? "../../../image/card/suit/" + suit : ""
         x: 3
         y: 19
@@ -64,6 +66,7 @@ Item {
 
     Image {
         id: numberItem
+        visible: isKnown
         source: (color != "" && number > 0) ? "../../../image/card/number/" + color + "/" + number : ""
         x: 0
         y: 2

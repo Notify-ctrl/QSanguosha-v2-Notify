@@ -25,7 +25,7 @@ MouseArea {
 
     Timer {
         id: hideTimer
-        interval: 10000
+        interval: 100
         running: !mouseArea.containsMouse && tip.visible
         onTriggered: {
             tip.opacity = 0

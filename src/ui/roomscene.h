@@ -19,14 +19,16 @@ signals:
     void addPlayer(ClientPlayer *player);
     void removePlayer(const QString &player_name);
     void returnToStart();
-    // == Above is done ===========
+    void chooseGeneral(const QStringList &generals);
+    void chooseGeneralDone(const QString &general);
+    void updateProperty(QVariantList args);
+    // == Above are done ===========
     //Signals from C++ to QML
     void loseCards(int moveId, QList<CardsMoveStruct> moves);
     void getCards(int moveId, QList<CardsMoveStruct> moves);
     void keepLoseCardLog(const CardsMoveStruct &move);
     void keepGetCardLog(const CardsMoveStruct &move);
     // choice dialog
-    void chooseGeneral(const QStringList &generals);
     void chooseSuit(const QStringList &suits);
     void chooseCard(const ClientPlayer *playerName, const QString &flags, const QString &reason,
         bool handcard_visible, Card::HandlingMethod method, QList<int> disabled_ids);
@@ -120,7 +122,6 @@ signals:
     void enableCards(const QVariant &cardIds);
     void setPhotoReady(bool ready);
     void enablePhotos(const QVariant &seats);
-    void chooseGeneral(const QVariant &generals, int num);
     void startEmotion(const QString &emotion, int seat);
     void playAudio(const QString &path);
     void showIndicatorLine(int from, const QVariantList &tos);

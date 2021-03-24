@@ -6,5 +6,5 @@ CardItem {
     suit: ""
     number: 0
     card.source: "../../../image/general/card/" + name + ".jpg"
-    glow.color: Engine.kingdomColor[kingdom]
+    glow.color: "white" //Engine.kingdomColor[kingdom]
 }

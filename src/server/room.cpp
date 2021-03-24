@@ -5012,7 +5012,7 @@ void Room::_setupChooseGeneralRequestArgs(ServerPlayer *player)
 {
     JsonArray options = JsonUtils::toJsonArray(player->getSelected()).value<JsonArray>();
     if (getLord())
-        options.append(QString("%1(lord)").arg(getLord()->getGeneralName()));
+        options.append(QString("%1").arg(getLord()->getGeneralName()));
     player->m_commandArgs = options;
 }
 

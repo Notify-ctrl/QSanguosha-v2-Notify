@@ -348,6 +348,9 @@ void Client::updateProperty(const QVariant &arg)
     ClientPlayer *player = getPlayer(object_name);
     if (!player) return;
     player->setProperty(args[1].toString().toLatin1().constData(), args[2].toString());
+    QVariantList sig_args;
+    sig_args << object_name << args[1].toString() << args[2];
+    emit property_updated(sig_args);
 }
 
 void Client::removePlayer(const QVariant &player_name)

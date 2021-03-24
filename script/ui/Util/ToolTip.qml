@@ -45,20 +45,6 @@ ApplicationWindow {
         }
     }
 
-    Behavior on x {
-        enabled: true
-        NumberAnimation {
-            duration: 200
-        }
-    }
-
-    Behavior on y {
-        enabled: true
-        NumberAnimation {
-            duration: 200
-        }
-    }
-
     function appear(point, text) {
         root.text = text
 

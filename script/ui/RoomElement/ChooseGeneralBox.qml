@@ -1,11 +1,14 @@
 import QtQuick 2.4
 import "../Util"
+import "../Util/util.js" as Utility
 
 GraphicsBox {
-    property alias model: generalList
+    property alias generalList: generalList
+    // property var generalList: []
     property int choiceNum: 1
     property var choices: []
     property var selectedItem: []
+    property bool loaded: false
 
     ListModel {
         id: generalList
@@ -24,7 +27,7 @@ GraphicsBox {
 
         Item {
             id: generalArea
-            width: generalList.count >= 5 ? Math.ceil(generalList.count / 2) : Math.max(3, generalList.count) * 97
+            width: (generalList.count >= 5 ? Math.ceil(generalList.count / 2) : Math.max(3, generalList.count)) * 97
             height: generalList.count >= 5 ? 290 : 150
             z: 1
 
@@ -50,7 +53,7 @@ GraphicsBox {
 
             Image {
                 anchors.centerIn: parent
-                source: "../../../image/choosegeneralbox/split-line"
+                source: "../../../image/split-line"
             }
         }
 
@@ -101,9 +104,10 @@ GraphicsBox {
         model: generalList
 
         GeneralCardItem {
-            gid: model.gid
+            // gid: model.gid
+            // name: model.name
+            // kingdom: model.kingdom
             name: model.name
-            kingdom: model.kingdom
             selectable: true
             draggable: true
 
@@ -150,11 +154,16 @@ GraphicsBox {
 
     function updatePosition()
     {
+        /*if (!loaded) {
+            generalCardList.model = generalList
+            loaded = true
+        }*/
         choices = [];
         var item, magnet, pos, i;
         for (i = 0; i < selectedItem.length && i < resultList.count; i++) {
             item = selectedItem[i];
-            choices.push(item.gid);
+            // choices.push(item.gid);
+            choices.push(item.name);
             magnet = resultList.itemAt(i);
             pos = root.mapFromItem(resultArea, magnet.x, magnet.y);
             if (item.homeX !== pos.x || item.homeY !== item.y) {

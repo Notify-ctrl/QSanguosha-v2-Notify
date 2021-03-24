@@ -59,7 +59,7 @@ GraphicsBox {
                     model: handcards
 
                     CardItem {
-                        name: "hegback"
+                        name: "card-back"
                         autoBack: false
                         selectable: true
                         onClicked: root.cardSelected(cid);

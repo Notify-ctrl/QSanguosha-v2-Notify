@@ -191,7 +191,7 @@ RowLayout {
             id: headGeneralItem
             y: -4
             avatar: headGeneralName ? headGeneralName: "huangyueying"
-            generalName: qsTr(headGeneralName)
+            generalName: Sanguosha.translate(headGeneralName)
             generalPosition: "head"
 
             Rectangle {
@@ -213,7 +213,7 @@ RowLayout {
             x: 128
             y: -4
             avatar: deputyGeneralName ? deputyGeneralName : "zhugeliang"
-            generalName: qsTr(deputyGeneralName)
+            generalName: Sanguosha.translate(deputyGeneralName)
             generalPosition: "deputy"
             visible: deputyGeneralName ? true : false
 

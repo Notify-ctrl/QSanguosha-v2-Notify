@@ -173,6 +173,7 @@ RoomScene {
                     dashboard.drunk = Qt.binding(function(){return model.drunk;});
                     dashboard.headSkills = Qt.binding(function(){return model.headSkills;});
                     dashboard.deputySkills = Qt.binding(function(){return model.deputySkills;});
+                    dashboard.userRole = Qt.binding(function(){return model.role;});
                 }
 
                 function onSetAcceptEnabled() {
@@ -250,11 +251,6 @@ RoomScene {
             width: 190
             height: 50
             visible: Sanguosha.getServerInfo("EnableAI")
-            // opacity: Self.owner ? 1 : 0
-            ToolTipArea {
-                anchors.fill: parent
-                text: qsTr("Press F7 to fill robots")
-            }
         }
         MetroButton {
             id: returnToStart
@@ -319,13 +315,42 @@ RoomScene {
     onChooseGeneral: {
         popupBox.source = "RoomElement/ChooseGeneralBox.qml";
         var box = popupBox.item;
-        box.choiceNum = num;
+        // box.choiceNum = num;
+        box.choiceNum = 1;
         box.accepted.connect(function(){
-            roomScene.onChooseGeneralFinished(box.choices);
+            roomScene.onChooseGeneralDone(box.choices[0]);
         });
         for (var i = 0; i < generals.length; i++)
-            box.model.append(generals[i]);
+            box.generalList.append({ "name": generals[i] });
         box.updatePosition();
+    }
+
+    onUpdateProperty: {
+        let player_name = args[0]
+        let property_name = args[1]
+        if (property_name === "general") property_name = "headGeneralName"
+        else if (property_name === "general2") property_name = "deputyGeneralName"
+        let value = args[2]
+        if (player_name === Self.objectName || player_name === "MG_SELF") {
+            let tmp = dashboardModel
+            tmp[0][property_name] = value
+            if (property_name === "headGeneralName") {
+                tmp[0]["kingdom"] = Sanguosha.getGeneralKingdom(value)
+            }
+            dashboardModel = tmp
+        } else {
+            for (let i = 0; i < photoModel.length; i++) {
+                if (photoModel[i].clientPlayer === player_name) {
+                    photoModel[i][property_name] = value
+                    if (property_name === "headGeneralName") {
+                        photoModel[i]["kingdom"] = Sanguosha.getGeneralKingdom(value)
+                    }
+                    photos.model = photoModel
+                    arrangePhotos()
+                    break
+                }
+            }
+        }
     }
 
     onMoveCards: {
@@ -632,17 +657,18 @@ RoomScene {
     Component.onCompleted: {
         toast.show(qsTr("Sucesessfully entered room."))
         dashboardModel = [{
-            seatNumber: 0,
+            seat: 0,
             phase: "start",
             hp: 0,
             maxHp: 0,
             headGeneralName: Self.getAvatar(),
             deputyGeneralName: "",
-            headGeneralKingdom: "qun",
             chained: false,
             dying: false,
             alive: false,
             drunk: false,
+            kingdom: "qun",
+            role: "unknown",
             headSkills: [],
             deputySkills: []
         }]
@@ -672,5 +698,6 @@ RoomScene {
         photos.model = photoModel
 
         playerNum = player_num
+        addRobotButton.opacity = Self.owner ? 1 : 0
     }
 }

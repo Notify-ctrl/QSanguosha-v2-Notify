@@ -275,6 +275,7 @@ signals:
     void error_message(const QString &msg);
     void player_added(ClientPlayer *new_player);
     void player_removed(const QString &player_name);
+    void property_updated(QVariantList args);
     // choice signal
     void generals_got(const QStringList &generals);
     void kingdoms_got(const QStringList &kingdoms);

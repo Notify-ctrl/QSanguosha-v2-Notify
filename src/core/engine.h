@@ -129,6 +129,9 @@ public:
     Q_INVOKABLE void setConfig(const QString &, QVariant);
     Q_INVOKABLE QStringList getMiniScenarioNames();
     Q_INVOKABLE QVariant getServerInfo(const QString &);
+    Q_INVOKABLE const QString getGeneralKingdom(const QString &name) {
+        return getGeneral(name)->getKingdom();
+    }
 
 private:
     void _loadMiniScenarios();
