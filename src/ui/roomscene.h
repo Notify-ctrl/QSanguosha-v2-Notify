@@ -18,6 +18,7 @@ signals:
     void chat(const QString &chatter);
     void addPlayer(ClientPlayer *player);
     void removePlayer(const QString &player_name);
+    void returnToStart();
     // == Above is done ===========
     //Signals from C++ to QML
     void loseCards(int moveId, QList<CardsMoveStruct> moves);

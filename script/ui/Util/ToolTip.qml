@@ -1,92 +1,80 @@
-import QtQuick 2.4
+import QtQuick 2.8
+import QtQuick.Controls 2.2 // 辣鸡qml自带tooltip
+import QtQuick.Window 2.1
 
-Rectangle {
-    id: tooltip
-    width: holder.width + horizontalPadding * 2
-    height: holder.height + verticalPadding * 2
-    color: "#aa999999"
-    visible: false
+ApplicationWindow {
+    id: root
 
-    property alias text: holder.text
-    property int verticalPadding: 1
-    property int horizontalPadding: 5
+    flags: Qt.CustomizeWindowHint | Qt.FramelessWindowHint | Qt.ToolTip
+    color: "transparent"
+    opacity: 0
 
+    // related to contentWidth
+    property string text: "QSanguoshaQSanguoshaQSanguoshaQSanguosha"
 
-    Text {
-        anchors.centerIn: parent
-        id: holder
-        text: ""
-        wrapMode: Text.WordWrap
-        onTextChanged: tooltip.resetHolderSize()
-    }
+    width: main_rect.width
+    height: main_rect.height
 
-    NumberAnimation {
-        id: appear
-        target: tooltip
-        property: "opacity"
-        easing.type: Easing.InOutQuad
-        duration: 300
-        from: 0
-        to: 1
-    }
+    Rectangle {
+        id: main_rect
+        radius: 8
+        width: tipText.contentWidth + 16
+        height: tipText.contentHeight + 16
+        opacity: 0.8
+        border.color: "#676554"
+        border.width: 1
+        color: "#2E2C27"
+        Text {
+            id: tipText
+            wrapMode: Text.WordWrap
+            textFormat: Text.RichText
+            anchors.centerIn: parent
 
-    NumberAnimation {
-        id: disappear
-        target: tooltip
-        property: "opacity"
-        easing.type: Easing.InOutQuad
-        from: 1
-        to: 0
-        onStopped: visible = false;
-    }
-
-    onVisibleChanged: {
-        if (visible) {
-            appear.start();
+            style: Text.Outline
+            font.pixelSize: 18
+            color: "#E4D5A0"
+            text: root.text
         }
     }
 
-    function show(posX, posY) {
-        resetHolderSize();
-
-        if (holder.width > 100) {
-            holder.width = Math.sqrt(1.618 * holder.width * holder.height);
-            holder.doLayout();
+    Behavior on opacity {
+        enabled: true
+        NumberAnimation {
+            duration: 200
+            // easing.type: Easing.InOutQuad
         }
-
-        if (width > Root.width || height > Root.height) {
-            holder.width = Root.width - horizontalPadding * 2;
-            holder.doLayout();
-            if (height > Root.height) {
-                scale = Math.min(Root.width / width, Root.height / height);
-            }
-        } else {
-            scale = 1;
-        }
-
-        var position = parent.mapToItem(Root, posX, posX);
-
-        if (position.x + width * scale > Root.width) {
-             posX += Root.width - (position.x + width * scale);
-        }
-        if (position.y + height * scale > Root.height) {
-            posY += Root.height - (position.y + height * scale);
-        }
-
-        var oo = parent.mapFromItem(Root, 0, 0);
-        x = Math.max(oo.x, posX);
-        y = Math.max(oo.y, posY);
-
-        visible = true;
     }
 
-    function hide() {
-        disappear.start();
+    Behavior on x {
+        enabled: true
+        NumberAnimation {
+            duration: 200
+        }
     }
 
-    function resetHolderSize() {
-        holder.width = undefined;
-        holder.height = undefined;
-        holder.doLayout();
+    Behavior on y {
+        enabled: true
+        NumberAnimation {
+            duration: 200
+        }
+    }
+
+    function appear(point, text) {
+        root.text = text
+
+        // boundary detection
+        var xx = point.x
+        var yy = point.y
+        if (xx + width > Screen.desktopAvailableWidth) {
+            xx = Screen.desktopAvailableWidth - width
+        }
+        if (yy + height > Screen.desktopAvailableHeight) {
+            yy = Screen.desktopAvailableHeight - height
+        }
+
+        root.x = xx
+        root.y = yy
+
+        show()
     }
 }

@@ -29,21 +29,15 @@ StartGameDialog {
         anchors.centerIn: parent
         height: 480
         width: 800
-        Flickable {
-            width: parent.width - 40
-            height: parent.height - 20
+        Rectangle {
+            id: dialog
+            color: "transparent"
             anchors.centerIn: parent
-            contentWidth: dialog.width
-            contentHeight: dialog.height
-            ScrollBar.vertical: ScrollBar {}
-            clip: true
-            flickableDirection: Flickable.VerticalFlick
-            Rectangle {
-                id: dialog
-                color: "transparent"
-                height: childrenRect.height + 64
-                width: childrenRect.width
-                Column {
+            height: childrenRect.height + 64
+            width: childrenRect.width
+            RowLayout {
+                spacing: 40
+                ColumnLayout {
                     x: 32
                     y: 20
                     spacing: 20
@@ -105,13 +99,6 @@ StartGameDialog {
                         }
                     }
 
-                    Image {
-                        id: avatarImg
-                        Component.onCompleted: {
-                            source = "../../../image/general/full/" + userAvatar.text;
-                        }
-                    }
-
                     RowLayout {
                         anchors.rightMargin: 8
                         spacing: 16
@@ -134,6 +121,13 @@ StartGameDialog {
                                 startGameDialog.rejected()
                             }
                         }
+                    }
+                }
+
+                Image {
+                    id: avatarImg
+                    Component.onCompleted: {
+                        source = "../../../image/general/full/" + userAvatar.text;
                     }
                 }
             }

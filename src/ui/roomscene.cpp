@@ -7,6 +7,10 @@ RoomScene::RoomScene(QQuickItem *parent) : QQuickItem(parent)
 
     connect(ClientInstance, &Client::player_added, this, &RoomScene::addPlayer);
     connect(ClientInstance, &Client::player_removed, this, &RoomScene::removePlayer);
+
+    connect(this, &RoomScene::returnToStart, Self, &ClientPlayer::deleteLater);
+    connect(this, &RoomScene::returnToStart, ClientInstance, &Client::deleteLater);
+    connect(this, &RoomScene::returnToStart, ClientInstance, &Client::disconnectFromHost);
 }
 
 REGISTER_QMLTYPE("Sanguosha", 1, 0, RoomScene)

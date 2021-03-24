@@ -7,7 +7,9 @@ ApplicationWindow {
     visible: true
     width: 1366
     height: 768
-
+Item {  // For ToolTip
+    id: rootWindowItem
+    anchors.fill: parent
     Loader {
         id: startSceneLoader
         anchors.fill: parent
@@ -29,7 +31,7 @@ ApplicationWindow {
     Rectangle {
         id: toast
         opacity: 0
-        z: 999
+        z: 998
         anchors.horizontalCenter: parent.horizontalCenter
         y: parent.height * 0.8
         radius: 16
@@ -68,6 +70,10 @@ ApplicationWindow {
         }
     }
 
+    ToolTip {
+        id: tip
+    }
+
     Component.onCompleted: {
         var skip_splash = false;
         for (var i = 0; i < Qt.application.arguments.length; i++) {
@@ -95,4 +101,5 @@ ApplicationWindow {
             });
         }
     }
+}
 }

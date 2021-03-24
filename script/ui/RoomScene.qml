@@ -239,6 +239,34 @@ RoomScene {
         onFinished: visible = false;
     }
 
+    ColumnLayout {
+        id: buttons
+        // visible: !Sanguosha.getServerInfo("DuringGame")
+        anchors.verticalCenter: roomScene.verticalCenter
+        x: roomScene.width / 2 - width / 2 - logBox.width / 2
+        MetroButton {
+            id: addRobotButton
+            text: qsTr("Add a Robot")
+            width: 190
+            height: 50
+            visible: Sanguosha.getServerInfo("EnableAI")
+            // opacity: Self.owner ? 1 : 0
+            ToolTipArea {
+                anchors.fill: parent
+                text: qsTr("Press F7 to fill robots")
+            }
+        }
+        MetroButton {
+            id: returnToStart
+            text: qsTr("Return to Start")
+            width: 190
+            height: 50
+            onClicked: {
+                roomScene.returnToStart()
+            }
+        }
+    }
+
     onAddPlayer: {
         for (let i = 0; i < photoModel.length; i++) {
             if (photoModel[i].clientPlayer === "") {
@@ -282,6 +310,10 @@ RoomScene {
                 arrangePhotos()
             }
         }
+    }
+
+    onReturnToStart: {
+        dialogLoader.setSource("")
     }
 
     onChooseGeneral: {
