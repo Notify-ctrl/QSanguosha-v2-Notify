@@ -23,7 +23,7 @@ Item {
         var result = [];
         for (var i = 0; i < cards.length; i++) {
             for (var j = 0; j < outputs.length; j++) {
-                if (outputs[j].cid === cards[i].cid) {
+                if (outputs[j] === cards[i].cid) {
                     result.push(cards[i]);
                     cards.splice(i, 1);
                     i--;

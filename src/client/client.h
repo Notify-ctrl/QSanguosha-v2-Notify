@@ -83,7 +83,7 @@ public:
     QList<QByteArray> getRecords() const;
     QString getReplayPath() const;
     Replayer *getReplayer() const;
-    QString getPlayerName(const QString &str);
+    Q_INVOKABLE QString getPlayerName(const QString &str);
     QString getSkillNameToInvoke() const;
     QString getSkillNameToInvokeData() const;
 

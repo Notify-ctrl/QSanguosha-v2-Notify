@@ -88,7 +88,7 @@ public:
     int getCardCount() const;
     const Card *getEngineCard(int cardId) const;
     // @todo: consider making this const Card *
-    Card *getCard(int cardId);
+    Q_INVOKABLE Card *getCard(int cardId);
     WrappedCard *getWrappedCard(int cardId);
 
     QStringList getLords(bool contain_banned = false) const;
@@ -132,6 +132,7 @@ public:
     Q_INVOKABLE const QString getGeneralKingdom(const QString &name) {
         return getGeneral(name)->getKingdom();
     }
+    Q_INVOKABLE QString getCardLogName(QString str);
 
 private:
     void _loadMiniScenarios();

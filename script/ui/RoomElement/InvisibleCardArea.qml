@@ -56,9 +56,15 @@ Item {
         var parentPos = roomScene.mapFromItem(root, 0, 0);
         var card;
         var items = [];
-        for (var i = 0; i < outputs.length; i++) {
-            if (contains(outputs[i].cid)) {
-                var state = outputs[i];
+        for (let i = 0; i < outputs.length; i++) {
+            if (contains(outputs[i])) {
+                // var state = outputs[i];
+                let card = Sanguosha.getCard(outputs[i])
+                let state = {}
+                state.suit = card.suit
+                state.number = card.number
+                state.name = card.objectName
+                state.cid = card.id
                 state.x = parentPos.x;
                 state.y = parentPos.y;
                 state.opacity = 0;

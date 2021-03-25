@@ -22,6 +22,7 @@ Client::Client(QObject *parent, const QString &filename)
     player_count(1) // Self is not included!! Be care!!!
 {
     ClientInstance = this;
+    main_window->rootContext()->setContextProperty("ClientInstance", this);
     m_isGameOver = false;
     m_isDisconnected = true;
 

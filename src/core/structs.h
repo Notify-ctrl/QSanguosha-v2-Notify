@@ -7,6 +7,7 @@ class Card;
 class Slash;
 
 #include "serverplayer.h"
+#include "defines.h"
 
 struct DamageStruct
 {
@@ -226,6 +227,9 @@ struct CardsMoveOneTimeStruct
 
 struct CardsMoveStruct
 {
+    Q_GADGET
+
+public:
     inline CardsMoveStruct()
     {
         from_place = Player::PlaceUnknown;
@@ -313,6 +317,14 @@ struct CardsMoveStruct
     {
         return player != NULL && (from == player || (to == player && to_place != Player::PlaceSpecial));
     }
+
+private:
+    Q_PROPERTY(QList<int> card_ids MEMBER card_ids)
+    Q_PROPERTY(Player::Place from_place MEMBER from_place)
+    Q_PROPERTY(Player::Place to_place MEMBER to_place)
+    Q_PROPERTY(QString from_player_name MEMBER from_player_name)
+    Q_PROPERTY(QString to_player_name MEMBER to_player_name)
+    Q_PROPERTY(bool open MEMBER open)
 };
 
 struct DyingStruct
@@ -565,5 +577,6 @@ Q_DECLARE_METATYPE(const Card *)
 Q_DECLARE_METATYPE(ServerPlayer *)
 Q_DECLARE_METATYPE(JudgeStruct *)
 Q_DECLARE_METATYPE(PindianStruct *)
+REGISTER_UNCREATABLE_QMLTYPE("Sanguosha", 1, 0, CardsMoveStruct)
 #endif
 

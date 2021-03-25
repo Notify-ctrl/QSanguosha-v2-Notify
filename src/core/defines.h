@@ -14,7 +14,13 @@ Q_COREAPP_STARTUP_FUNCTION(__cRegisterQmlType__ ## qmlName)
 
 #define REGISTER_QMLTYPE_NOT_AVAILABLE(uri, versionMajor, versionMinor, qmlName) static void __cRegisterQmlType__ ## qmlName()\
 {\
-    qmlRegisterTypeNotAvailable(uri, versionMajor, versionMinor, #qmlName, QString(#qmlName) + QString(" can't be initialized."));\
+    qmlRegisterTypeNotAvailable(uri, versionMajor, versionMinor, #qmlName, QString(#qmlName) + QString(" is not available now."));\
+}\
+Q_COREAPP_STARTUP_FUNCTION(__cRegisterQmlType__ ## qmlName)
+
+#define REGISTER_UNCREATABLE_QMLTYPE(uri, versionMajor, versionMinor, qmlName) static void __cRegisterQmlType__ ## qmlName()\
+{\
+    qmlRegisterUncreatableType<qmlName>(uri, versionMajor, versionMinor, #qmlName, QString(#qmlName) + QString(" can't be created in qml."));\
 }\
 Q_COREAPP_STARTUP_FUNCTION(__cRegisterQmlType__ ## qmlName)
 

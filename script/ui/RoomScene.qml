@@ -4,6 +4,7 @@ import QtMultimedia 5.12
 import "Util"
 import Sanguosha 1.0
 import "RoomElement"
+import "Util/util.js" as Utility
 
 RoomScene {
     property var dashboardModel: null
@@ -331,20 +332,36 @@ RoomScene {
         if (property_name === "general") property_name = "headGeneralName"
         else if (property_name === "general2") property_name = "deputyGeneralName"
         let value = args[2]
+        let setValue = function (target_model, property_name, value) {
+            switch (property_name) {
+            case "headGeneralName":
+                target_model[property_name] = value;
+                target_model["kingdom"] = Sanguosha.getGeneralKingdom(value);
+                break
+            case "maxhp":
+                property_name = "maxHp";
+            case "seat":
+            case "hp":
+                target_model[property_name] = parseInt(value);
+                break;
+            case "chained":
+            case "alive":
+            case "drunk":
+                target_model[property_name] = (value === "true" ? true : false)
+                break
+            default:
+                target_model[property_name] = value;
+            }
+        }
+
         if (player_name === Self.objectName || player_name === "MG_SELF") {
             let tmp = dashboardModel
-            tmp[0][property_name] = value
-            if (property_name === "headGeneralName") {
-                tmp[0]["kingdom"] = Sanguosha.getGeneralKingdom(value)
-            }
+            setValue(tmp[0], property_name, value)
             dashboardModel = tmp
         } else {
             for (let i = 0; i < photoModel.length; i++) {
                 if (photoModel[i].clientPlayer === player_name) {
-                    photoModel[i][property_name] = value
-                    if (property_name === "headGeneralName") {
-                        photoModel[i]["kingdom"] = Sanguosha.getGeneralKingdom(value)
-                    }
+                    setValue(photoModel[i], property_name, value)
                     photos.model = photoModel
                     arrangePhotos()
                     break
@@ -353,14 +370,18 @@ RoomScene {
         }
     }
 
+    onReceiveLog: {
+        logBox.append(log_str)
+    }
+
     onMoveCards: {
         for (var i = 0; i < moves.length; i++) {
             var move = moves[i];
-            var from = getAreaItem(move.from);
-            var to = getAreaItem(move.to);
+            var from = getAreaItem(move.from_place, move.from_player_name);
+            var to = getAreaItem(move.to_place, move.to_player_name);
             if (!from || !to || from === to)
                 continue;
-            var items = from.remove(move.cards);
+            var items = from.remove(move.card_ids);
             if (items.length > 0)
                 to.add(items);
             to.updateCardPosition(true);
@@ -599,7 +620,7 @@ RoomScene {
         line.finished.connect(function(){line.destroy();});
         line.running = true;
     }
-
+/*
     function getItemBySeat(seat)
     {
         if (seat === dashboard.seatNumber)
@@ -607,26 +628,36 @@ RoomScene {
         var i = (seat - dashboard.seatNumber - 1 + playerNum) % playerNum;
         return photos.itemAt(i);
     }
-
-    function getAreaItem(area)
+*/
+    function getItemByPlayerName(name)
     {
-        if (area.type === "drawPile") {
+        if (name === Self.objectName)
+            return dashboard;
+        for (let i = 0; i < photoModel.length; i++) {
+            if (photoModel[i].clientPlayer === name)
+                return photos.itemAt(i);
+        }
+    }
+
+    function getAreaItem(area, name)
+    {
+        if (area === Player.DrawPile) {
             return drawPile;
-        } else if (area.type === "table") {
+        } else if (area === Player.DiscardPile || area === Player.PlaceTable) {
             return tablePile;
-        } else if (area.type === "wugu") {
+        } else if (area === Player.PlaceWuGu) {
             return popupBox.item;
         }
 
-        var photo = getItemBySeat(area.seat);
+        var photo = getItemByPlayerName(name);
         if (!photo)
             return null;
 
-        if (area.type === "hand") {
+        if (area === Player.PlaceHand) {
             return photo.handcardArea;
-        } else if (area.type === "equip")
+        } else if (area === Player.PlaceEquip)
             return photo.equipArea;
-        else if (area.type === "delayedTrick")
+        else if (area === Player.PlaceDelayedTrick)
             return photo.delayedTrickArea;
 
         return null;
@@ -642,22 +673,10 @@ RoomScene {
         }
     }
 
-    function convertNumber(number) {
-        if (number === 1)
-            return "A";
-        if (number >= 2 && number <= 10)
-            return number;
-        if (number >= 11 && number <= 13) {
-            var strs = ["J", "Q", "K"];
-            return strs[number - 11];
-        }
-        return "";
-    }
-
     Component.onCompleted: {
         toast.show(qsTr("Sucesessfully entered room."))
         dashboardModel = [{
-            seat: 0,
+            seat: 1,
             phase: "start",
             hp: 0,
             maxHp: 0,

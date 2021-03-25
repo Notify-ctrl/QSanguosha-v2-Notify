@@ -1,4 +1,5 @@
 import QtQuick 2.4
+import "../Util/util.js" as Utility
 
 Rectangle {
     property int cid: 0
@@ -43,7 +44,7 @@ Rectangle {
     GlowText {
         id: numberItem
         visible: number > 0 && number < 14
-        text: roomScene.convertNumber(number)
+        text: Utility.convertNumber(number)
         font.weight: Font.Bold
         font.pixelSize: 10
         glow.color: "#FFFFBE"

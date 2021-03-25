@@ -4,6 +4,7 @@
 #include "general.h"
 #include "card.h"
 //#include "wrapped-card.h"
+#include "defines.h"
 
 class EquipCard;
 class Weapon;
@@ -119,7 +120,7 @@ public:
     QString getFlags() const;
     QStringList getFlagList() const;
     virtual void setFlags(const QString &flag);
-    bool hasFlag(const QString &flag) const;
+    Q_INVOKABLE bool hasFlag(const QString &flag) const;
     void clearFlags();
 
     bool faceUp() const;

@@ -219,4 +219,4 @@ void ClientPlayer::setMark(const QString &mark, int value)
         emit duanchang_invoked();
 }
 
-REGISTER_QMLTYPE_NOT_AVAILABLE("Sanguosha", 1, 0, ClientPlayer)
+REGISTER_UNCREATABLE_QMLTYPE("Sanguosha", 1, 0, ClientPlayer)

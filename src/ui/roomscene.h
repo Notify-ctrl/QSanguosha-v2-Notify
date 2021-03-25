@@ -22,6 +22,8 @@ signals:
     void chooseGeneral(const QStringList &generals);
     void chooseGeneralDone(const QString &general);
     void updateProperty(QVariantList args);
+    void receiveLog(const QStringList &log_str);
+    void moveCards(int moveId, QList<CardsMoveStruct> moves);
     // == Above are done ===========
     //Signals from C++ to QML
     void loseCards(int moveId, QList<CardsMoveStruct> moves);
@@ -118,7 +120,7 @@ signals:
     void trust();
 
     // ======================================
-    void moveCards(const QVariant &moves);
+    // void moveCards(const QVariant &moves);
     void enableCards(const QVariant &cardIds);
     void setPhotoReady(bool ready);
     void enablePhotos(const QVariant &seats);
