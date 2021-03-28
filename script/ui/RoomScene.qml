@@ -93,7 +93,6 @@ RoomScene {
                         id: drawPile
                         x: parent.width / 2
                         y: parent.height * 0.7
-                        isDrawPile: true
                     }
 
                     TablePile {

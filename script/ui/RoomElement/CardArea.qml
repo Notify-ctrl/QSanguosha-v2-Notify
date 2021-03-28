@@ -1,6 +1,8 @@
 import QtQuick 2.4
 
-
+// cards: CardItem[]
+// add(inputs: CardItem[] | CardItem)
+// remove(outputs: number[] | number)
 Item {
     property var cards: []
     property int length: 0

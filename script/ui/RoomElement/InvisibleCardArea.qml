@@ -1,6 +1,8 @@
 import QtQuick 2.4
 
-
+// cards: (CardItem.data)[]
+// add(inputs: CardItem[] | CardItem)
+// remove(outputs: number[] | number)
 Item {
     property var cards: []
     property int length: 0
@@ -58,13 +60,18 @@ Item {
         var items = [];
         for (let i = 0; i < outputs.length; i++) {
             if (contains(outputs[i])) {
-                // var state = outputs[i];
                 let card = Sanguosha.getCard(outputs[i])
                 let state = {}
-                state.suit = card.suit
-                state.number = card.number
-                state.name = card.objectName
-                state.cid = card.id
+                if (card === null) {
+                    state.name = "card-back"
+                    state.cid = -1
+                } else {
+                    state.suit = card.suit
+                    state.number = card.number
+                    state.name = card.objectName
+                    state.cid = card.id
+                    state.subtype = card.subtype
+                }
                 state.x = parentPos.x;
                 state.y = parentPos.y;
                 state.opacity = 0;
@@ -75,8 +82,8 @@ Item {
                 items.push(card);
                 if (checkExisting) {
                     //@to-do: remove it from cards
-                    /*cards.splice(i, 1);
-                    i--;*/
+                    cards.splice(i, 1);
+                    i--;
                 }
             }
         }

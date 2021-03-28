@@ -3,6 +3,7 @@ import QtQuick 2.4
 Column {
     property int itemHeight: Math.floor(height / 4)
     property var items: [weaponItem, armorItem, defensiveHorseItem, offensiveHorseItem, treasureItem]
+    property var subtypes: ["weapon", "armor", "defensive_horse", "offensive_horse", "treasure"]
 
     InvisibleCardArea {
         id: area
@@ -71,13 +72,13 @@ Column {
         if (inputs instanceof Array) {
             for (var i = 0; i < inputs.length; i++) {
                 card = inputs[i];
-                item = items[card.subtype];
+                item = items[subtypes.indexOf(card.subtype)];
                 item.setCard(card);
                 item.show();
             }
         } else {
             card = inputs;
-            item = items[card.subtype];
+            item = items[subtypes.indexOf(card.subtype)];
             item.setCard(card);
             item.show();
         }

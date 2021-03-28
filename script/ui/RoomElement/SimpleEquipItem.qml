@@ -124,7 +124,7 @@ Rectangle {
         name = card.name;
         suit = card.suit;
         number = card.number;
-        text = qsTr(card.name + ":brief-description");
+        text = Sanguosha.translate(card.name); //qsTr(card.name + ":brief-description");
     }
 
     function show()
