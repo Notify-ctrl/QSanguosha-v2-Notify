@@ -82,7 +82,7 @@ void StartServerDialog::printServerInfo()
         emit messageLogged(tr("Seconardary general is disabled"));
 
     if (Config.EnableAI) {
-        emit messageLogged(tr("This server is AI enabled, AI delay is %1 milliseconds").arg(Config.AIDelay));
+        emit messageLogged(tr("This server is AI enabled, AI delay is %1 milliseconds").arg(Config.value("AIDelay").toInt()));
     } else
         emit messageLogged(tr("This server is AI disabled"));
 }

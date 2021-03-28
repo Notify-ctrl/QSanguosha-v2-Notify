@@ -10,6 +10,13 @@ RoomScene {
     property var dashboardModel: null
     property var photoModel: []
     property int playerNum: 0
+    property int currentPlayerNum: 1
+    property var m_move_cache: ({})
+    property var _m_cardsMoveStash: ({})
+
+    function /* class */_MoveCardsClassifier(card_ids) {
+        this.ids = card_ids
+    }
 
     id: roomScene
     anchors.fill: parent
@@ -86,6 +93,7 @@ RoomScene {
                         id: drawPile
                         x: parent.width / 2
                         y: parent.height * 0.7
+                        isDrawPile: true
                     }
 
                     TablePile {
@@ -251,7 +259,10 @@ RoomScene {
             text: qsTr("Add a Robot")
             width: 190
             height: 50
-            visible: Sanguosha.getServerInfo("EnableAI")
+            // visible: Sanguosha.getServerInfo("EnableAI")
+            onClicked: {
+                roomScene.addRobot(1)
+            }
         }
         MetroButton {
             id: returnToStart
@@ -262,6 +273,11 @@ RoomScene {
                 roomScene.returnToStart()
             }
         }
+    }
+
+    MetroButton {
+        text: "托管"
+        onClicked: roomScene.trust()
     }
 
     onAddPlayer: {
@@ -288,8 +304,13 @@ RoomScene {
                 photos.model = photoModel
                 arrangePhotos()
 
-                /*if (!Self->hasFlag("marshalling"))
-                    Sanguosha->playSystemAudioEffect("add-player", false);*/
+                currentPlayerNum++
+                if (currentPlayerNum === playerNum)
+                    buttons.visible = false
+                else buttons.visible = true
+
+                /*if (!Self.hasFlag("marshalling"))
+                    Sanguosha.playSystemAudioEffect("add-player", false);*/
 
                 return;
             }
@@ -307,6 +328,7 @@ RoomScene {
                 arrangePhotos()
             }
         }
+        currentPlayerNum--
     }
 
     onReturnToStart: {
@@ -374,7 +396,24 @@ RoomScene {
         logBox.append(log_str)
     }
 
-    onMoveCards: {
+    onGetCards: {
+        for (var i = 0; i < moves.length; i++) {
+            var move = moves[i];
+            var from = getAreaItem(move.from_place, move.from_player_name);
+            var to = getAreaItem(move.to_place, move.to_player_name);
+            if (!from || !to || from === to)
+                continue;
+            //var items = from.remove(move.card_ids);
+            //if (to === Player.DrawPile) continue;
+            let items = _m_cardsMoveStash[moveId][i]
+            if (items.length > 0)
+                to.add(items);
+            to.updateCardPosition(true);
+        }
+    }
+
+    onLoseCards: {
+        _m_cardsMoveStash[moveId] = [];
         for (var i = 0; i < moves.length; i++) {
             var move = moves[i];
             var from = getAreaItem(move.from_place, move.from_player_name);
@@ -382,18 +421,20 @@ RoomScene {
             if (!from || !to || from === to)
                 continue;
             var items = from.remove(move.card_ids);
-            if (items.length > 0)
-                to.add(items);
-            to.updateCardPosition(true);
+            //if (items.length > 0)
+            //    to.add(items);
+            //to.updateCardPosition(true);
+            _m_cardsMoveStash[moveId].push(items);
         }
     }
 
-    onStartEmotion: {
+    onSetEmotion: {
         var component = Qt.createComponent("RoomElement/PixmapAnimation.qml");
         if (component.status !== Component.Ready)
             return;
 
-        var photo = getItemBySeat(seat);
+        // var photo = getItemBySeat(seat);
+        var photo = getItemByPlayerName(who)
         var animation = component.createObject(roomScene, {source: emotion, x: photo.x, y: photo.y});
         animation.finished.connect(function(){animation.destroy();});
         animation.start();
@@ -620,15 +661,7 @@ RoomScene {
         line.finished.connect(function(){line.destroy();});
         line.running = true;
     }
-/*
-    function getItemBySeat(seat)
-    {
-        if (seat === dashboard.seatNumber)
-            return dashboard;
-        var i = (seat - dashboard.seatNumber - 1 + playerNum) % playerNum;
-        return photos.itemAt(i);
-    }
-*/
+
     function getItemByPlayerName(name)
     {
         if (name === Self.objectName)
@@ -643,7 +676,8 @@ RoomScene {
     {
         if (area === Player.DrawPile) {
             return drawPile;
-        } else if (area === Player.DiscardPile || area === Player.PlaceTable) {
+        } else if (area === Player.DiscardPile || area === Player.PlaceTable
+                   || area === Player.PlaceJudge) {
             return tablePile;
         } else if (area === Player.PlaceWuGu) {
             return popupBox.item;
@@ -717,6 +751,6 @@ RoomScene {
         photos.model = photoModel
 
         playerNum = player_num
-        addRobotButton.opacity = Self.owner ? 1 : 0
+        // addRobotButton.visible = Self.owner ? 1 : 0
     }
 }

@@ -18,8 +18,15 @@ RoomScene::RoomScene(QQuickItem *parent) : QQuickItem(parent)
     connect(ClientInstance, &Client::property_updated, this, &RoomScene::updateProperty);
     connect(ClientInstance, &Client::log_received, this, &RoomScene::receiveLog);
 
-    connect(ClientInstance, &Client::move_cards_got, this, &RoomScene::moveCards);
-    connect(ClientInstance, &Client::move_cards_lost, this, &RoomScene::moveCards);
+    //connect(ClientInstance, &Client::move_cards_got, this, &RoomScene::moveCards);
+    //connect(ClientInstance, &Client::move_cards_lost, this, &RoomScene::moveCards);
+    connect(ClientInstance, &Client::move_cards_got, this, &RoomScene::getCards);
+    connect(ClientInstance, &Client::move_cards_lost, this, &RoomScene::loseCards);
+
+    connect(this, &RoomScene::addRobot, ClientInstance, &Client::addRobot);
+    connect(this, &RoomScene::trust, ClientInstance, &Client::trust);
+
+    connect(ClientInstance, &Client::emotion_set, this, &RoomScene::setEmotion);
 }
 
 REGISTER_QMLTYPE("Sanguosha", 1, 0, RoomScene)

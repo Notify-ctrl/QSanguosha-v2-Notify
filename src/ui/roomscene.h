@@ -23,11 +23,15 @@ signals:
     void chooseGeneralDone(const QString &general);
     void updateProperty(QVariantList args);
     void receiveLog(const QStringList &log_str);
-    void moveCards(int moveId, QList<CardsMoveStruct> moves);
-    // == Above are done ===========
-    //Signals from C++ to QML
+    void addRobot(int num);
+    void trust();
+    // void moveCards(int moveId, QList<CardsMoveStruct> moves);
     void loseCards(int moveId, QList<CardsMoveStruct> moves);
     void getCards(int moveId, QList<CardsMoveStruct> moves);
+    void setEmotion(const QString &who, const QString &emotion);
+    // == Above are done ===========
+    //Signals from C++ to QML
+
     void keepLoseCardLog(const CardsMoveStruct &move);
     void keepGetCardLog(const CardsMoveStruct &move);
     // choice dialog
@@ -62,7 +66,6 @@ signals:
 
     void setChatBoxVisibleSlot();
 
-    void addRobot();
     void doAddRobotAction();
     void fillRobots();
     void fillCards(const QList<int> &card_ids, const QList<int> &disabled_ids = QList<int>());
@@ -78,7 +81,6 @@ signals:
     void changeHp(const QString &who, int delta, DamageStruct::Nature nature, bool losthp);
     void changeMaxHp(const QString &who, int delta);
     void moveFocus(const QStringList &who, QSanProtocol::Countdown);
-    void setEmotion(const QString &who, const QString &emotion);
     void showSkillInvocation(const QString &who, const QString &skill_name);
     void doAnimation(int name, const QStringList &args);
     void showOwnerButtons(bool owner);
@@ -117,14 +119,12 @@ signals:
 
     void doPindianAnimation();
 
-    void trust();
-
     // ======================================
     // void moveCards(const QVariant &moves);
     void enableCards(const QVariant &cardIds);
     void setPhotoReady(bool ready);
     void enablePhotos(const QVariant &seats);
-    void startEmotion(const QString &emotion, int seat);
+    // void startEmotion(const QString &emotion, int seat);
     void playAudio(const QString &path);
     void showIndicatorLine(int from, const QVariantList &tos);
     void showPrompt(const QString &prompt);

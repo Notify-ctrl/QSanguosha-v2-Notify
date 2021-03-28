@@ -324,6 +324,8 @@ private:
     Q_PROPERTY(Player::Place to_place MEMBER to_place)
     Q_PROPERTY(QString from_player_name MEMBER from_player_name)
     Q_PROPERTY(QString to_player_name MEMBER to_player_name)
+    Q_PROPERTY(QString from_pile_name MEMBER from_pile_name)
+    Q_PROPERTY(QString to_pile_name MEMBER to_pile_name)
     Q_PROPERTY(bool open MEMBER open)
 };
 
