@@ -532,7 +532,7 @@ sgs.ai_skill_use_func.NosRendeCard = function(card, use, self)
 			break
 		end
 
-		if friend:objectName() == self.player:objectName() or not self.player:getHandcards():contains(card) then goto continue end
+		if friend:objectName() == self.player:objectName() or not self.player:getHandcards():contains(card) then continue end
 		local canJijiang = self.player:hasLordSkill("jijiang") and friend:getKingdom() == "shu"
 		if card:isAvailable(self.player) and ((card:isKindOf("Slash") and not canJijiang) or card:isKindOf("Duel") or card:isKindOf("Snatch") or card:isKindOf("Dismantlement")) then
 			local dummy_use = { isDummy = true, to = sgs.SPlayerList() }
@@ -541,34 +541,31 @@ sgs.ai_skill_use_func.NosRendeCard = function(card, use, self)
 			if dummy_use.card and dummy_use.to:length() > 0 then
 				if card:isKindOf("Slash") or card:isKindOf("Duel") then
 					local t1 = dummy_use.to:first()
-					if dummy_use.to:length() > 1 then goto continue
+					if dummy_use.to:length() > 1 then continue
 					elseif t1:getHp() == 1 or sgs.card_lack[t1:objectName()]["Jink"] == 1
-							or t1:isCardLimited(sgs.Sanguosha:cloneCard("jink"), sgs.Card_MethodResponse) then goto continue
+							or t1:isCardLimited(sgs.Sanguosha:cloneCard("jink"), sgs.Card_MethodResponse) then continue
 					end
 				elseif (card:isKindOf("Snatch") or card:isKindOf("Dismantlement")) and self:getEnemyNumBySeat(self.player, friend) > 0 then
 					local hasDelayedTrick
 					for _, p in sgs.qlist(dummy_use.to) do
 						if self:isFriend(p) and (self:willSkipDrawPhase(p) or self:willSkipPlayPhase(p)) then hasDelayedTrick = true break end
 					end
-					if hasDelayedTrick then goto continue end
+					if hasDelayedTrick then continue end
 				end
 			end
 		elseif card:isAvailable(self.player) and self:getEnemyNumBySeat(self.player, friend) > 0 and (card:isKindOf("Indulgence") or card:isKindOf("SupplyShortage")) then
 			local dummy_use = { isDummy = true }
 			self:useTrickCard(card, dummy_use)
-			if dummy_use.card then goto continue end
+			if dummy_use.card then continue end
 		end
 
-		if true then
-			if friend:hasSkill("enyuan") and #cards >= 1 and not (self.room:getMode() == "04_1v3" and self.player:getMark("nosrende") == 1) then
-				use.card = sgs.Card_Parse("@NosRendeCard=" .. card:getId() .. "+" .. cards[1]:getId())
-			else
-				use.card = sgs.Card_Parse("@NosRendeCard=" .. card:getId())
-			end
-			if use.to then use.to:append(friend) end
-			return
+		if friend:hasSkill("enyuan") and #cards >= 1 and not (self.room:getMode() == "04_1v3" and self.player:getMark("nosrende") == 1) then
+			use.card = sgs.Card_Parse("@NosRendeCard=" .. card:getId() .. "+" .. cards[1]:getId())
+		else
+			use.card = sgs.Card_Parse("@NosRendeCard=" .. card:getId())
 		end
-		::continue::
+		if use.to then use.to:append(friend) end
+		return
 	end
 
 	if notFound then
@@ -2079,14 +2076,13 @@ sgs.ai_skill_use_func.NosFanjianCard=function(card,use,self)
 			local flag = string.format("%s_%s_%s", "visible", enemy:objectName(), self.player:objectName())
 			if card:hasFlag("visible") or card:hasFlag(flag) then visible = visible + 1 end
 		end
-		if visible > 0 and (#cards <= 2 or suits_num <= 2) then goto _continue end
+		if visible > 0 and (#cards <= 2 or suits_num <= 2) then continue end
 		if self:canAttack(enemy) and not enemy:hasSkills("qingnang|jijiu|tianxiang")
 			and not (wgt and card:getTypeId() ~= sgs.Card_Basic and (enemy:isKongcheng() or enemy:objectName() == wgt:objectName())) then
 			use.card = sgs.Card_Parse("@NosFanjianCard=.")
 			if use.to then use.to:append(enemy) end
 			return
 		end
-		::_continue::
 	end
 end
 

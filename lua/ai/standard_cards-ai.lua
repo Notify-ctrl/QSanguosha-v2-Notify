@@ -535,7 +535,7 @@ function SmartAI:useCardSlash(card, use)
 	for _, target in ipairs(targets) do
 		if self.player:hasSkill("chixin") then
 			local chixin_list = self.player:property("chixin"):toString():split("+")			
-			if table.contains(chixin_list, target:objectName()) then goto continue_1 end
+			if table.contains(chixin_list, target:objectName()) then continue end
 		end
 		local canliuli = false
 		local use_wuqian = self.player:hasSkill("wuqian") and self.player:getMark("@wrath") >= 2
@@ -562,7 +562,7 @@ function SmartAI:useCardSlash(card, use)
 					local c = sgs.Sanguosha:getCard(id)
 					if isCard("Peach", c, target) or isCard("Analeptic", c, target) then isGood = false break end
 				end
-				if not isGood then goto continue_1 end
+				if not isGood then continue end
 			end
 
 			-- fill the card use struct
@@ -633,7 +633,6 @@ function SmartAI:useCardSlash(card, use)
 			end
 			if not use.to or self.slash_targets <= use.to:length() then return end
 		end
-		::continue_1::
 	end
 
 	for _, friend in ipairs(self.friends_noself) do
@@ -1086,7 +1085,7 @@ end
 
 sgs.ai_card_intention.Peach = function(self, card, from, tos)
 	for _, to in ipairs(tos) do
-		if to:hasSkill("wuhun") then goto continue_2 end
+		if to:hasSkill("wuhun") then continue end
 		if not sgs.isRolePredictable() and from:objectName() ~= to:objectName()
 			and sgs.current_mode_players["renegade"] > 0 and sgs.evaluatePlayerRole(to) == "rebel"
 			and (sgs.evaluatePlayerRole(from) == "loyalist" or sgs.evaluatePlayerRole(from) == "renegade") then
@@ -1095,7 +1094,6 @@ sgs.ai_card_intention.Peach = function(self, card, from, tos)
 			sgs.outputRoleValues(from, 100)
 		end
 		sgs.updateIntention(from, to, -120)
-		::continue_2::
 	end
 end
 
@@ -1942,7 +1940,7 @@ function SmartAI:useCardDuel(duel, use)
 			if use.to then
 				if i == 1 and not use.current_targets then
 					use.to:append(targets[i])
-					if not use.isDummy and math.random() < 0.5 then self:speak("duel", self.player:isFemale()) end
+					if not use.isDummy then self:speak("duel", self.player:isFemale()) end
 				elseif n1 >= enemySlash and not targets[i]:hasSkill("danlao") and not (lx and self:isEnemy(lx) and lx:getHp() > targets_num / 2) then
 					use.to:append(targets[i])
 				end
@@ -2209,11 +2207,10 @@ function SmartAI:useCardSnatchOrDismantlement(card, use)
 		enemies = self:exclude(enemies, card)
 		local temp = {}
 		for _, enemy in ipairs(enemies) do
-			if enemy:hasSkills("tuntian+guidao") and enemy:hasSkills("zaoxian|jixi|zhiliang|leiji|nosleiji") then goto continue_3 end
+			if enemy:hasSkills("tuntian+guidao") and enemy:hasSkills("zaoxian|jixi|zhiliang|leiji|nosleiji") then continue end
 			if self:hasTrickEffective(card, enemy) or isSkillCard then
 				table.insert(temp, enemy)
 			end
-			::continue_3::
 		end
 		enemies = temp
 		self:sort(enemies, "defense")
@@ -2222,11 +2219,10 @@ function SmartAI:useCardSnatchOrDismantlement(card, use)
 		enemies = self:exclude(self.enemies, card)
 		local temp = {}
 		for _, enemy in ipairs(enemies) do
-			if enemy:hasSkills("tuntian+guidao") and enemy:hasSkills("zaoxian|jixi|zhiliang|leiji|nosleiji") then goto continue_4 end
+			if enemy:hasSkills("tuntian+guidao") and enemy:hasSkills("zaoxian|jixi|zhiliang|leiji|nosleiji") then continue end
 			if self:hasTrickEffective(card, enemy) or isSkillCard then
 				table.insert(temp, enemy)
 			end
-			::continue_4::
 		end
 		enemies = temp
 		self:sort(enemies, "defense")

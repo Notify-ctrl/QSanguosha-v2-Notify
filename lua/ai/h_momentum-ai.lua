@@ -169,7 +169,7 @@ sgs.ai_skill_invoke.fenming = function(self, data)
 	local value = 0
 	local players = self.room:getAlivePlayers()
 	for _, p in sgs.qlist(players) do
-		if not p:isChained() or p:isKongcheng() then goto continue end
+		if not p:isChained() or p:isKongcheng() then continue end
 		local HandcardNum = p:getHandcardNum()
 		local v = 1 / HandcardNum
 		local v1, v2 = 0, 0
@@ -191,7 +191,6 @@ sgs.ai_skill_invoke.fenming = function(self, data)
 		if self:isFriend(p) then value = value - v
 		else value = value + v
 		end
-		::continue::
 	end
 
 	return value > 0

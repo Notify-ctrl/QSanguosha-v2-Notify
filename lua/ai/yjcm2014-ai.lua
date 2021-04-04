@@ -87,7 +87,7 @@ sgs.ai_skill_use["@@shenduan"] = function(self)
 	local ids = self.player:property("shenduan"):toString():split("+")
 	for _, id in ipairs(ids) do
 		local card = sgs.Sanguosha:getCard(id)
-		if self.player:isCardLimited(card, sgs.Card_MethodUse) then goto continue_1 end
+		if self.player:isCardLimited(card, sgs.Card_MethodUse) then continue end
 		local card_str = ("supply_shortage:shenduan[%s:%s]=%d"):format(card:getSuitString(), card:getNumberString(), id)
 		local ss = sgs.Card_Parse(card_str)
 		local dummy_use = { isDummy = true , to = sgs.SPlayerList() }
@@ -95,7 +95,6 @@ sgs.ai_skill_use["@@shenduan"] = function(self)
 		if dummy_use.card and not dummy_use.to:isEmpty() then
 			return card_str .. "->" .. dummy_use.to:first():objectName()
 		end
-		::continue_1::
 	end
 	return "."
 end
@@ -247,11 +246,10 @@ sgs.ai_skill_playerchosen.zhongyong = function(self, targetlist)
 	self:sort(self.friends)
 	if self:getCardsNum("Slash") > 0 then
 		for _, friend in ipairs(self.friends) do
-			if not targetlist:contains(friend) or friend:objectName() == self.player:objectName() then goto continue_2 end
+			if not targetlist:contains(friend) or friend:objectName() == self.player:objectName() then continue end
 			if getCardsNum("Jink", friend, self.player) < 1 or sgs.card_lack[friend:objectName()]["Jink"] == 1 then
 				return friend
 			end
-			::continue_2::
 		end
 		if self:getCardsNum("Jink") == 0 and targetlist:contains(self.player) then return self.player end
 	end
@@ -282,7 +280,7 @@ sgs.ai_skill_use_func.ShenxingCard = function(card, use, self)
 		local use_slash, keep_jink, keep_analeptic, keep_weapon = false, false, false
 		local keep_slash = self.player:getTag("JilveWansha"):toBool()
 		for _, zcard in sgs.qlist(zcards) do
-			if self.player:isCardLimited(zcard, sgs.Card_MethodDiscard) then goto continue_3 end
+			if self.player:isCardLimited(zcard, sgs.Card_MethodDiscard) then continue end
 			if not isCard("Peach", zcard, self.player) and not isCard("ExNihilo", zcard, self.player) then
 				local shouldUse = true
 				if isCard("Slash", zcard, self.player) and not use_slash then
@@ -327,7 +325,7 @@ sgs.ai_skill_use_func.ShenxingCard = function(card, use, self)
 					shouldUse = false
 				end
 				if shouldUse then
-					if (table.contains(unpreferedCards, zcard:getId())) then goto continue_3 end
+					if (table.contains(unpreferedCards, zcard:getId())) then continue end
 					table.insert(unpreferedCards, zcard:getId())
 					if self.room:getCardPlace(zcard:getId()) == sgs.Player_PlaceHand then
 						if zcard:isRed() then red_num = red_num + 1
@@ -339,7 +337,6 @@ sgs.ai_skill_use_func.ShenxingCard = function(card, use, self)
 					return
 				end
 			end
-			::continue_3::
 		end
 	end
 
@@ -348,31 +345,28 @@ sgs.ai_skill_use_func.ShenxingCard = function(card, use, self)
 	if red - red_num <= 2 - #unpreferedCards then
 		for _, c in ipairs(cards) do
 			if c:isRed() and (not isCard("Peach", c, self.player) or not self:findFriendsByType(sgs.Friend_Weak) and #cards > 1) then
-				if self.player:isCardLimited(c, sgs.Card_MethodDiscard) then goto continue_4 end
-				if table.contains(unpreferedCards, c:getId()) then goto continue_4 end
+				if self.player:isCardLimited(c, sgs.Card_MethodDiscard) then continue end
+				if table.contains(unpreferedCards, c:getId()) then continue end
 				table.insert(unpreferedCards, c:getId())
 			end
-			::continue_4::
 		end
 	elseif black - black_num <= 2 - #unpreferedCards then
 		for _, c in ipairs(cards) do
 			if c:isBlack() and (not isCard("Peach", c, self.player) or not self:findFriendsByType(sgs.Friend_Weak) and #cards > 1) then
-				if self.player:isCardLimited(c, sgs.Card_MethodDiscard) then goto continue_5 end
-				if table.contains(unpreferedCards, c:getId()) then goto continue_5 end
+				if self.player:isCardLimited(c, sgs.Card_MethodDiscard) then continue end
+				if table.contains(unpreferedCards, c:getId()) then continue end
 				table.insert(unpreferedCards, c:getId())
 			end
-			::continue_5::
 		end
 	end
 
 	if #unpreferedCards < 2 then
 		for _, c in ipairs(cards) do
 			if not self.player:isCardLimited(c, sgs.Card_MethodDiscard) then
-				if table.contains(unpreferedCards, c:getId()) then goto continue_6 end
+				if table.contains(unpreferedCards, c:getId()) then continue end
 				table.insert(unpreferedCards, c:getId())
 			end
 			if #unpreferedCards == 2 then break end
-			::continue_6::
 		end
 	end
 
@@ -425,11 +419,9 @@ end
 
 sgs.ai_card_intention.BingyiCard = function(self, card, from, tos)
 	for _, to in ipairs(tos) do
-		if self:needKongcheng(to, true) then
-			sgs.updateIntention(from, to, 10)
-		elseif not hasManjuanEffect(to) then
-			sgs.updateIntention(from, to, -10)
-		end
+		if self:needKongcheng(to, true) then sgs.updateIntention(from, to, 10)
+		elseif hasManjuanEffect(to) then continue
+		else sgs.updateIntention(from, to, -10) end
 	end
 end
 

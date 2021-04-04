@@ -62,13 +62,13 @@ local function GuanXing(self, cards)
 			if need_judge:isKindOf("Lightning") then
 				lightning_index = judge_count
 				has_lightning = need_judge
-				goto continue_1
+				continue
 			elseif need_judge:isKindOf("Indulgence") then
 				willSkipPlayPhase = true
-				if self.player:isSkipped(sgs.Player_Play) then goto continue_1 end
+				if self.player:isSkipped(sgs.Player_Play) then continue end
 			elseif need_judge:isKindOf("SupplyShortage") then
 				willSkipDrawPhase = true
-				if self.player:isSkipped(sgs.Player_Draw) then goto continue_1 end
+				if self.player:isSkipped(sgs.Player_Draw) then continue end
 			end
 			local judge_str = sgs.ai_judgestring[need_judge:objectName()]
 			if not judge_str then
@@ -89,7 +89,6 @@ local function GuanXing(self, cards)
 					break
 				end
 			end
-			::continue_1::
 		end
 
 		if lightning_index then
@@ -147,7 +146,7 @@ local function GuanXing(self, cards)
 	local conflict, AI_doNotInvoke_luoshen
 	for _, skill in sgs.qlist(self.player:getVisibleSkillList()) do
 		local sname = skill:objectName()
-		if sname == "guanxing" or sname == "super_guanxing" then conflict = true; goto continue_2 end
+		if sname == "guanxing" or sname == "super_guanxing" then conflict = true continue end
 		if conflict then
 			if sname == "tuqi" then
 				if self.player:getPile("retinue"):length() > 0 and self.player:getPile("retinue"):length() <= 2 then
@@ -205,7 +204,6 @@ local function GuanXing(self, cards)
 				end
 			end
 		end
-		::continue_2::
 	end
 
 	local drawCards = self:ImitateResult_DrawNCards(self.player, self.player:getVisibleSkillList(true))

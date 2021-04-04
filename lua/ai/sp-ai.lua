@@ -455,7 +455,7 @@ sgs.ai_skill_use["@@bifa"] = function(self, prompt)
 	self:sort(self.enemies, "hp")
 	if #self.enemies < 0 then return "." end
 	for _, enemy in ipairs(self.enemies) do
-		if enemy:getPile("bifa"):length() > 0 then goto continue_bifa end
+	if enemy:getPile("bifa"):length() > 0 then continue end
 		if not (self:needToLoseHp(enemy) and not self:hasSkills(sgs.masochism_skill, enemy)) then
 			for _, c in ipairs(cards) do
 				if c:isKindOf("EquipCard") then return "@BifaCard=" .. c:getEffectiveId() .. "->" .. enemy:objectName() end
@@ -471,7 +471,6 @@ sgs.ai_skill_use["@@bifa"] = function(self, prompt)
 				end
 			end
 		end
-		::continue_bifa::
 	end
 end
 
@@ -944,7 +943,7 @@ sgs.ai_skill_use_func.DuwuCard = function(card, use, self)
 	end
 
 	for _, enemy in ipairs(enemies) do
-		if enemy:getHp() > #card_ids then goto continue_duwu end
+		if enemy:getHp() > #card_ids then continue end
 		if enemy:getHp() <= 0 then
 			use.card = sgs.Card_Parse("@DuwuCard=.")
 			if use.to then use.to:append(enemy) end
@@ -969,7 +968,6 @@ sgs.ai_skill_use_func.DuwuCard = function(card, use, self)
 				end
 			end
 		end
-		::continue_duwu::
 	end
 end
 
@@ -1017,7 +1015,7 @@ sgs.ai_skill_use_func.ZhoufuCard = function(card, use, self)
 	self:sort(self.friends_noself)
 	local zhenji
 	for _, friend in ipairs(self.friends_noself) do
-		if friend:getPile("incantation"):length() > 0 then goto continue_zhoufu_1 end
+		if friend:getPile("incantation"):length() > 0 then continue end
 		local reason = getNextJudgeReason(self, friend)
 		if reason then
 			if reason == "luoshen" then
@@ -1076,7 +1074,6 @@ sgs.ai_skill_use_func.ZhoufuCard = function(card, use, self)
 				end
 			end
 		end
-		::continue_zhoufu_1::
 	end
 	if zhenji then
 		for _, card in ipairs(cards) do
@@ -1089,7 +1086,7 @@ sgs.ai_skill_use_func.ZhoufuCard = function(card, use, self)
 	end
 	self:sort(self.enemies)
 	for _, enemy in ipairs(self.enemies) do
-		if enemy:getPile("incantation"):length() > 0 then goto continue_zhoufu_2 end
+		if enemy:getPile("incantation"):length() > 0 then continue end
 		local reason = getNextJudgeReason(self, enemy)
 		if not enemy:hasSkill("tiandu") and reason then
 			if reason == "indulgence" then
@@ -1145,7 +1142,6 @@ sgs.ai_skill_use_func.ZhoufuCard = function(card, use, self)
 				end
 			end
 		end
-		::continue_zhoufu_2::
 	end
 
 	local has_indulgence, has_supplyshortage
@@ -1165,7 +1161,7 @@ sgs.ai_skill_use_func.ZhoufuCard = function(card, use, self)
 	if has_indulgence then
 		local indulgence = sgs.Sanguosha:cloneCard("indulgence")
 		for _, enemy in ipairs(self.enemies) do
-			if enemy:getPile("incantation"):length() > 0 then goto continue_zhoufu_3 end
+			if enemy:getPile("incantation"):length() > 0 then continue end
 			if self:hasTrickEffective(indulgence, enemy, friend) and self:playerGetRound(friend) < self:playerGetRound(enemy) and not self:willSkipPlayPhase(enemy) then
 				for _, card in ipairs(cards) do
 					if not (card:getSuit() == sgs.Card_Heart or (enemy:hasSkill("hongyan") and card:getSuit() == sgs.Card_Spade))
@@ -1176,13 +1172,12 @@ sgs.ai_skill_use_func.ZhoufuCard = function(card, use, self)
 					end
 				end
 			end
-			::continue_zhoufu_3::
 		end
 	elseif has_supplyshortage then
 		local supplyshortage = sgs.Sanguosha:cloneCard("supply_shortage")
 		local distance = self:getDistanceLimit(supplyshortage, friend)
 		for _, enemy in ipairs(self.enemies) do
-			if enemy:getPile("incantation"):length() > 0 then goto continue_zhoufu_4 end
+			if enemy:getPile("incantation"):length() > 0 then continue end
 			if self:hasTrickEffective(supplyshortage, enemy, friend) and self:playerGetRound(friend) < self:playerGetRound(enemy)
 				and not self:willSkipDrawPhase(enemy) and friend:distanceTo(enemy) <= distance then
 				for _, card in ipairs(cards) do
@@ -1193,12 +1188,11 @@ sgs.ai_skill_use_func.ZhoufuCard = function(card, use, self)
 					end
 				end
 			end
-			::continue_zhoufu_4::
 		end
 	end
 
 	for _, target in sgs.qlist(self.room:getOtherPlayers(self.player)) do
-		if target:getPile("incantation"):length() > 0 then goto continue_zhoufu_5 end
+		if target:getPile("incantation"):length() > 0 then continue end
 		if self:hasEightDiagramEffect(target) then
 			for _, card in ipairs(cards) do
 				if (card:isRed() and self:isFriend(target)) or (card:isBlack() and self:isEnemy(target)) and not self:isValuableCard(card) then
@@ -1208,12 +1202,11 @@ sgs.ai_skill_use_func.ZhoufuCard = function(card, use, self)
 				end
 			end
 		end
-		::continue_zhoufu_5::
 	end
 
 	if self:getOverflow() > 0 then
 		for _, target in sgs.qlist(self.room:getOtherPlayers(self.player)) do
-			if target:getPile("incantation"):length() > 0 then goto continue_zhoufu_6 end
+		if target:getPile("incantation"):length() > 0 then continue end
 			for _, card in ipairs(cards) do
 				if not self:isValuableCard(card) and math.random() > 0.5 then
 					use.card = sgs.Card_Parse("@ZhoufuCard=" .. card:getEffectiveId())
@@ -1221,7 +1214,6 @@ sgs.ai_skill_use_func.ZhoufuCard = function(card, use, self)
 					return
 				end
 			end
-			::continue_zhoufu_6::
 		end
 	end
 
@@ -1333,9 +1325,6 @@ sgs.ai_skill_use["@@qingyi"] = function(self, prompt)
 end
 
 --星彩
-
-sgs.ai_skill_invoke.shenxian = sgs.ai_skill_invoke.luoying
-
 local qiangwu_skill = {}
 qiangwu_skill.name = "qiangwu"
 table.insert(sgs.ai_skills, qiangwu_skill)
@@ -1681,7 +1670,7 @@ sgs.ai_skill_cardask["@sp_zhenwei"] = function(self, data)
 	if not self:isFriend(use.to:at(0)) or self:isFriend(use.from) then return "." end
 	if use.to:at(0):hasSkills("liuli|tianxiang") and use.card:isKindOf("Slash") and use.to:at(0):getHandcardNum() > 1 then return "." end
 	if use.card:isKindOf("Slash") and not self:slashIsEffective(use.card, use.to:at(0), use.from) then return "." end
-	if use.to:at(0):hasSkills(sgs.masochism_skill) and not self:isWeak(use.to:at(0)) then return "." end
+	if use.to:at(0):hasSkills(sgs.masochism_skill) and not use.to:at(0):isWeak() then return "." end
 	if self.player:getHandcardNum() + self.player:getEquips():length() < 2 and not self:isWeak(use.to:at(0)) then return "." end
 	local to_discard = self:askForDiscard("sp_zhenwei", 1, 1, false, true)
 	if #to_discard > 0 then
@@ -1727,7 +1716,7 @@ quji_skill.getTurnUseCard = function(self)
 	end
 	table.sort(cards, compare_func)
 
-	if cards[1]:isBlack() and self.player:getLostHp() > 0 then return end
+	if cards[1]:isBlack() and self:getLostHp() > 0 then return end
 	if self.player:getLostHp() == 2 and (cards[1]:isBlack() or cards[2]:isBlack()) then return end
 
 	local card_str = "@QujiCard="..cards[1]:getId()
@@ -1792,14 +1781,15 @@ end
 --孙皓
 sgs.ai_skill_invoke.canshi = function(self, data)
 	local n = 0
-	for _, p in sgs.qlist(self.room:getAlivePlayers()) do
-		if p:isWounded() or (self.player:hasSkill("guiming") and self.player:isLord() and p:getKingdom() == "wu" and self.player:objectName() ~= p:objectName()) then n = n + 1 end
+	for _, p in sgs.qlist(self.room:getOtherPlayers(self.player)) do
+		if p:isWounded() or (self.player:hasSkill("guiming") and self.player:isLord() and p:getKingdom() == "wu") then n = n + 1 end
 	end
 	if n <= 2 then return false end
 	if n == 3 and (not self:isWeak() or self:willSkipPlayPhase()) then return true end
 	if n > 3 then return true end
 	return false
 end
+
 
 sgs.ai_card_intention.QingyiCard = sgs.ai_card_intention.Slash
 

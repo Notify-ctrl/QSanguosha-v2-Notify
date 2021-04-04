@@ -97,9 +97,9 @@ sgs.ai_skill_use_func.JunxingCard = function(card, use, self)
 			return
 		end
 	end
-	if #use_cards > 3 then
+	if #use_cards >= 3 then
 		for _, friend in ipairs(self.friends_noself) do
-			if friend:hasSkills(sgs.notActive_cardneed_skill) and not friend:hasSkills(sgs.Active_cardneed_skill) then
+			if friend:getHandcardNum() <= 1 and not self:needKongcheng(friend) then
 				use.card = sgs.Card_Parse("@JunxingCard=" .. table.concat(use_cards, "+"))
 				if use.to then use.to:append(friend) end
 				return
@@ -812,7 +812,7 @@ sgs.ai_skill_use_func.DanshouCard = function(card, use, self)
 						or (self:needToThrowArmor(p) and p:getArmor()) or self:doNotDiscard(p) then
 							target = p  break end
 					elseif self:isEnemy(p) then
-						if times == 2 and self:needToThrowArmor(p) then goto continue_1
+						if times == 2 and self:needToThrowArmor(p) then continue
 						elseif (not self:doNotDiscard(p) or self:getDangerousCard(p) or self:getValuableCard(p)) then
 							target = p  break end
 					end
@@ -828,7 +828,6 @@ sgs.ai_skill_use_func.DanshouCard = function(card, use, self)
 					target = p  break end
 			end
 		end
-		::continue_1::
 	end
 	if target and #to_discard == times then
 		use.card = sgs.Card_Parse("@DanshouCard=" .. table.concat(to_discard, "+"))
@@ -990,10 +989,9 @@ sgs.ai_skill_playerchosen.juece = function(self, targetlist)
 	self:sort(targets)
 	local friends, enemies = {}, {}
 	for _, target in ipairs(targets) do
-		if self:cantbeHurt(target, self.player) or not self:damageIsEffective(target, nil, self.player) then goto continue_2 end
+		if self:cantbeHurt(target, self.player) or not self:damageIsEffective(target, nil, self.player) then continue end
 		if self:isEnemy(target) then table.insert(enemies, target)
 		elseif self:isFriend(target) then table.insert(friends, target) end
-		::continue_2::
 	end
 	for _, enemy in ipairs(enemies) do
 		if not self:getDamagedEffects(enemy, self.player) and not self:needToLoseHp(enemy, self.player) then return enemy end
@@ -1131,29 +1129,27 @@ sgs.ai_skill_use_func.MiejiCard = function(card, use, self)
 			if hasLightning and card:getSuit() == sgs.Card_Spade and card:getNumber() >= 2 and card:getNumber() <= 9 then
 				if self:isEnemy(nextAlive) then
 					putcard = card break
-				else goto continue_3
+				else continue
 				end
 			end
 			if hasSupplyShortage and card:getSuit() == sgs.Card_Club then
 				if self:isFriend(nextAlive) then
 					putcard = card break
-				else goto continue_3
+				else continue
 				end
 			end
 			if not putcard then
 				putcard = card break
 			end
 		end
-		::continue_3::
 	end
 
 	local target
 	for _, enemy in ipairs(self.enemies) do
-		if self:needKongcheng(enemy) and enemy:getHandcardNum() <= 2 then goto continue_4 end
+		if self:needKongcheng(enemy) and enemy:getHandcardNum() <= 2 then continue end
 		if not enemy:isNude()  then
 			target = enemy break
 		end
-		::continue_4::
 	end
 	if not target then
 		for _, friend in ipairs(self.friends_noself) do
@@ -1175,9 +1171,8 @@ sgs.ai_use_priority.MiejiCard = sgs.ai_use_priority.Dismantlement + 1
 
 sgs.ai_card_intention.MiejiCard = function(self, card, from, tos)
 	for _, to in ipairs(tos) do
-		if self:needKongcheng(to) and to:getHandcardNum() <= 2 then goto continue_5 end
+		if self:needKongcheng(to) and to:getHandcardNum() <= 2 then continue end
 		sgs.updateIntention(from, to, 10)
-		::continue_5::
 	end
 end
 
