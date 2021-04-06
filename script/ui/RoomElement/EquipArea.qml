@@ -106,12 +106,12 @@ Rectangle {
         if (inputs instanceof Array) {
             for (var i = 0; i < inputs.length; i++) {
                 data = inputs[i].toData();
-                cards.set(data.subtype, data);
+                cards.set(subtypes.indexOf(data.subtype), data);
                 equipItems.itemAt(subtypes.indexOf(data.subtype)).show();
             }
         } else {
             data = inputs.toData();
-            cards.set(data.subtype, data);
+            cards.set(subtypes.indexOf(data.subtype), data);
             equipItems.itemAt(subtypes.indexOf(data.subtype)).show();
         }
         area.add(inputs);
