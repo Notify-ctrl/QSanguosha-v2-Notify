@@ -1,10 +1,11 @@
 import QtQuick 2.15
+import "../Util/util.js" as Utility
 
 Item {
     property point start: Qt.point(0, 0)
     property var end: []
     property alias running: pointToAnimation.running
-    property color color: Engine.kingdomColor["god"]
+    property color color: Utility.kingdomColor["god"]
     property real ratio: 0
     property int lineWidth: 6
 
@@ -70,7 +71,7 @@ Item {
         }
     }
 
-    ParallelAnimation {
+    SequentialAnimation {
         id: pointToAnimation
 
         PropertyAnimation {
@@ -78,7 +79,11 @@ Item {
             property: "ratio"
             to: 1
             easing.type: Easing.OutCubic
-            duration: 500
+            duration: 200
+        }
+
+        PauseAnimation {
+            duration: 200
         }
 
         PropertyAnimation {
@@ -86,7 +91,7 @@ Item {
             property: "opacity"
             to: 0
             easing.type: Easing.InQuart
-            duration: 600
+            duration: 300
         }
 
         onStopped: {

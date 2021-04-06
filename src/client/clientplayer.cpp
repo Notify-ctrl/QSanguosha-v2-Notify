@@ -8,7 +8,6 @@ ClientPlayer *Self = NULL;
 ClientPlayer::ClientPlayer(Client *client)
     : Player(client), handcard_num(0)
 {
-    mark_doc = new QTextDocument(this);
 }
 
 int ClientPlayer::aliveCount() const
@@ -108,7 +107,7 @@ void ClientPlayer::setCards(const QList<int> &card_ids)
         known_cards.append(Sanguosha->getCard(cardId));
 }
 
-QTextDocument *ClientPlayer::getMarkDoc() const
+QString ClientPlayer::getMarkDoc() const
 {
     return mark_doc;
 }
@@ -195,7 +194,7 @@ void ClientPlayer::setMark(const QString &mark, int value)
     foreach (QString key, keys) {
         if (key.startsWith("@") && marks[key] > 0) {
             int val = marks[key];
-            QString mark_text = QString("<img src='image/mark/%1.png' />").arg(key);
+            QString mark_text = QString("<img src='../../../image/mark/%1.png' />").arg(key);
             if (val != 1)
                 mark_text.append(QString("%1").arg(val));
             if (this != Self)
@@ -205,7 +204,7 @@ void ClientPlayer::setMark(const QString &mark, int value)
                 QString hp_str = this->property("tishen_hp").toString();
                 if (hp_str.isEmpty()) continue;
                 int tishen_hp = hp_str.toInt();
-                QString mark_text = QString("<img src='image/mark/%1.png' />%2").arg("@substitute_hp").arg(tishen_hp);
+                QString mark_text = QString("<img src='../../../image/mark/%1.png' />%2").arg("@substitute_hp").arg(tishen_hp);
                 if (this != Self)
                     mark_text.append("<br>");
                 text.append(mark_text);
@@ -213,7 +212,8 @@ void ClientPlayer::setMark(const QString &mark, int value)
         }
     }
 
-    mark_doc->setHtml(text);
+    mark_doc = text;
+    emit mark_doc_changed();
 
     if (mark == "@duanchang")
         emit duanchang_invoked();

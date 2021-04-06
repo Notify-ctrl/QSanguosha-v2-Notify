@@ -6,7 +6,7 @@ import Sanguosha 1.0
 Item {
     property string headGeneral: ""
     property string deputyGeneral: ""
-    property string clientPlayer: ""
+    property ClientPlayer clientPlayer: null
     property alias screenName: screenNameItem.text
     property alias faceTurned: faceTurnedCover.visible
     property string userRole: "unknown"
@@ -21,7 +21,8 @@ Item {
     property bool chained: false
     property bool dying: false
     property bool alive: true
-    property bool drunk: false
+    property bool drunk: clientPlayer === null ? false : clientPlayer.getMark("drank") > 0
+    property bool faceup: true
     property alias progressBar: progressBarItem
     property int seat: 0
     property bool selectable: false
@@ -120,7 +121,7 @@ Item {
         id: faceTurnedCover
         anchors.fill: parent
         source: "../../../image/general/faceturned"
-        visible: false
+        visible: !faceup
     }
 
     Rectangle {
@@ -154,7 +155,7 @@ Item {
 
     Item {
         width: 17
-        height: maxHp > 5 ? 72 : 6 + 15 * maxHp
+        height: maxHp > 5 ? 72 : 6 + 18 * maxHp
         anchors.right: parent.right
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 1
@@ -199,13 +200,14 @@ Item {
     GlowText {
         id: headGeneralNameItem
         color: "white"
+        x: 2
         y: 30
         font.pixelSize: 18
         font.family: "LiSu"
         font.weight: Font.Bold
-        width: 32
+        width: 24
         wrapMode: Text.WrapAnywhere
-        lineHeight: 1.5
+        lineHeight: text.length === 2 ? 1.5 : 1
         horizontalAlignment: Text.AlignHCenter
         text: Sanguosha.translate(headGeneral)
 
@@ -280,6 +282,12 @@ Item {
         visible: !parent.alive
     }
 
+    Image {
+        anchors.centerIn: parent
+        source: "../../../image/system/death/" + userRole
+        visible: !parent.alive
+    }
+
     MouseArea {
         anchors.fill: parent
         onClicked: {
@@ -301,13 +309,22 @@ Item {
         value: parent.userRole
     }
 
-
     ProgressBar {
         id: progressBarItem
         width: parent.width
         height: 10
         y: parent.height + 10
         visible: false
+    }
+
+    Text {
+        id: marks
+        width: 32
+        x: parent.width + 2
+        font.pixelSize: 14
+        color: "white"
+        // wrapMode: Text.WrapAnywhere
+        text: clientPlayer === null ? "" : clientPlayer.mark_doc
     }
 
     InvisibleCardArea {
@@ -318,6 +335,25 @@ Item {
     InvisibleCardArea {
         id: defaultArea
         anchors.centerIn: parent
+    }
+
+    SequentialAnimation {
+        id: trembleAnimation
+        running: false
+        PropertyAnimation {
+            target: root
+            property: "x"
+            to: root.x - 20
+            easing.type: Easing.InQuad
+            duration: 100
+        }
+        PropertyAnimation {
+            target: root
+            property: "x"
+            to: root.x
+            easing.type: Easing.OutQuad
+            duration: 100
+        }
     }
 
     function add(inputs)
@@ -333,5 +369,9 @@ Item {
     function updateCardPosition(animated)
     {
         defaultArea.updateCardPosition(animated);
+    }
+
+    function tremble() {
+        trembleAnimation.start()
     }
 }

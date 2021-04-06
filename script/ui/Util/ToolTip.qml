@@ -2,7 +2,7 @@ import QtQuick 2.8
 import QtQuick.Controls 2.2 // 辣鸡qml自带tooltip
 import QtQuick.Window 2.1
 
-ApplicationWindow {
+Window {
     id: root
 
     flags: Qt.CustomizeWindowHint | Qt.FramelessWindowHint | Qt.ToolTip
@@ -10,7 +10,7 @@ ApplicationWindow {
     opacity: 0
 
     // related to contentWidth
-    property string text: "QSanguoshaQSanguoshaQSanguoshaQSanguosha"
+    property string text: "话说我们这是停工几个月了优先级不改改吗"
 
     width: main_rect.width
     height: main_rect.height
@@ -27,6 +27,7 @@ ApplicationWindow {
         Text {
             id: tipText
             wrapMode: Text.WordWrap
+            width: 480
             textFormat: Text.RichText
             anchors.centerIn: parent
 
@@ -38,28 +39,16 @@ ApplicationWindow {
     }
 
     Behavior on opacity {
-        enabled: true
         NumberAnimation {
             duration: 200
-            // easing.type: Easing.InOutQuad
         }
     }
 
     function appear(point, text) {
         root.text = text
 
-        // boundary detection
-        var xx = point.x
-        var yy = point.y
-        if (xx + width > Screen.desktopAvailableWidth) {
-            xx = Screen.desktopAvailableWidth - width
-        }
-        if (yy + height > Screen.desktopAvailableHeight) {
-            yy = Screen.desktopAvailableHeight - height
-        }
-
-        root.x = xx
-        root.y = yy
+        root.x = point.x
+        root.y = point.y
 
         show()
     }

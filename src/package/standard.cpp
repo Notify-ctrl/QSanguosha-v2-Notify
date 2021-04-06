@@ -275,6 +275,9 @@ void DelayedTrick::onUse(Room *room, const CardUseStruct &card_use) const
     log.type = "#UseCard";
     log.card_str = toString();
     room->sendLog(log);
+    foreach (ServerPlayer *to, use.to) {
+        room->doAnimate(QSanProtocol::S_ANIMATE_INDICATE, use.from->objectName(), to->objectName());
+    }
 
     CardMoveReason reason(CardMoveReason::S_REASON_USE, use.from->objectName(), use.to.first()->objectName(), this->getSkillName(), QString());
     room->moveCardTo(this, use.to.first(), Player::PlaceDelayedTrick, reason, true);

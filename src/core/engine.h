@@ -104,7 +104,7 @@ public:
     }
 
     void playSystemAudioEffect(const QString &name, bool superpose = true) const;
-    void playAudioEffect(const QString &filename, bool superpose = true) const;
+    Q_INVOKABLE void playAudioEffect(const QString &filename, bool superpose = true) const;
     void playSkillAudioEffect(const QString &skill_name, int index, bool superpose = true) const;
 
     const ProhibitSkill *isProhibited(const Player *from, const Player *to, const Card *card, const QList<const Player *> &others = QList<const Player *>()) const;
@@ -133,7 +133,9 @@ public:
     Q_INVOKABLE const QString getGeneralKingdom(const QString &name) {
         return getGeneral(name)->getKingdom();
     }
-    Q_INVOKABLE QString getCardLogName(QString str);
+    Q_INVOKABLE const QString getGeneralDescription(const QString &name) {
+        return getGeneral(name)->getSkillDescription(true);
+    }
 
 private:
     void _loadMiniScenarios();

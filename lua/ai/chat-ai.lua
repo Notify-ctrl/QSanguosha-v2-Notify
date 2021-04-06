@@ -186,7 +186,7 @@ sgs.ai_chat_func[sgs.CardFinished].analeptic = function(self, player, data)
 			"喜闻乐见",
 			"前排围观，出售爆米花，矿泉水，花生，瓜子...",
 			"不要砍我，我有" .. "<b><font color = 'yellow'>" .. sgs.Sanguosha:translate("jink")
-				.. string.format("[<img src='image/system/log/%s.png' height = 12/>", suit) .. math.random(1, 10) .. "] </font></b>",
+                                .. string.format("[<img src='../../../image/system/log/%s.png' height = 12/>", suit) .. math.random(1, 10) .. "] </font></b>",
 			"我菊花一紧"
 		}
 		for _, p in sgs.qlist(self.room:getAlivePlayers()) do

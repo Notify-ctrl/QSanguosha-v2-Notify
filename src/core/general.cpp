@@ -171,11 +171,11 @@ QString General::getSkillDescription(bool include_name) const
     if (include_name) {
         QString color_str = Sanguosha->getKingdomColor(kingdom).name();
         QString name = QString("<font color=%1><b>%2</b></font>     ").arg(color_str).arg(Sanguosha->translate(objectName()));
-        name.prepend(QString("<img src='image/kingdom/icon/%1.png'/>    ").arg(kingdom));
+        name.prepend(QString("<img src='../../../image/kingdom/icon/%1.png'/>    ").arg(kingdom));
         for (int i = 0; i < max_hp; i++)
-            name.append("<img src='image/system/magatamas/5.png' height = 12/>");
+            name.append("<img src='../../../image/general/magatamas/3.png' height = 18/>");
 
-        QString gender("  <img src='image/gender/%1.png' height=17 />");
+        QString gender("  <img src='../../../image/gender/%1.png' height=17 />");
         if (isMale())
             name.append(gender.arg("male"));
         else if (isFemale())

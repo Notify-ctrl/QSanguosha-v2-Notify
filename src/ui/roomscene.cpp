@@ -27,6 +27,10 @@ RoomScene::RoomScene(QQuickItem *parent) : QQuickItem(parent)
     connect(this, &RoomScene::trust, ClientInstance, &Client::trust);
 
     connect(ClientInstance, &Client::emotion_set, this, &RoomScene::setEmotion);
+    connect(ClientInstance, &Client::animated, this, &RoomScene::doAnimation);
+    connect(ClientInstance, &Client::hp_changed, this, &RoomScene::changeHp);
+
+    connect(ClientInstance, &Client::event_received, this, &RoomScene::handleGameEvent);
 }
 
 REGISTER_QMLTYPE("Sanguosha", 1, 0, RoomScene)

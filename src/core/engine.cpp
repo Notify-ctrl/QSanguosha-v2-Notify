@@ -779,13 +779,6 @@ QVariant Engine::getServerInfo(const QString &key)
     return ServerInfoMap[key];
 }
 
-QString Engine::getCardLogName(QString str)
-{
-    const Card *card = Card::Parse(str);
-    if (!card) return QString();
-    else return card->getLogName();
-}
-
 WrappedCard *Engine::getWrappedCard(int cardId)
 {
     Card *card = getCard(cardId);

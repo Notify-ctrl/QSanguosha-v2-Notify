@@ -293,7 +293,7 @@ QString Card::getLogName() const
     case Heart:
     case Club:
     case Diamond: {
-        suit_char = QString("<img src='image/system/log/%1.png' height = 12/>").arg(getSuitString());
+        suit_char = QString("<img src='../../../image/system/log/%1.png' height = 12/>").arg(getSuitString());
         break;
     }
     case NoSuitRed: {
@@ -557,7 +557,7 @@ const Card *Card::Parse(const QString &str)
         return card;
     } else {
         bool ok;
-        int card_id = (int)str.toDouble(&ok);
+        int card_id = str.toInt(&ok);
         if (ok)
             return Sanguosha->getCard(card_id)->getRealCard();
         else
@@ -654,6 +654,9 @@ void Card::onUse(Room *room, const CardUseStruct &use) const
     log.type = "#UseCard";
     log.card_str = card_use.card->toString(hidden);
     room->sendLog(log);
+    foreach (ServerPlayer *to, card_use.to) {
+        room->doAnimate(QSanProtocol::S_ANIMATE_INDICATE, card_use.from->objectName(), to->objectName());
+    }
 
     if (card_use.card->isKindOf("Collateral")) { // put it here for I don't wanna repeat these codes in Card::onUse
         ServerPlayer *victim = card_use.to.first()->tag["collateralVictim"].value<ServerPlayer *>();

@@ -1,5 +1,7 @@
 import QtQuick 2.15
 import QtGraphicalEffects 1.0
+import "../Util"
+import "../Util/util.js" as Utility
 
 Item {
     property int cid: 0
@@ -23,6 +25,7 @@ Item {
     property bool isClicked: false
     property bool moveAborted: false
     property bool isKnown: true
+    property alias description: tipArea.text
 
     signal toggleDiscards()
     signal clicked()
@@ -130,6 +133,13 @@ Item {
             selected = selectable ? !selected : false;
             parent.clicked();
         }
+    }
+
+    ToolTipArea {
+        id: tipArea
+        enabled: name !== "card-back"
+        text: Sanguosha.translate(name) + "[<img src='../../../image/system/log/"
+              + suit + ".png' height = 14/> " + Utility.convertNumber(number) + "] " + Sanguosha.translate(":" + name)
     }
 
     ParallelAnimation {

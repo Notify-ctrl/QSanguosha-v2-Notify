@@ -12,12 +12,12 @@ MouseArea {
 
     Timer {
         id: showTimer
-        interval: 1000
-        running: text.length !== 0 && mouseArea.containsMouse && !tip.visible
+        interval: 0
+        //running: text.length !== 0 && mouseArea.containsMouse && !tip.visible
         onTriggered: {
             let p = mapToItem(rootWindowItem, mouseX, mouseY)
-            p.x += rootWindow.x + 5
-            p.y += rootWindow.y + 5
+            p.x += rootWindow.x + 20
+            p.y += rootWindow.y - 20
             tip.opacity = 1
             tip.appear(p, text);
         }
@@ -25,11 +25,27 @@ MouseArea {
 
     Timer {
         id: hideTimer
-        interval: 100
-        running: !mouseArea.containsMouse && tip.visible
+        interval: 0
+        // running: !mouseArea.containsMouse && tip.visible
         onTriggered: {
             tip.opacity = 0
             tip.hide();
         }
+    }
+
+    onEntered: {
+        showTimer.start()
+    }
+
+    onExited: {
+        hideTimer.start()
+    }
+
+    onMouseXChanged: {
+        tip.x = mapToItem(rootWindowItem, mouseX, mouseY).x + rootWindow.x + 20
+    }
+
+    onMouseYChanged: {
+        tip.y = mapToItem(rootWindowItem, mouseX, mouseY).y + rootWindow.y - 20
     }
 }

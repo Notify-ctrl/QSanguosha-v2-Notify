@@ -27,6 +27,7 @@ Item {
                 card.homeOpacity = 0;
                 // card.goBack(true);
                 roomScene.cardItemGoBack(card, true)
+                card.destroyOnStop()
             }
 
             cards.splice(0, discardedCards.length);

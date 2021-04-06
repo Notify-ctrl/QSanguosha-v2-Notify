@@ -191,7 +191,7 @@ public:
     void addMark(const QString &mark, int add_num = 1);
     void removeMark(const QString &mark, int remove_num = 1);
     virtual void setMark(const QString &mark, int value);
-    int getMark(const QString &mark) const;
+    Q_INVOKABLE int getMark(const QString &mark) const;
     QStringList getMarkNames() const;
 
     void setChained(bool chained);
@@ -247,7 +247,7 @@ public:
 
     void copyFrom(Player *p);
 
-    QList<const Player *> getSiblings() const;
+    Q_INVOKABLE QList<const Player *> getSiblings() const;
     QList<const Player *> getAliveSiblings() const;
 
     QVariantMap tag;

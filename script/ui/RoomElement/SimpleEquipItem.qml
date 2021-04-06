@@ -1,4 +1,5 @@
 import QtQuick 2.15
+import "../Util"
 import "../Util/util.js" as Utility
 
 Rectangle {
@@ -109,6 +110,12 @@ Rectangle {
         }
     }
 
+    ToolTipArea {
+        enabled: name !== ""
+        text: Sanguosha.translate(name) + "[<img src='../../../image/system/log/"
+              + suit + ".png' height = 14/> " + Utility.convertNumber(number) + "] " + Sanguosha.translate(":" + name)
+    }
+
     function reset()
     {
         cid = 0;
@@ -124,7 +131,9 @@ Rectangle {
         name = card.name;
         suit = card.suit;
         number = card.number;
-        text = Sanguosha.translate(card.name); //qsTr(card.name + ":brief-description");
+        if (card.subtype === "defensive_horse") text = "+1"
+        else if (card.subtype === "offensive_horse") text = "-1"
+        else text = Sanguosha.translate(card.name);
     }
 
     function show()

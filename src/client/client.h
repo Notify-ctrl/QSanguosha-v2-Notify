@@ -116,6 +116,8 @@ public:
     void setMark(const QVariant &mark_str);
     void showCard(const QVariant &show_str);
     void log(const QVariant &log_str);
+    QString appendLog(const QString &type, const QString &from_general, const QStringList &tos,
+        QString card_str, QString arg, QString arg2);
     void speak(const QVariant &speak_data);
     void addHistory(const QVariant &history);
     void moveFocus(const QVariant &focus);
@@ -286,7 +288,7 @@ signals:
     void roles_got(const QString &scheme, const QStringList &roles);
 
     void seats_arranged(const QList<const ClientPlayer *> &seats);
-    void hp_changed(const QString &who, int delta, DamageStruct::Nature nature, bool losthp);
+    void hp_changed(const QString &who, int delta, int nature, bool losthp);
     void maxhp_changed(const QString &who, int delta);
     void status_changed(Client::Status oldStatus, Client::Status newStatus);
     void avatars_hiden();
@@ -294,7 +296,7 @@ signals:
     void player_killed(const QString &who);
     void player_revived(const QString &who);
     void card_shown(const QString &player_name, int card_id);
-    void log_received(const QStringList &log_str);
+    void log_received(const QString &log_str);
     void guanxing(const QList<int> &card_ids, bool single_side);
     void gongxin(const QList<int> &card_ids, bool enable_heart, QList<int> enabled_ids);
     void focus_moved(const QStringList &focus, QSanProtocol::Countdown countdown);
@@ -309,7 +311,7 @@ signals:
     void game_started();
     void game_over();
     void standoff();
-    void event_received(const QVariant &);
+    void event_received(QVariantList args);
 
     void move_cards_lost(int moveId, QList<CardsMoveStruct> moves);
     void move_cards_got(int moveId, QList<CardsMoveStruct> moves);

@@ -11,12 +11,17 @@ RoomScene {
     property var photoModel: []
     property int playerNum: 0
     property int currentPlayerNum: 1
-    property var m_move_cache: ({})
     property var _m_cardsMoveStash: ({})
-
-    function /* class */_MoveCardsClassifier(card_ids) {
-        this.ids = card_ids
-    }
+    property var anim_map: [
+        function() {},
+        doIndicate,
+        doLightboxAnimation,
+        doMovingAnimation,
+        doHuashen,
+        doAppearingAnimation,
+        doAppearingAnimation,
+    ]
+    property var anim_names: ["", "indicate", "lightbox", "nullification", "huashen", "fire", "lighting"]
 
     id: roomScene
     anchors.fill: parent
@@ -125,7 +130,7 @@ RoomScene {
 
                     Connections {
                         target: roomScene
-                        function onAddLog(richText) {
+                        function onReceiveLog(richText) {
                             logBox.append(richText);
                         }
                     }
@@ -274,6 +279,7 @@ RoomScene {
         }
     }
 
+    //tmp
     MetroButton {
         text: "托管"
         onClicked: roomScene.trust()
@@ -281,11 +287,11 @@ RoomScene {
 
     onAddPlayer: {
         for (let i = 0; i < photoModel.length; i++) {
-            if (photoModel[i].clientPlayer === "") {
-                photoModel[i].clientPlayer = player.objectName
+            if (photoModel[i].clientPlayer === null) {
+                // photoModel[i].clientPlayer = player
                 photoModel[i] = {
                     screenName: player.screenname,
-                    clientPlayer: player.objectName,
+                    clientPlayer: player,
                     hp: 0,
                     maxHp: 0,
                     headGeneral: player.getAvatar(),
@@ -320,7 +326,7 @@ RoomScene {
         let photo = null
         for (var i = 0; i < photoModel.length; i++) {
             if (photoModel[i].clientPlayer === player_name) {
-                photoModel[i].clientPlayer = ""
+                photoModel[i].clientPlayer = null
                 photoModel[i].headGeneral = "anjiang"
                 photoModel[i].screenName = ""
                 photos.model = photoModel
@@ -337,7 +343,6 @@ RoomScene {
     onChooseGeneral: {
         popupBox.source = "RoomElement/ChooseGeneralBox.qml";
         var box = popupBox.item;
-        // box.choiceNum = num;
         box.choiceNum = 1;
         box.accepted.connect(function(){
             roomScene.onChooseGeneralDone(box.choices[0]);
@@ -369,6 +374,7 @@ RoomScene {
             case "chained":
             case "alive":
             case "drunk":
+            case "faceup":
                 target_model[property_name] = (value === "true" ? true : false)
                 break
             case "screenName":
@@ -380,25 +386,7 @@ RoomScene {
             }
         }
 
-        /*if (player_name === Self.objectName || player_name === "MG_SELF") {
-            //let tmp = dashboardModel
-            setValue(dashboard, property_name, value)
-            //dashboardModel = tmp
-        } else {
-            for (let i = 0; i < photoModel.length; i++) {
-                if (photoModel[i].clientPlayer === player_name) {
-                    setValue(photoModel[i], property_name, value)
-                    photos.model = photoModel
-                    arrangePhotos()
-                    break
-                }
-            }*/
-            setValue(getItemByPlayerName(player_name), property_name, value)
-        //}
-    }
-
-    onReceiveLog: {
-        logBox.append(log_str)
+        setValue(getItemByPlayerName(player_name), property_name, value)
     }
 
     // To solve a mysterious internal error (dirty trick)
@@ -424,9 +412,6 @@ RoomScene {
             if (!from || !to || from === to)
                 continue;
             var items = from.remove(move.card_ids);
-            //if (items.length > 0)
-            //    to.add(items);
-            //to.updateCardPosition(true);
             _m_cardsMoveStash[moveId].push(items);
         }
     }
@@ -438,8 +423,6 @@ RoomScene {
             var to = getAreaItem(move.to_place, move.to_player_name);
             if (!from || !to || from === to)
                 continue;
-            //var items = from.remove(move.card_ids);
-            //if (to === Player.DrawPile) continue;
             let items = _m_cardsMoveStash[moveId][i]
             if (items.length > 0)
                 to.add(items);
@@ -452,13 +435,102 @@ RoomScene {
         if (component.status !== Component.Ready)
             return;
 
-        // var photo = getItemBySeat(seat);
         var photo = getItemByPlayerName(who)
         var animation = component.createObject(roomScene, {source: emotion, x: photo.x, y: photo.y});
         animation.finished.connect(function(){animation.destroy();});
         animation.start();
     }
 
+    onDoAnimation: {
+        anim_map[name](anim_names[name], args)
+    }
+
+    function doMovingAnimation(name, args) {
+        doIndicate(name, args)
+    }
+    function doAppearingAnimation(name, args) {}
+
+    function doLightboxAnimation(name, args) {/*
+        let component = Qt.createComponent("RoomElement/LightBox.qml");
+        if (component.status !== Component.Ready)
+            return;
+
+        let word = args[0]
+        let disp = args[1]
+        if (disp === undefined) {
+            disp = "2000:0"
+        }
+        let disp_arg = disp.split(":")
+        let duration = disp_arg[0]*/
+    }
+
+    function doHuashen(name, args) {}
+
+    function doIndicate(name, args)
+    {
+        var component = Qt.createComponent("RoomElement/IndicatorLine.qml");
+        if (component.status !== Component.Ready)
+            return;
+
+        let from = args[0]
+        let tos = [args[1]]
+        var fromItem = getItemByPlayerName(from);
+        var fromPos = mapFromItem(fromItem, fromItem.width / 2, fromItem.height / 2);
+
+        var end = [];
+        for (var i = 0; i < tos.length; i++) {
+            if (from === tos[i])
+                continue;
+            var toItem = getItemByPlayerName(tos[i]);
+            var toPos = mapFromItem(toItem, toItem.width / 2, toItem.height / 2);
+            end.push(toPos);
+        }
+
+        var color = Utility.kingdomColor[fromItem.kingdom];
+        var line = component.createObject(roomScene, {start: fromPos, end: end, color: color});
+        line.finished.connect(function(){line.destroy();});
+        line.running = true;
+    }
+
+    onChangeHp: {
+        let photo = getItemByPlayerName(who)
+        if (delta < 0) {
+            if (!losthp) {
+                if (who !== Self.objectName && who !== "MG_SELF") {
+                    onSetEmotion(who, "damage")
+                    photo.tremble()
+                }
+            }
+        }
+    }
+
+    onHandleGameEvent: {
+        switch (args[0]) {
+        case 0: // S_GAME_EVENT_PLAYER_DYING
+            getItemByPlayerName(args[1]).dying = true
+            break
+        case 1: // S_GAME_EVENT_PLAYER_QUITDYING,
+            getItemByPlayerName(args[1]).dying = false
+            break
+        case 2: // S_GAME_EVENT_PLAY_EFFECT,
+        case 3: // S_GAME_EVENT_JUDGE_RESULT,
+        case 4: // S_GAME_EVENT_DETACH_SKILL,
+        case 5: // S_GAME_EVENT_ACQUIRE_SKILL,
+        case 6: // S_GAME_EVENT_ADD_SKILL,
+        case 7: // S_GAME_EVENT_LOSE_SKILL,
+        case 8: // S_GAME_EVENT_PREPARE_SKILL,
+        case 9: // S_GAME_EVENT_UPDATE_SKILL,
+        case 10: // S_GAME_EVENT_HUASHEN,
+        case 11: // S_GAME_EVENT_CHANGE_GENDER,
+        case 12: // S_GAME_EVENT_CHANGE_HERO,
+        case 13: // S_GAME_EVENT_PLAYER_REFORM,
+        case 14: // S_GAME_EVENT_SKILL_INVOKED,
+        case 15: // S_GAME_EVENT_PAUSE,
+        case 16: // S_GAME_EVENT_REVEAL_PINDIAN
+        }
+    }
+
+/*
     onEnableCards: {
         dashboard.equipArea.enableCards(cardIds);
         dashboard.handcardArea.enableCards(cardIds);
@@ -568,7 +640,7 @@ RoomScene {
         for (var i = 0; i < winners.length; i++)
             popupBox.item.add(winners[i]);
     }
-
+*/
     onPlayerNumChanged: arrangePhotos();
 
     function arrangePhotos()
@@ -657,36 +729,12 @@ RoomScene {
         }
     }
 
-    onShowIndicatorLine:
-    {
-        var component = Qt.createComponent("RoomElement/IndicatorLine.qml");
-        if (component.status !== Component.Ready)
-            return;
-
-        var fromItem = getItemBySeat(from);
-        var fromPos = mapFromItem(fromItem, fromItem.width / 2, fromItem.height / 2);
-
-        var end = [];
-        for (var i = 0; i < tos.length; i++) {
-            if (from === tos[i])
-                continue;
-            var toItem = getItemBySeat(tos[i]);
-            var toPos = mapFromItem(toItem, toItem.width / 2, toItem.height / 2);
-            end.push(toPos);
-        }
-
-        var color = Engine.kingdomColor[fromItem.userRole];
-        var line = component.createObject(roomScene, {start: fromPos, end: end, color: color});
-        line.finished.connect(function(){line.destroy();});
-        line.running = true;
-    }
-
     function getItemByPlayerName(name)
     {
         if (name === Self.objectName || name === "MG_SELF")
             return dashboard;
         for (let i = 0; i < photoModel.length; i++) {
-            if (photoModel[i].clientPlayer === name)
+            if (photoModel[i].clientPlayer.objectName === name)
                 return photos.itemAt(i);
         }
     }
@@ -737,7 +785,7 @@ RoomScene {
             deputyGeneral: "",
             chained: false,
             dying: false,
-            alive: false,
+            alive: true,
             drunk: false,
             kingdom: "qun",
             role: "unknown",
@@ -752,7 +800,7 @@ RoomScene {
             photoModel.push(
                         {
                             screenName: "",
-                            clientPlayer: "",
+                            clientPlayer: null,
                             hp: 0,
                             maxHp: 0,
                             headGeneral: "anjiang",

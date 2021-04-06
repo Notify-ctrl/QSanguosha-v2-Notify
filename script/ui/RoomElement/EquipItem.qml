@@ -1,4 +1,5 @@
 import QtQuick 2.15
+import "../Util"
 import "../Util/util.js" as Utility
 
 Item {
@@ -63,6 +64,12 @@ Item {
                 return;
             selected = !selected;
         }
+    }
+
+    ToolTipArea {
+        enabled: name !== ""
+        text: Sanguosha.translate(name) + "[<img src='../../../image/system/log/"
+              + suit + ".png' height = 14/> " + Utility.convertNumber(number) + "] " + Sanguosha.translate(":" + name)
     }
 
     ParallelAnimation {

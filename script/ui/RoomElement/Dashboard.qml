@@ -1,5 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Layouts 1.1
+import QtGraphicalEffects 1.0
 import "../Util"
 
 RowLayout {
@@ -16,7 +17,8 @@ RowLayout {
     property bool chained: false
     property bool dying: false
     property bool alive: true
-    property bool drunk: false
+    property bool drunk: Self === null || Self === undefined ? false : Self.getMark("drank") > 0
+    property bool faceup: true
     property bool selectable: false
     property bool selected: false
 
@@ -63,6 +65,15 @@ RowLayout {
                     Layout.fillHeight: true
                     Layout.topMargin: 15
 
+                    Colorize {
+                        anchors.fill: parent
+                        source: parent
+                        hue: 0
+                        saturation: 0
+                        lightness: 0
+                        visible: !parent.alive
+                    }
+
                     DelayedTrickArea {
                         id: delayedTrickAreaItem
                         width: parent.width
@@ -85,6 +96,22 @@ RowLayout {
                         y: -height - 5
                         x: parent.width - width
                         visible: root.phase != "inactive"
+                    }
+
+                    Image {
+                        anchors.centerIn: parent
+                        source: "../../../image/system/death/" + userRole
+                        visible: !root.alive
+                    }
+
+                    Text {
+                        id: marks
+                        height: 32
+                        anchors.right: parent.right
+                        font.pixelSize: 14
+                        color: "white"
+                        // wrapMode: Text.WrapAnywhere
+                        text: Self === null ? "" : Self.mark_doc
                     }
 
                     Connections {
@@ -111,6 +138,15 @@ RowLayout {
             Image {
                 id: platter
                 source: "../../../image/dashboard/platter"
+
+                Colorize {
+                    anchors.fill: parent
+                    source: parent
+                    hue: 0
+                    saturation: 0
+                    lightness: 0
+                    visible: !parent.alive
+                }
 
                 IrregularButton {
                     id: acceptButtonItem
@@ -162,6 +198,15 @@ RowLayout {
         Layout.preferredWidth: deputyGeneralItem.visible ? 283 : 155
         Layout.preferredHeight: 149
 
+        Colorize {
+            anchors.fill: parent
+            source: parent
+            hue: 0
+            saturation: 0
+            lightness: 0
+            visible: !parent.alive
+        }
+
         Image {
             source: "../../../image/dashboard/base"
         }
@@ -176,6 +221,7 @@ RowLayout {
                 id: hpBar
                 visible: maxHp > 0
                 anchors.bottom: parent.bottom
+                anchors.bottomMargin: -3
                 transform: Scale {
                     xScale: hpBar.parent.width / hpBar.width
                     yScale: xScale
@@ -206,6 +252,12 @@ RowLayout {
                 anchors.bottom: parent.bottom
                 anchors.bottomMargin: 3
             }
+
+            Image {
+                anchors.fill: parent
+                source: "../../../image/general/faceturned"
+                visible: !faceup
+            }
         }
 
         GeneralAvatar {
@@ -229,12 +281,18 @@ RowLayout {
                 anchors.bottom: parent.bottom
                 anchors.bottomMargin: 3
             }
+
+            Image {
+                anchors.fill: parent
+                source: "../../../image/general/faceturned"
+                visible: !faceup
+            }
         }
 
         Image {
             source: "../../../image/system/chain"
             visible: root.chained
-            anchors.horizontalCenter: headGeneralItem.right
+            anchors.horizontalCenter: headGeneralItem.horizontalCenter
             anchors.verticalCenter: headGeneralItem.verticalCenter
         }
     }

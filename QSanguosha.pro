@@ -331,4 +331,5 @@ DEPENDPATH += $$_PRO_FILE_PWD_/include/freetype
 ANDROID_PACKAGE_SOURCE_DIR = $$_PRO_FILE_PWD_/resource/android
 
 DISTFILES += \
+    script/ui/RoomElement/LightBox.qml \
     script/ui/Util/util.js
