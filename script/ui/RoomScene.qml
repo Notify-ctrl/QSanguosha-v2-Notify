@@ -71,8 +71,8 @@ RoomScene {
                             clientPlayer: modelData.clientPlayer
                             hp: modelData.hp
                             maxHp: modelData.maxHp
-                            headGeneral: modelData.headGeneralName
-                            deputyGeneral: modelData.deputyGeneralName
+                            headGeneral: modelData.headGeneral
+                            deputyGeneral: modelData.deputyGeneral
                             phase: modelData.phase
                             seat: modelData.seat
                             chained: modelData.chained
@@ -168,12 +168,12 @@ RoomScene {
                 target: roomScene
                 function onDashboardModelChanged() {
                     var model = dashboardModel[0];
-                    dashboard.seatNumber = Qt.binding(function(){return model.seat});
+                    dashboard.seat = Qt.binding(function(){return model.seat});
                     dashboard.phase = Qt.binding(function(){return model.phase});
                     dashboard.hp = Qt.binding(function(){return model.hp});
                     dashboard.maxHp = Qt.binding(function(){return model.maxHp});
-                    dashboard.headGeneralName = Qt.binding(function(){return model.headGeneralName});
-                    dashboard.deputyGeneralName = Qt.binding(function(){return model.deputyGeneralName});
+                    dashboard.headGeneral = Qt.binding(function(){return model.headGeneral});
+                    dashboard.deputyGeneral = Qt.binding(function(){return model.deputyGeneral});
                     dashboard.headGeneralKingdom = dashboard.deputyGeneralKingdom = Qt.binding(function(){return model.kingdom});
                     dashboard.chained = Qt.binding(function(){return model.chained;});
                     dashboard.dying = Qt.binding(function(){return model.dying;});
@@ -288,8 +288,8 @@ RoomScene {
                     clientPlayer: player.objectName,
                     hp: 0,
                     maxHp: 0,
-                    headGeneralName: player.getAvatar(),
-                    deputyGeneralName: "",
+                    headGeneral: player.getAvatar(),
+                    deputyGeneral: "",
                     phase: "inactive",
                     seat: i + 2,
                     chained: false,
@@ -321,7 +321,7 @@ RoomScene {
         for (var i = 0; i < photoModel.length; i++) {
             if (photoModel[i].clientPlayer === player_name) {
                 photoModel[i].clientPlayer = ""
-                photoModel[i].headGeneralName = "anjiang"
+                photoModel[i].headGeneral = "anjiang"
                 photoModel[i].screenName = ""
                 photos.model = photoModel
                 arrangePhotos()
@@ -350,12 +350,13 @@ RoomScene {
     onUpdateProperty: {
         let player_name = args[0]
         let property_name = args[1]
-        if (property_name === "general") property_name = "headGeneralName"
-        else if (property_name === "general2") property_name = "deputyGeneralName"
+        if (property_name === "general") property_name = "headGeneral"
+        else if (property_name === "general2") property_name = "deputyGeneral"
+        else if (property_name === "role") property_name = "userRole"
         let value = args[2]
         let setValue = function (target_model, property_name, value) {
             switch (property_name) {
-            case "headGeneralName":
+            case "headGeneral":
                 target_model[property_name] = value;
                 target_model["kingdom"] = Sanguosha.getGeneralKingdom(value);
                 break
@@ -370,15 +371,19 @@ RoomScene {
             case "drunk":
                 target_model[property_name] = (value === "true" ? true : false)
                 break
-            default:
+            case "screenName":
+            case "clientPlayer":
+            case "phase":
+            case "kingdom":
+            case "userRole":
                 target_model[property_name] = value;
             }
         }
 
-        if (player_name === Self.objectName || player_name === "MG_SELF") {
-            let tmp = dashboardModel
-            setValue(tmp[0], property_name, value)
-            dashboardModel = tmp
+        /*if (player_name === Self.objectName || player_name === "MG_SELF") {
+            //let tmp = dashboardModel
+            setValue(dashboard, property_name, value)
+            //dashboardModel = tmp
         } else {
             for (let i = 0; i < photoModel.length; i++) {
                 if (photoModel[i].clientPlayer === player_name) {
@@ -387,16 +392,31 @@ RoomScene {
                     arrangePhotos()
                     break
                 }
-            }
-        }
+            }*/
+            setValue(getItemByPlayerName(player_name), property_name, value)
+        //}
     }
 
     onReceiveLog: {
         logBox.append(log_str)
     }
 
+    // To solve a mysterious internal error (dirty trick)
+    function cardItemGoBack(card, animated) {
+        if (animated) {
+            card.moveAborted = true;
+            card.goBackAnim.stop();
+            card.moveAborted = false;
+            card.goBackAnim.start();
+        } else {
+            card.x = card.homeX;
+            card.y = card.homeY;
+            card.opacity = card.homeOpacity;
+        }
+    }
+
     onLoseCards: {
-        //_m_cardsMoveStash[moveId] = [];
+        _m_cardsMoveStash[moveId] = [];
         for (var i = 0; i < moves.length; i++) {
             var move = moves[i];
             var from = getAreaItem(move.from_place, move.from_player_name);
@@ -404,13 +424,13 @@ RoomScene {
             if (!from || !to || from === to)
                 continue;
             var items = from.remove(move.card_ids);
-            if (items.length > 0)
-                to.add(items);
-            to.updateCardPosition(true);
-            //_m_cardsMoveStash[moveId].push(items);
+            //if (items.length > 0)
+            //    to.add(items);
+            //to.updateCardPosition(true);
+            _m_cardsMoveStash[moveId].push(items);
         }
     }
-/*
+
     onGetCards: {
         for (var i = 0; i < moves.length; i++) {
             var move = moves[i];
@@ -426,7 +446,7 @@ RoomScene {
             to.updateCardPosition(true);
         }
     }
-*/
+
     onSetEmotion: {
         var component = Qt.createComponent("RoomElement/PixmapAnimation.qml");
         if (component.status !== Component.Ready)
@@ -663,7 +683,7 @@ RoomScene {
 
     function getItemByPlayerName(name)
     {
-        if (name === Self.objectName)
+        if (name === Self.objectName || name === "MG_SELF")
             return dashboard;
         for (let i = 0; i < photoModel.length; i++) {
             if (photoModel[i].clientPlayer === name)
@@ -713,8 +733,8 @@ RoomScene {
             phase: "start",
             hp: 0,
             maxHp: 0,
-            headGeneralName: Self.getAvatar(),
-            deputyGeneralName: "",
+            headGeneral: Self.getAvatar(),
+            deputyGeneral: "",
             chained: false,
             dying: false,
             alive: false,
@@ -735,8 +755,8 @@ RoomScene {
                             clientPlayer: "",
                             hp: 0,
                             maxHp: 0,
-                            headGeneralName: "anjiang",
-                            deputyGeneralName: "",
+                            headGeneral: "anjiang",
+                            deputyGeneral: "",
                             phase: "inactive",
                             seat: i + 2,
                             chained: false,

@@ -19,6 +19,7 @@ Item {
     property alias glow: glowItem
     property alias footnote: footnoteItem.text
     property alias card: cardItem
+    property alias goBackAnim: goBackAnimation
     property bool isClicked: false
     property bool moveAborted: false
     property bool isKnown: true

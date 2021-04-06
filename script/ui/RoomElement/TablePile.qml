@@ -25,7 +25,8 @@ Item {
             for (i = 0; i < discardedCards.length; i++) {
                 card = discardedCards[i];
                 card.homeOpacity = 0;
-                card.goBack(true);
+                // card.goBack(true);
+                roomScene.cardItemGoBack(card, true)
             }
 
             cards.splice(0, discardedCards.length);
@@ -115,7 +116,8 @@ Item {
         if (animated) {
             for (i = 0; i < cards.length; i++)
                 // cards[i].goBack() // WTF
-                console.log(cards[i].homeOpacity)
+                // console.log(cards[i].homeOpacity)
+                roomScene.cardItemGoBack(cards[i], true)
         }
     }
 }

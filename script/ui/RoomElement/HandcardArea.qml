@@ -73,7 +73,8 @@ Item {
 
         if (animated) {
             for (i = 0; i < cards.length; i++)
-                cards[i].goBack(true);
+                // cards[i].goBack(true);
+                roomScene.cardItemGoBack(cards[i], true)
         }
     }
 

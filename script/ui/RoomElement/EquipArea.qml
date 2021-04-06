@@ -4,6 +4,7 @@ import "../Util/util.js" as Utility
 
 Rectangle {
     signal cardSelected(int cardId, bool selected)
+    property var subtypes: ["weapon", "armor", "defensive_horse", "offensive_horse", "treasure"]
 
     id: root
     color: Qt.rgba(0, 0, 0, 0.65)
@@ -11,11 +12,11 @@ Rectangle {
     ListModel {
         id: cards
 
-        ListElement {cid: 0; name: ""; suit: ""; number: 0; subtype: 0}
-        ListElement {cid: 0; name: ""; suit: ""; number: 0; subtype: 1}
-        ListElement {cid: 0; name: ""; suit: ""; number: 0; subtype: 2}
-        ListElement {cid: 0; name: ""; suit: ""; number: 0; subtype: 3}
-        ListElement {cid: 0; name: ""; suit: ""; number: 0; subtype: 4}
+        ListElement {cid: 0; name: ""; suit: ""; number: 0; subtype: "weapon"}
+        ListElement {cid: 0; name: ""; suit: ""; number: 0; subtype: "armor"}
+        ListElement {cid: 0; name: ""; suit: ""; number: 0; subtype: "defensive_horse"}
+        ListElement {cid: 0; name: ""; suit: ""; number: 0; subtype: "offensive_horse"}
+        ListElement {cid: 0; name: ""; suit: ""; number: 0; subtype: "treasure"}
     }
 
     InvisibleCardArea {
@@ -106,12 +107,12 @@ Rectangle {
             for (var i = 0; i < inputs.length; i++) {
                 data = inputs[i].toData();
                 cards.set(data.subtype, data);
-                equipItems.itemAt(data.subtype).show();
+                equipItems.itemAt(subtypes.indexOf(data.subtype)).show();
             }
         } else {
             data = inputs.toData();
             cards.set(data.subtype, data);
-            equipItems.itemAt(data.subtype).show();
+            equipItems.itemAt(subtypes.indexOf(data.subtype)).show();
         }
         area.add(inputs);
     }

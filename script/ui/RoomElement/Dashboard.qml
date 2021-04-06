@@ -3,11 +3,11 @@ import QtQuick.Layouts 1.1
 import "../Util"
 
 RowLayout {
-    property string headGeneralName: ""
+    property string headGeneral: ""
     property alias headGeneralKingdom: headGeneralItem.kingdom
-    property string deputyGeneralName: ""
+    property string deputyGeneral: ""
     property alias deputyGeneralKingdom: deputyGeneralItem.kingdom
-    property int seatNumber: 0
+    property int seat: 0
     property string userRole: "unknown"
     property string kingdom: "unknown"
     property alias hp: hpBar.value
@@ -151,8 +151,8 @@ RowLayout {
                 Image {
                     x: 71
                     y: 117
-                    source: seatNumber > 0 ? "../../../image/dashboard/seatnum/" + seatNumber : ""
-                    visible: seatNumber > 0
+                    source: seat > 0 ? "../../../image/dashboard/seatnum/" + seat : ""
+                    visible: seat > 0
                 }
             }
         }
@@ -190,8 +190,8 @@ RowLayout {
         GeneralAvatar {
             id: headGeneralItem
             y: -4
-            avatar: headGeneralName ? headGeneralName: "huangyueying"
-            generalName: Sanguosha.translate(headGeneralName)
+            avatar: headGeneral ? headGeneral: "huangyueying"
+            generalName: Sanguosha.translate(headGeneral)
             generalPosition: "head"
 
             Rectangle {
@@ -212,10 +212,10 @@ RowLayout {
             id: deputyGeneralItem
             x: 128
             y: -4
-            avatar: deputyGeneralName ? deputyGeneralName : "zhugeliang"
-            generalName: Sanguosha.translate(deputyGeneralName)
+            avatar: deputyGeneral ? deputyGeneral : "zhugeliang"
+            generalName: Sanguosha.translate(deputyGeneral)
             generalPosition: "deputy"
-            visible: deputyGeneralName ? true : false
+            visible: deputyGeneral ? true : false
 
             Rectangle {
                 color: Qt.rgba(250, 0, 0, 0.45)
