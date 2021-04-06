@@ -1,4 +1,4 @@
-import QtQuick 2.4
+import QtQuick 2.15
 
 Column {
     property int itemHeight: Math.floor(height / 4)

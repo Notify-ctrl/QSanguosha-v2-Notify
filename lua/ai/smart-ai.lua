@@ -1188,7 +1188,7 @@ sgs.ai_card_intention.general = function(from, to, level)
     -- 将level固定为 10或者-10，目的是由原来的忠反值的变化 更改为 统计AI跳身份的行为次数，因为感觉具体的level值不太好把握，容易出现忠反值不合理飙涨的情况
     level = level > 0 and 10 or -10
 
-    sgs.outputRoleValues(from, level)
+    -- sgs.outputRoleValues(from, level)
 
     local loyalist_value = sgs.role_evaluation[from:objectName()]["loyalist"]
     local renegade_value = sgs.role_evaluation[from:objectName()]["renegade"]
@@ -1261,7 +1261,7 @@ sgs.ai_card_intention.general = function(from, to, level)
         end
     end
     ]]
-    sgs.outputRoleValues(from, level)
+    -- sgs.outputRoleValues(from, level)
 end
 
 function sgs.outputRoleValues(player, level)
@@ -1861,7 +1861,7 @@ function sgs.evaluateAlivePlayersRole()
                 sgs.role_evaluation[name]["loyalist"] = math.min(-sgs.role_evaluation[name]["renegade"], sgs.role_evaluation[name]["loyalist"])
                 sgs.role_evaluation[name]["renegade"] = 0
                 sgs.ai_role[name] = "rebel"
-                sgs.outputRoleValues(p, 0)
+                -- sgs.outputRoleValues(p, 0)
                 global_room:writeToConsole("rebel:" .. p:getGeneralName() .." Modified Success!")
                 rebel = rebel + 1
                 if rebel == r_count then break end

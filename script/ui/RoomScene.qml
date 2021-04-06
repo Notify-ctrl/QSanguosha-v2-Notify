@@ -1,4 +1,4 @@
-import QtQuick 2.4
+import QtQuick 2.15
 import QtQuick.Layouts 1.1
 import QtMultimedia 5.12
 import "Util"
@@ -395,6 +395,22 @@ RoomScene {
         logBox.append(log_str)
     }
 
+    onLoseCards: {
+        //_m_cardsMoveStash[moveId] = [];
+        for (var i = 0; i < moves.length; i++) {
+            var move = moves[i];
+            var from = getAreaItem(move.from_place, move.from_player_name);
+            var to = getAreaItem(move.to_place, move.to_player_name);
+            if (!from || !to || from === to)
+                continue;
+            var items = from.remove(move.card_ids);
+            if (items.length > 0)
+                to.add(items);
+            to.updateCardPosition(true);
+            //_m_cardsMoveStash[moveId].push(items);
+        }
+    }
+/*
     onGetCards: {
         for (var i = 0; i < moves.length; i++) {
             var move = moves[i];
@@ -410,23 +426,7 @@ RoomScene {
             to.updateCardPosition(true);
         }
     }
-
-    onLoseCards: {
-        _m_cardsMoveStash[moveId] = [];
-        for (var i = 0; i < moves.length; i++) {
-            var move = moves[i];
-            var from = getAreaItem(move.from_place, move.from_player_name);
-            var to = getAreaItem(move.to_place, move.to_player_name);
-            if (!from || !to || from === to)
-                continue;
-            var items = from.remove(move.card_ids);
-            //if (items.length > 0)
-            //    to.add(items);
-            //to.updateCardPosition(true);
-            _m_cardsMoveStash[moveId].push(items);
-        }
-    }
-
+*/
     onSetEmotion: {
         var component = Qt.createComponent("RoomElement/PixmapAnimation.qml");
         if (component.status !== Component.Ready)

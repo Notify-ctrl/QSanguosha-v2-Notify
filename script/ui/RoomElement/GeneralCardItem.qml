@@ -1,4 +1,4 @@
-import QtQuick 2.4
+import QtQuick 2.15
 
 CardItem {
     property int gid: 0

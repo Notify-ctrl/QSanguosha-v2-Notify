@@ -1,4 +1,4 @@
-import QtQuick 2.4
+import QtQuick 2.15
 
 Item {
     property var discardedCards: []
@@ -52,7 +52,7 @@ Item {
             for (i = 0; i < outputs.length; i++) {
                 var exists = false;
                 for (j = 0; j < result.length; j++) {
-                   if (result[j].cid === outputs[i].cid) {
+                   if (result[j].cid === outputs[i]) {
                        exists = true;
                        break;
                    }
@@ -114,7 +114,8 @@ Item {
 
         if (animated) {
             for (i = 0; i < cards.length; i++)
-                cards[i].goBack(true);
+                // cards[i].goBack() // WTF
+                console.log(cards[i].homeOpacity)
         }
     }
 }

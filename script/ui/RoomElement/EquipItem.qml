@@ -1,4 +1,5 @@
-import QtQuick 2.4
+import QtQuick 2.15
+import "../Util/util.js" as Utility
 
 Item {
     property string name: ""
@@ -23,7 +24,7 @@ Item {
     }
 
     GlowText {
-        text: number ? (Engine.convertNumber(number)) : ""
+        text: number ? (Utility.convertNumber(number)) : ""
         font.pixelSize: 14
         x: parent.width - 28
         y: 2

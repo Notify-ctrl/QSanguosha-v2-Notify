@@ -1,4 +1,4 @@
-import QtQuick 2.4
+import QtQuick 2.15
 
 Item {
     property alias rows: grid.rows
@@ -31,8 +31,7 @@ Item {
     {
         area.add(inputs);
         if (inputs instanceof Array) {
-            for (var i = 0; i < inputs.length; i++)
-                cards.append(inputs[i]);
+            cards.append(...inputs);
         } else {
             cards.append(inputs);
         }

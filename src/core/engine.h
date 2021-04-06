@@ -88,7 +88,8 @@ public:
     int getCardCount() const;
     const Card *getEngineCard(int cardId) const;
     // @todo: consider making this const Card *
-    Q_INVOKABLE Card *getCard(int cardId);
+    Card *getCard(int cardId);
+    Q_INVOKABLE QString getCard4Qml(int cardId);
     WrappedCard *getWrappedCard(int cardId);
 
     QStringList getLords(bool contain_banned = false) const;

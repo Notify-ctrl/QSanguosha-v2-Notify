@@ -813,6 +813,25 @@ Card *Engine::getCard(int cardId)
     return card;
 }
 
+QString Engine::getCard4Qml(int cardId)
+{
+    Card *card = getCard(cardId);
+    QJsonDocument doc;
+    QJsonObject obj;
+    if (card == NULL) {
+        obj.insert("name", "card-back");
+        obj.insert("cid", -1);
+    } else {
+        obj.insert("name", card->objectName());
+        obj.insert("cid", card->getId());
+        obj.insert("suit", card->getSuitString());
+        obj.insert("number", card->getNumber());
+        obj.insert("subtype", card->getSubtype());
+    }
+    doc.setObject(obj);
+    return QString(doc.toJson());
+}
+
 const Card *Engine::getEngineCard(int cardId) const
 {
     if (cardId == Card::S_UNKNOWN_CARD_ID)

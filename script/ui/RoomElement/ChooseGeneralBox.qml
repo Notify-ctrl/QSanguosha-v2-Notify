@@ -1,4 +1,4 @@
-import QtQuick 2.4
+import QtQuick 2.15
 import "../Util"
 import "../Util/util.js" as Utility
 

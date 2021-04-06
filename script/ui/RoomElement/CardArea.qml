@@ -1,4 +1,4 @@
-import QtQuick 2.4
+import QtQuick 2.15
 
 // cards: CardItem[]
 // add(inputs: CardItem[] | CardItem)
@@ -12,8 +12,7 @@ Item {
     function add(inputs)
     {
         if (inputs instanceof Array) {
-            for (var i = 0; i < inputs.length; i++)
-                cards.push(inputs[i]);
+            cards.push(...inputs);
         } else {
             cards.push(inputs);
         }

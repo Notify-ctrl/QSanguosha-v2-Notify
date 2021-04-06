@@ -1,6 +1,6 @@
-import QtQuick 2.4
+import QtQuick 2.15
 import QtGraphicalEffects 1.0
-
+import "../Util/util.js" as Utility
 
 Rectangle {
     signal cardSelected(int cardId, bool selected)

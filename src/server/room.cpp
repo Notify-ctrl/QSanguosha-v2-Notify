@@ -5011,8 +5011,8 @@ ServerPlayer *Room::askForPlayerChosen(ServerPlayer *player, const QList<ServerP
 void Room::_setupChooseGeneralRequestArgs(ServerPlayer *player)
 {
     JsonArray options = JsonUtils::toJsonArray(player->getSelected()).value<JsonArray>();
-    if (getLord())
-        options.append(QString("%1").arg(getLord()->getGeneralName()));
+    //if (getLord())
+    //    options.append(QString("%1").arg(getLord()->getGeneralName()));
     player->m_commandArgs = options;
 }
 

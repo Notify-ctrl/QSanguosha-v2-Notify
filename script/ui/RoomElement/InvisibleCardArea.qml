@@ -1,4 +1,4 @@
-import QtQuick 2.4
+import QtQuick 2.15
 
 // cards: (CardItem.data)[]
 // add(inputs: CardItem[] | CardItem)
@@ -60,18 +60,7 @@ Item {
         var items = [];
         for (let i = 0; i < outputs.length; i++) {
             if (contains(outputs[i])) {
-                let card = Sanguosha.getCard(outputs[i])
-                let state = {}
-                if (card === null) {
-                    state.name = "card-back"
-                    state.cid = -1
-                } else {
-                    state.suit = card.suit
-                    state.number = card.number
-                    state.name = card.objectName
-                    state.cid = card.id
-                    state.subtype = card.subtype
-                }
+                let state = JSON.parse(Sanguosha.getCard4Qml(outputs[i]))
                 state.x = parentPos.x;
                 state.y = parentPos.y;
                 state.opacity = 0;
