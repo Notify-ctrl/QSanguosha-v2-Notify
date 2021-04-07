@@ -9,7 +9,7 @@ icu*.dll
 Qt5*.dll
 sanguosha.qm
 config.ini
-#swig/sanguosha_wrap.cxx
+swig/sanguosha_wrap.cxx
 records/*
 users.db
 doc/*.html
