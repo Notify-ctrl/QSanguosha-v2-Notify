@@ -28,6 +28,7 @@ RowLayout {
     property alias handcardArea: handcardAreaItem
     property alias equipArea: equipAreaItem
     property alias delayedTrickArea: delayedTrickAreaItem
+    property alias specialArea: specialArea
     property alias progressBar: progressBarItem
     property alias headSkills: headSkillPanel.skills
     property alias deputySkills: deputySkillPanel.skills
@@ -257,6 +258,38 @@ RowLayout {
                 anchors.fill: parent
                 source: "../../../image/general/faceturned"
                 visible: !faceup
+            }
+
+            SpecialArea {
+                id: specialArea
+            }
+
+            Connections {
+                target: Self
+                enabled: Self !== null
+                function onPile_changed(name) {
+                    let pile = Self.getPile(name)
+                    let model = specialArea.pileModel
+                    if (pile.length === 0) {
+                        for (let i = 0; i < model.length; i++) {
+                            if (model[i].str === name) {
+                                model.splice(i, 1)
+                                break
+                            }
+                        }
+                    } else {
+                        let createNew = true
+                        for (let j = 0; j < model.length; j++) {
+                            if (model[j].str === name) {
+                                model[j].cids = pile
+                                createNew = false
+                                break
+                            }
+                        }
+                        if (createNew) model.push({ str: name, cids: pile})
+                    }
+                    specialArea.pileModel = model
+                }
             }
         }
 

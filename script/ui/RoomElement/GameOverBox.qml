@@ -1,12 +1,12 @@
 import QtQuick 2.15
 import QtQuick.Controls 1.4
 import QtQuick.Controls.Styles 1.4
-
+import "../Util"
 
 GraphicsBox {
     title.text: qsTr("WINNERS")
     width: 600
-    height: 400
+    height: 420
 
     ListModel {
         id: winnerList
@@ -58,6 +58,27 @@ GraphicsBox {
             text: styleData.value
             font.pixelSize: 20
             color: Qt.rgba(255, 255, 255, 1)
+        }
+    }
+
+    Row {
+        anchors.right: parent.right
+        anchors.rightMargin: 4
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 4
+        MetroButton {
+            text: qsTr("Restart")
+            onClicked: {
+                dialogLoader.setSource("../Dialog/StartGameDialog.qml")
+                dialogLoader.item.connectToServer()
+            }
+        }
+        MetroButton {
+            text: qsTr("Main Menu")
+            onClicked: {
+                close()
+                dialogLoader.setSource("")
+            }
         }
     }
 

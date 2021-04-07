@@ -14,7 +14,7 @@ Item {
     property int homeY: 0
     property real homeOpacity: 1.0
     property int goBackDuration: 500
-    property bool selectable: false
+    property bool selectable: true
     property bool selected: false
     property bool draggable: false
     property bool autoBack: true

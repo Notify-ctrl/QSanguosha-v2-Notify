@@ -31,6 +31,13 @@ RoomScene::RoomScene(QQuickItem *parent) : QQuickItem(parent)
     connect(ClientInstance, &Client::hp_changed, this, &RoomScene::changeHp);
 
     connect(ClientInstance, &Client::event_received, this, &RoomScene::handleGameEvent);
+    connect(ClientInstance, &Client::status_changed, this, &RoomScene::updateStatus);
+
+    connect(ClientInstance, &Client::ag_filled, this, &RoomScene::fillCards);
+    connect(ClientInstance, &Client::ag_taken, this, &RoomScene::takeAmazingGrace);
+    connect(ClientInstance, &Client::ag_cleared, this, &RoomScene::clearPopupBox);
+
+    connect(ClientInstance, &Client::game_over, this, &RoomScene::showGameOverBox);
 }
 
 REGISTER_QMLTYPE("Sanguosha", 1, 0, RoomScene)

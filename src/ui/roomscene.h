@@ -32,6 +32,11 @@ signals:
     void doAnimation(int name, const QStringList &args);
     void changeHp(const QString &who, int delta, int nature, bool losthp);
     void handleGameEvent(QVariantList args);
+    void fillCards(const QList<int> &card_ids, const QList<int> &disabled_ids);
+    void takeAmazingGrace(ClientPlayer *taker, int card_id, bool move_cards);
+    void amazingGraceTaken(int cid);
+    void clearPopupBox();
+    void showGameOverBox();
 
     // void moveCards(const QVariant &moves);
     void enableCards(const QVariant &cardIds);
@@ -45,13 +50,13 @@ signals:
     void setRejectEnabled(bool enabled);
     void setFinishEnabled(bool enabled);
     void askToChooseCards(const QVariant &cards);
-    void clearPopupBox();
+
     void askToChoosePlayerCard(const QVariant &handcards, const QVariant &equips, const QVariant &delayedTricks);
     void showCard(int fromSeat, const QVariant &cards);
     void showOptions(const QStringList &options);
     void showArrangeCardBox(const QVariant &cards, const QVariant &capacities, const QVariant &names);
-    void showGameOverBox(const QVariant &winners);
     void addLog(const QString &richText);
+    void updateStatus(Client::Status oldStatus, Client::Status newStatus);
 
 };
 

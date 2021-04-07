@@ -36,7 +36,7 @@ Item {
         }
     }
 
-    function contains(cid)
+    function _contains(cid)
     {
         if (!checkExisting)
             return true;
@@ -59,7 +59,7 @@ Item {
         var card;
         var items = [];
         for (let i = 0; i < outputs.length; i++) {
-            if (contains(outputs[i])) {
+            if (_contains(outputs[i])) {
                 let state = JSON.parse(Sanguosha.getCard4Qml(outputs[i]))
                 state.x = parentPos.x;
                 state.y = parentPos.y;

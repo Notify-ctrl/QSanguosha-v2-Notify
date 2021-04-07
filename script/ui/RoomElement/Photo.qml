@@ -17,6 +17,7 @@ Item {
     property alias handcardArea: handcardAreaItem
     property alias equipArea: equipAreaItem
     property alias delayedTrickArea: delayedTrickAreaItem
+    property alias specialArea: specialArea
     property string phase: "inactive"
     property bool chained: false
     property bool dying: false
@@ -337,6 +338,10 @@ Item {
         anchors.centerIn: parent
     }
 
+    SpecialArea {
+        id: specialArea
+    }
+
     SequentialAnimation {
         id: trembleAnimation
         running: false
@@ -353,6 +358,34 @@ Item {
             to: root.x
             easing.type: Easing.OutQuad
             duration: 100
+        }
+    }
+
+    Connections {
+        target: clientPlayer
+        enabled: clientPlayer !== null
+        function onPile_changed(name) {
+            let pile = clientPlayer.getPile(name)
+            let model = specialArea.pileModel
+            if (pile.length === 0) {
+                for (let i = 0; i < model.length; i++) {
+                    if (model[i].str === name) {
+                        model.splice(i, 1)
+                        break
+                    }
+                }
+            } else {
+                let createNew = true
+                for (let j = 0; j < model.length; j++) {
+                    if (model[j].str === name) {
+                        model[j].cids = pile
+                        createNew = false
+                        break
+                    }
+                }
+                if (createNew) model.push({ str: name, cids: pile})
+            }
+            specialArea.pileModel = model
         }
     }
 

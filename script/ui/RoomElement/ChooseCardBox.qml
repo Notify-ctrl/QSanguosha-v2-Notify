@@ -1,8 +1,9 @@
-import QtQuick 2.15
+﻿import QtQuick 2.15
 
 
 GraphicsBox {
     property int spacing: 5
+    property string currentPlayerName: ""
 
     signal cardSelected(int cid)
 
@@ -30,6 +31,7 @@ GraphicsBox {
                 number: model.number
                 autoBack: false
                 selectable: model.selectable
+                footnote: model.footnote
                 onClicked: root.cardSelected(cid);
             }
         }
@@ -53,8 +55,10 @@ GraphicsBox {
             var removed = result[i];
             for (var j = 0; j < cards.count; j++) {
                 var card = cards.get(j);
-                if (removed.cid === card.cid)
+                if (removed.cid === card.cid) {
                     card.selectable = false;
+                    card.footnote = currentPlayerName
+                }
             }
         }
         return result;

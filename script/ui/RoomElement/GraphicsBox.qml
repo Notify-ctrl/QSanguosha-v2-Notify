@@ -33,16 +33,12 @@ Item {
     Text {
         id: titleItem
         color: "#E4D5A0"
-        width: parent.width
-        height: 32
+        text: "QSanguosha"
         font.pixelSize: 18
         horizontalAlignment: Text.AlignHCenter
-        x: 6
-        y: 6
-
-        transform: Scale {
-            xScale: Math.min(1.0, (root.width - 12)) / titleItem.width
-        }
+        anchors.top: parent.top
+        anchors.topMargin: 4
+        anchors.horizontalCenter: parent.horizontalCenter
     }
 
     MouseArea {
@@ -57,3 +53,9 @@ Item {
         finished();
     }
 }
+
+/*##^##
+Designer {
+    D{i:0;autoSize:true;height:480;width:640}
+}
+##^##*/

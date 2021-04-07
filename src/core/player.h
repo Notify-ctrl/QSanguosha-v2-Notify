@@ -93,7 +93,7 @@ public:
 
     void setGeneral(const General *general);
     void setGeneralName(const QString &general_name);
-    QString getGeneralName() const;
+    Q_INVOKABLE QString getGeneralName() const;
 
     void setGeneral2Name(const QString &general_name);
     QString getGeneral2Name() const;
@@ -201,7 +201,7 @@ public:
     bool canSlash(const Player *other, bool distance_limit = true, int rangefix = 0, const QList<const Player *> &others = QList<const Player *>()) const;
     int getCardCount(bool include_equip = true, bool include_judging = false) const;
 
-    QList<int> getPile(const QString &pile_name) const;
+    Q_INVOKABLE QList<int> getPile(const QString &pile_name) const;
     QStringList getPileNames() const;
     QString getPileName(int card_id) const;
     bool pileOpen(const QString &pile_name, const QString &player) const;

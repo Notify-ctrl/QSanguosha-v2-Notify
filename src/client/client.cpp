@@ -10,6 +10,8 @@
 #include "util.h"
 #include "wrapped-card.h"
 #include "src/main.h"
+// @TODO
+#include "server.h"
 
 using namespace std;
 using namespace QSanProtocol;
@@ -272,6 +274,9 @@ void Client::disconnectFromHost()
         socket->deleteLater();
         m_isDisconnected = true;
     }
+    // @TODO: Dirty code here. Remember to remove them.
+    Server *server = qApp->findChild<Server *>();
+    if (server) server->deleteLater();
 }
 
 void Client::processServerPacket(const QString &cmd)
@@ -2093,3 +2098,5 @@ void Client::updateSkill(const QVariant &skill_name)
 
     emit skill_updated(skill_name.toString());
 }
+
+REGISTER_UNCREATABLE_QMLTYPE("Sanguosha", 1, 0, Client)

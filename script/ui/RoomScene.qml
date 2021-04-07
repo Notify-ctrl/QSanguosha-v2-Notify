@@ -530,6 +530,91 @@ RoomScene {
         }
     }
 
+    onUpdateStatus: {
+        // @TODO: skill buttons
+
+        switch (newStatus & Client.ClientStatusBasicMask) {
+        case Client.NotActive:
+            break;
+        case Client.Responding:
+            break;
+        case Client.AskForShowOrPindian:
+            break;
+        case Client.Playing:
+            break;
+        case Client.Discarding:
+        case Client.Exchanging:
+            break;
+        case Client.ExecDialog:
+            setAcceptEnabled(false)
+            setRejectEnabled(false)
+            setFinishEnabled(false)
+            break;
+        case Client.AskForSkillInvoke:
+            break;
+        case Client.AskForPlayerChoose:
+            break;
+        case Client.AskForAG:
+            setAcceptEnabled(ClientInstance.m_isDiscardActionRefusable)
+            setRejectEnabled(false)
+            setFinishEnabled(false)
+
+            popupBox.item.cardSelected.connect(function(cid){
+                roomScene.onAmazingGraceTaken(cid);
+            });
+            break;
+        case Client.AskForYiji:
+            break;
+        case Client.AskForGuanxing:
+        case Client.AskForGongxin:
+            setAcceptEnabled(true)
+            setRejectEnabled(false)
+            setFinishEnabled(false)
+            break;
+        case Client.AskForGeneralTaken:
+        case Client.AskForArrangement:
+            setAcceptEnabled(false)
+            setRejectEnabled(false)
+            setFinishEnabled(false)
+            break;
+        }
+        // @TODO
+    }
+
+    onFillCards: {
+        popupBox.source = "RoomElement/ChooseCardBox.qml";
+        popupBox.item.addCards(drawPile.remove(card_ids));
+        popupBox.moveToCenter();
+    }
+
+    onTakeAmazingGrace: {
+        let card_ids = [card_id]
+
+        popupBox.item.currentPlayerName = Sanguosha.translate(taker.getGeneralName())
+        let items = popupBox.item.remove(card_ids)[0]
+
+        if (taker !== null && move_cards) {
+            let to = getAreaItem(Player.PlaceHand, taker.objectName)
+            let from = getAreaItem(Player.PlaceWuGu, "")
+            to.add(from.remove(card_ids))
+            to.updateCardPosition(true)
+        }
+    }
+
+    onClearPopupBox: popupBox.item.close();
+
+    onShowGameOverBox: {
+        popupBox.source = "RoomElement/GameOverBox.qml";
+        let winners = []
+        // @TODO
+        let players = Self.getSiblings().append(Self)
+        for (let i = 0; i < players.length; i++)
+            if (players[i].property("win"))
+                winners.append(players[i])
+        for (let j = 0; j < winners.length; j++)
+            popupBox.item.add(winners[j]);
+    }
+
 /*
     onEnableCards: {
         dashboard.equipArea.enableCards(cardIds);
@@ -576,15 +661,6 @@ RoomScene {
         promptBox.visible = false;
     }
 
-    onAskToChooseCards: {
-        popupBox.source = "RoomElement/ChooseCardBox.qml";
-        popupBox.item.addCards(cards);
-        popupBox.moveToCenter();
-        popupBox.item.cardSelected.connect(function(cid){
-            roomScene.onAmazingGraceTaken(cid);
-        });
-    }
-
     onAskToChoosePlayerCard: {
         popupBox.source = "RoomElement/PlayerCardBox.qml";
         popupBox.item.addHandcards(handcards);
@@ -606,8 +682,6 @@ RoomScene {
             //@to-do: skills like Gongxin show multiple cards
         }
     }
-
-    onClearPopupBox: popupBox.item.close();
 
     onShowOptions: {
         popupBox.source = "RoomElement/ChooseOptionBox.qml";
@@ -633,12 +707,6 @@ RoomScene {
             roomScene.onArrangeCardDone(cardIds);
         });
         dashboard.acceptButton.enabled = true;
-    }
-
-    onShowGameOverBox: {
-        popupBox.source = "RoomElement/GameOverBox.qml";
-        for (var i = 0; i < winners.length; i++)
-            popupBox.item.add(winners[i]);
     }
 */
     onPlayerNumChanged: arrangePhotos();
@@ -760,6 +828,8 @@ RoomScene {
             return photo.equipArea;
         else if (area === Player.PlaceDelayedTrick)
             return photo.delayedTrickArea;
+        else if (area === Player.PlaceSpecial)
+            return photo.specialArea;
 
         return null;
     }
