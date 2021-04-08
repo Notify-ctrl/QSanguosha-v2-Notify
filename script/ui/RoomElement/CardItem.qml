@@ -20,6 +20,7 @@ Item {
     property bool autoBack: true
     property alias glow: glowItem
     property alias footnote: footnoteItem.text
+    property bool footnoteVisible: true
     property alias card: cardItem
     property alias goBackAnim: goBackAnimation
     property bool isClicked: false
@@ -80,10 +81,11 @@ Item {
 
     GlowText {
         id: footnoteItem
-        x: 4
+        x: 6
         y: parent.height - height - 6
         width: root.width - x * 2
         color: "white"
+        visible: footnoteVisible
         wrapMode: Text.WrapAnywhere
         horizontalAlignment: Text.AlignHCenter
         font.pixelSize: 12

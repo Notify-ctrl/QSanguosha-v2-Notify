@@ -31,6 +31,7 @@ Item {
     {
         card.autoBack = true;
         card.draggable = true;
+        card.selectable = false;
         card.selectedChanged.connect(adjustCards);
     }
 

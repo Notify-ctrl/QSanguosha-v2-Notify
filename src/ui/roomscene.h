@@ -13,6 +13,8 @@ class RoomScene : public QQuickItem
 public:
     RoomScene(QQuickItem *parent = nullptr);
 
+    Q_INVOKABLE QString _translateMovement(const CardsMoveStruct &move);
+
 signals:
     void addChatter(const QString &chatter);
     void chat(const QString &chatter);

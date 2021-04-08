@@ -422,7 +422,125 @@ void Client::getCards(const QVariant &arg)
     }
     updatePileNum();
     emit move_cards_got(moveId, moves);
+    // @TODO
+    for (int i = 0; i < moves.length(); i++) {
+        QString log = getCardLog(moves[i]);
+        if (log != QString()) emit log_received(log);
+    }
 }
+
+// @TODO: remove it
+QString Client::getCardLog(CardsMoveStruct &move)
+{
+    if (move.card_ids.isEmpty()) return QString();
+    if (move.to
+        && (move.to_place == Player::PlaceHand
+        || move.to_place == Player::PlaceEquip
+        || move.to_place == Player::PlaceSpecial)
+        && move.from_place != Player::DrawPile) {
+        foreach(QString flag, move.to->getFlagList())
+            if (flag.endsWith("_InTempMoving"))
+                return QString();
+    }
+
+    // private pile
+    if (move.to_place == Player::PlaceSpecial && !move.to_pile_name.isNull() && !move.to_pile_name.startsWith('#')) {
+        bool hidden = (move.card_ids.contains(Card::S_UNKNOWN_CARD_ID));
+        if (hidden)
+            return appendLog("#RemoveFromGame", QString(), QStringList(), QString(), move.to_pile_name, QString::number(move.card_ids.length()));
+        else
+            return appendLog("$AddToPile", QString(), QStringList(), IntList2StringList(move.card_ids).join("+"), move.to_pile_name);
+    }
+    if (move.from_place == Player::PlaceSpecial && move.to
+        && move.reason.m_reason == CardMoveReason::S_REASON_EXCHANGE_FROM_PILE) {
+        bool hidden = (move.card_ids.contains(Card::S_UNKNOWN_CARD_ID));
+        if (!hidden)
+            return appendLog("$GotCardFromPile", move.to->objectName(), QStringList(), IntList2StringList(move.card_ids).join("+"), move.from_pile_name);
+        else
+            return appendLog("#GotNCardFromPile", move.to->objectName(), QStringList(), QString(), move.from_pile_name, QString::number(move.card_ids.length()));
+    }
+    //DrawNCards
+    if (move.from_place == Player::DrawPile && move.to_place == Player::PlaceHand) {
+        QString to_general = move.to->objectName();
+        bool hidden = (move.card_ids.contains(Card::S_UNKNOWN_CARD_ID));
+        if (!hidden)
+            return appendLog("$DrawCards", to_general, QStringList(), IntList2StringList(move.card_ids).join("+"),
+            QString::number(move.card_ids.length()));
+        else
+            return appendLog("#DrawNCards", to_general, QStringList(), QString(),
+            QString::number(move.card_ids.length()));
+
+    }
+    if ((move.from_place == Player::PlaceTable || move.from_place == Player::PlaceJudge)
+        && move.to_place == Player::PlaceHand
+        && move.reason.m_reason != CardMoveReason::S_REASON_PREVIEW) {
+        QString to_general = move.to->objectName();
+        QList<int> ids = move.card_ids;
+        ids.removeAll(Card::S_UNKNOWN_CARD_ID);
+        if (!ids.isEmpty()) {
+            QString card_str = IntList2StringList(ids).join("+");
+            return appendLog("$GotCardBack", to_general, QStringList(), card_str);
+        }
+    }
+    if (move.from_place == Player::DiscardPile && move.to_place == Player::PlaceHand) {
+        QString to_general = move.to->objectName();
+        QString card_str = IntList2StringList(move.card_ids).join("+");
+        return appendLog("$RecycleCard", to_general, QStringList(), card_str);
+    }
+    if (move.from && move.from_place != Player::PlaceHand && move.from_place != Player::PlaceJudge
+        && move.to_place != Player::PlaceDelayedTrick && move.to_place != Player::PlaceJudge
+        && move.to && move.from != move.to) {
+        QString from_general = move.from->objectName();
+        QStringList tos;
+        tos << move.to->objectName();
+        QList<int> ids = move.card_ids;
+        ids.removeAll(Card::S_UNKNOWN_CARD_ID);
+        int hide = move.card_ids.length() - ids.length();
+        if (!ids.isEmpty()) {
+            QString card_str = IntList2StringList(ids).join("+");
+            return appendLog("$MoveCard", from_general, tos, card_str);
+        }
+        if (hide > 0)
+            return appendLog("#MoveNCards", from_general, tos, QString(), QString::number(hide));
+    }
+    if (move.from_place == Player::PlaceHand && move.to_place == Player::PlaceHand) {
+        QString from_general = move.from->objectName();
+        QStringList tos;
+        tos << move.to->objectName();
+        bool hidden = (move.card_ids.contains(Card::S_UNKNOWN_CARD_ID));
+        if (hidden)
+            return appendLog("#MoveNCards", from_general, tos, QString(), QString::number(move.card_ids.length()));
+        else
+            return appendLog("$MoveCard", from_general, tos, IntList2StringList(move.card_ids).join("+"));
+    }
+    if (move.from && move.to) {
+        // both src and dest are player
+        QString type;
+        if (move.to_place == Player::PlaceDelayedTrick) {
+            if (move.from_place == Player::PlaceDelayedTrick && move.from != move.to)
+                type = "$LightningMove";
+            else
+                type = "$PasteCard";
+        }
+        if (!type.isNull()) {
+            QString from_general = move.from->objectName();
+            QStringList tos;
+            tos << move.to->objectName();
+            return appendLog(type, from_general, tos, QString::number(move.card_ids.first()));
+        }
+    }
+    if (move.from && move.to && move.from_place == Player::PlaceEquip && move.to_place == Player::PlaceEquip) {
+        QString type = "$Install";
+        QString to_general = move.to->objectName();
+        foreach(int card_id, move.card_ids)
+            return appendLog(type, to_general, QStringList(), QString::number(card_id));
+    }
+    if (move.reason.m_reason == CardMoveReason::S_REASON_TURNOVER)
+        return appendLog("$TurnOver", move.reason.m_playerId, QStringList(), IntList2StringList(move.card_ids).join("+"));
+
+    return QString();
+}
+
 
 void Client::loseCards(const QVariant &arg)
 {
@@ -625,6 +743,7 @@ void Client::hpChange(const QVariant &change_str)
     if (!JsonUtils::isString(change[0]) || !JsonUtils::isNumber(change[1]) || !JsonUtils::isNumber(change[2])) return;
 
     QString who = change[0].toString();
+    ClientPlayer *player = getPlayer(who);
     int delta = change[1].toInt();
 
     int nature_index = change[2].toInt();
@@ -632,6 +751,10 @@ void Client::hpChange(const QVariant &change_str)
     if (nature_index > 0) nature = nature_index;
 
     emit hp_changed(who, delta, nature, nature_index == -1);
+    if (delta > 0)
+        emit log_received(appendLog("#Recover", who, QStringList(), QString(), QString::number(delta)));
+    emit log_received(appendLog("#GetHp", who, QStringList(), QString(),
+                                QString::number(player->getHp() + delta), QString::number(player->getMaxHp())));
 }
 
 void Client::maxhpChange(const QVariant &change_str)
@@ -1471,6 +1594,7 @@ void Client::takeAG(const QVariant &take_var)
         if (move_cards)
             taker->addCard(card, Player::PlaceHand);
         emit ag_taken(taker, card_id, move_cards);
+        emit log_received(appendLog("$TakeAG", taker->objectName(), QStringList(), QString::number(card_id)));
     }
 }
 

@@ -109,6 +109,7 @@ public:
     void gameOver(const QVariant &);
     void loseCards(const QVariant &);
     void getCards(const QVariant &);
+    QString getCardLog(CardsMoveStruct &move);
     void updateProperty(const QVariant &);
     void killPlayer(const QVariant &player_arg);
     void revivePlayer(const QVariant &player_arg);
@@ -117,7 +118,7 @@ public:
     void showCard(const QVariant &show_str);
     void log(const QVariant &log_str);
     QString appendLog(const QString &type, const QString &from_general, const QStringList &tos,
-        QString card_str, QString arg, QString arg2);
+        const QString card_str = QString(), const QString arg = QString(), const QString arg2 = QString());
     void speak(const QVariant &speak_data);
     void addHistory(const QVariant &history);
     void moveFocus(const QVariant &focus);

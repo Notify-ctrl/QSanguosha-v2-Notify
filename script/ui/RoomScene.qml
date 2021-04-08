@@ -424,8 +424,13 @@ RoomScene {
             if (!from || !to || from === to)
                 continue;
             let items = _m_cardsMoveStash[moveId][i]
-            if (items.length > 0)
+            if (items.length > 0) {
+                for (let j = 0; j < items.length; j++) {
+                    items[j].footnote = _translateMovement(move)
+                    items[j].footnoteVisible = false
+                }
                 to.add(items);
+            }
             to.updateCardPosition(true);
         }
     }
@@ -590,7 +595,7 @@ RoomScene {
     onTakeAmazingGrace: {
         let card_ids = [card_id]
 
-        popupBox.item.currentPlayerName = Sanguosha.translate(taker.getGeneralName())
+        if (taker !== null) popupBox.item.currentPlayerName = Sanguosha.translate(taker.getGeneralName())
         let items = popupBox.item.remove(card_ids)[0]
 
         if (taker !== null && move_cards) {

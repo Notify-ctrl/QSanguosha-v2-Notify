@@ -33,7 +33,6 @@ Item {
     Text {
         id: titleItem
         color: "#E4D5A0"
-        text: "QSanguosha"
         font.pixelSize: 18
         horizontalAlignment: Text.AlignHCenter
         anchors.top: parent.top

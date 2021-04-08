@@ -3,6 +3,7 @@ import QtQuick 2.15
 Item {
     property var discardedCards: []
     property alias cards: area.cards
+    property bool toVanish: false
 
     id: root
 
@@ -16,32 +17,45 @@ Item {
 
     Timer {
         id: vanishTimer
-        interval: 5000
+        interval: 1500
         repeat: true
         running: true
         triggeredOnStart: true
         onTriggered: {
             var i, card;
-            for (i = 0; i < discardedCards.length; i++) {
-                card = discardedCards[i];
-                card.homeOpacity = 0;
-                // card.goBack(true);
-                roomScene.cardItemGoBack(card, true)
-                card.destroyOnStop()
+            if (toVanish) {
+                for (i = 0; i < discardedCards.length; i++) {
+                    card = discardedCards[i];
+                    card.homeOpacity = 0;
+                    // card.goBack(true);
+                    roomScene.cardItemGoBack(card, true)
+                    card.destroyOnStop()
+                }
+
+                cards.splice(0, discardedCards.length);
+                updateCardPosition(true);
+
+                discardedCards = new Array(cards.length);
+                for (i = 0; i < cards.length; i++)
+                    discardedCards[i] = cards[i];
+                toVanish = false
+            } else {
+                for (i = 0; i < discardedCards.length; i++) {
+                    discardedCards[i].selectable = false
+                }
+                toVanish = true
             }
-
-            cards.splice(0, discardedCards.length);
-            updateCardPosition(true);
-
-            discardedCards = new Array(cards.length);
-            for (i = 0; i < cards.length; i++)
-                discardedCards[i] = cards[i];
         }
     }
 
     function add(inputs)
     {
         area.add(inputs);
+        // if (!inputs instanceof Array)
+        for (let i = 0; i < inputs.length; i++) {
+            inputs[i].footnoteVisible = true
+            inputs[i].selectable = true
+        }
     }
 
     function remove(outputs)

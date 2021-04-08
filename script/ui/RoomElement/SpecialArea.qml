@@ -13,8 +13,8 @@ Item {
         id: piles
         model: pileModel
         Rectangle {
-            height: 18
-            width: 60
+            height: 20
+            width: 80
             color: "green"
             Text {
                 anchors.centerIn: parent
