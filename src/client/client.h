@@ -78,7 +78,7 @@ public:
         return player_count;
     }
     Q_INVOKABLE void speakToServer(const QString &text);
-    ClientPlayer *getPlayer(const QString &name);
+    Q_INVOKABLE ClientPlayer *getPlayer(const QString &name);
     bool save(const QString &filename) const;
     QList<QByteArray> getRecords() const;
     QString getReplayPath() const;

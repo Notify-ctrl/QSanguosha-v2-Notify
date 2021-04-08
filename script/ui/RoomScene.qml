@@ -512,17 +512,47 @@ RoomScene {
     onHandleGameEvent: {
         switch (args[0]) {
         case 0: // S_GAME_EVENT_PLAYER_DYING
-            getItemByPlayerName(args[1]).dying = true
+            getItemByPlayerName(args[1]).dying = true;
             break
         case 1: // S_GAME_EVENT_PLAYER_QUITDYING,
-            getItemByPlayerName(args[1]).dying = false
-            break
+            getItemByPlayerName(args[1]).dying = false;
+            break;
         case 2: // S_GAME_EVENT_PLAY_EFFECT,
+            break;
         case 3: // S_GAME_EVENT_JUDGE_RESULT,
+            break;
         case 4: // S_GAME_EVENT_DETACH_SKILL,
+            let player_name = args[1];
+            let skill_name = args[2];
+
+            let player = ClientInstance.getPlayer(player_name);
+            player.detachSkill(skill_name);
+            if (player === Self) detachSkill(skill_name);
+
+            getItemByPlayerName(player.objectName).clientPlayer = player
+
+            break;
         case 5: // S_GAME_EVENT_ACQUIRE_SKILL,
+            let player_name2 = args[1];
+            let skill_name2 = args[2];
+
+            let player2 = ClientInstance.getPlayer(player_name2);
+            player2.acquireSkill(skill_name2);
+            //if (player2 === Self) acquireSkill(skill_name2);
+
+            getItemByPlayerName(player2.objectName).clientPlayer = player2
+
+            break;
         case 6: // S_GAME_EVENT_ADD_SKILL,
+            let photo3 = getItemByPlayerName(args[1])
+            photo3.clientPlayer.addSkill(args[2])
+            photo3.clientPlayerChanged()
+            break;
         case 7: // S_GAME_EVENT_LOSE_SKILL,
+            let photo4 = getItemByPlayerName(args[1])
+            photo4.clientPlayer.loseSkill(args[2])
+            photo4.clientPlayerChanged()
+            break;
         case 8: // S_GAME_EVENT_PREPARE_SKILL,
         case 9: // S_GAME_EVENT_UPDATE_SKILL,
         case 10: // S_GAME_EVENT_HUASHEN,
@@ -533,6 +563,12 @@ RoomScene {
         case 15: // S_GAME_EVENT_PAUSE,
         case 16: // S_GAME_EVENT_REVEAL_PINDIAN
         }
+    }
+
+    function detachSkill(name) {
+        let index = dashboard.headSkills.indexOf(name)
+        if (index !== -1)
+            dashboard.headSkills.splice(index, 1)
     }
 
     onUpdateStatus: {

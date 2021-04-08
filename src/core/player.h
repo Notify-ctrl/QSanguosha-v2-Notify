@@ -138,11 +138,11 @@ public:
 
     bool isLord() const;
 
-    void acquireSkill(const QString &skill_name);
-    void detachSkill(const QString &skill_name);
+    Q_INVOKABLE void acquireSkill(const QString &skill_name);
+    Q_INVOKABLE void detachSkill(const QString &skill_name);
     void detachAllSkills();
-    virtual void addSkill(const QString &skill_name);
-    virtual void loseSkill(const QString &skill_name);
+    Q_INVOKABLE virtual void addSkill(const QString &skill_name);
+    Q_INVOKABLE virtual void loseSkill(const QString &skill_name);
     virtual void loseAttachLordSkill(const QString &skill_name);
     bool hasSkill(const QString &skill_name, bool include_lose = false) const;
     bool hasSkill(const Skill *skill, bool include_lose = false) const;
@@ -221,7 +221,7 @@ public:
     QSet<const Skill *> getVisibleSkills(bool include_equip = false) const;
     QList<const Skill *> getVisibleSkillList(bool include_equip = false) const;
     QStringList getAcquiredSkills() const;
-    QString getSkillDescription() const;
+    Q_INVOKABLE QString getSkillDescription() const;
 
     virtual bool isProhibited(const Player *to, const Card *card, const QList<const Player *> &others = QList<const Player *>()) const;
     bool canSlashWithoutCrossbow(const Card *slash = NULL) const;

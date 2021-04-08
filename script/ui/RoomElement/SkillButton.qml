@@ -1,11 +1,13 @@
 import QtQuick 2.15
-
+import Sanguosha 1.0
+import "../Util"
 
 Image {
     property string name
     property string type: "proactive"
     property int columns: 1
     property bool pressed: false
+    property ViewAsSkill vs_skill: null
 
     readonly property string status: pressed ? "down" : mouseArea.containsMouse ? "hover" : "normal"
 
@@ -20,7 +22,7 @@ Image {
     }
 
     GlowText {
-        text: qsTr(name)
+        text: Sanguosha.translate(name)
         color: "white"
         font.family: "楷体"
         font.pixelSize: 14
@@ -43,5 +45,9 @@ Image {
         anchors.fill: parent
         hoverEnabled: true
         onClicked: parent.pressed = !parent.pressed;
+    }
+
+    ToolTipArea {
+        text: Sanguosha.translate(":" + name)
     }
 }

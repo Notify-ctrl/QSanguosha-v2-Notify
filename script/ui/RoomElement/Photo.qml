@@ -2,6 +2,7 @@ import QtQuick 2.15
 import QtQuick.Layouts 1.1
 import QtGraphicalEffects 1.0
 import Sanguosha 1.0
+import "../Util"
 
 Item {
     property string headGeneral: ""
@@ -105,6 +106,11 @@ Item {
             fillMode: Image.PreserveAspectCrop
             source: deputyGeneral != "" ? "../../../image/general/full/" + deputyGeneral : ""
         }
+    }
+
+    ToolTipArea {
+        enabled: clientPlayer !== null
+        text: clientPlayer === null ? "" : clientPlayer.getSkillDescription()
     }
 
     Rectangle {

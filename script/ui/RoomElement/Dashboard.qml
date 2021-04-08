@@ -1,6 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Layouts 1.1
 import QtGraphicalEffects 1.0
+import Sanguosha 1.0
 import "../Util"
 
 RowLayout {
@@ -8,6 +9,7 @@ RowLayout {
     property alias headGeneralKingdom: headGeneralItem.kingdom
     property string deputyGeneral: ""
     property alias deputyGeneralKingdom: deputyGeneralItem.kingdom
+    property ClientPlayer clientPlayer: Self
     property int seat: 0
     property string userRole: "unknown"
     property string kingdom: "unknown"
@@ -245,6 +247,11 @@ RowLayout {
                 color: Qt.rgba(250, 0, 0, 0.45)
                 anchors.fill: parent
                 visible: root.drunk
+            }
+
+            ToolTipArea {
+                enabled: clientPlayer !== null
+                text: clientPlayer === null ? "" : clientPlayer.getSkillDescription()
             }
 
             SkillPanel {
