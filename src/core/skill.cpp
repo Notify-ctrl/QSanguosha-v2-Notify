@@ -640,6 +640,3 @@ void MarkAssignSkill::onGameStart(ServerPlayer *player) const
 {
     player->getRoom()->setPlayerMark(player, mark_name, player->getMark(mark_name) + n);
 }
-
-REGISTER_UNCREATABLE_QMLTYPE("Sanguosha", 1, 0, Skill)
-REGISTER_UNCREATABLE_QMLTYPE("Sanguosha", 1, 0, ViewAsSkill)

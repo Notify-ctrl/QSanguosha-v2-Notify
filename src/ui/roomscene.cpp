@@ -119,6 +119,3 @@ QString RoomScene::_translateMovement(const CardsMoveStruct &move)
     }
     return result;
 }
-
-
-REGISTER_QMLTYPE("Sanguosha", 1, 0, RoomScene)

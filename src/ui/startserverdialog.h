@@ -2,13 +2,13 @@
 #define STARTSERVERDIALOG_H
 
 #include <QQuickItem>
-#include "defines.h"
 
 class Server;
 
 class StartServerDialog : public QQuickItem
 {
     Q_OBJECT
+    QML_ELEMENT
 
 public:
     StartServerDialog(QQuickItem *parent = 0);

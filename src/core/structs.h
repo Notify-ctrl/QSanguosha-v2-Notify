@@ -7,7 +7,6 @@ class Card;
 class Slash;
 
 #include "serverplayer.h"
-#include "defines.h"
 
 struct DamageStruct
 {
@@ -228,6 +227,8 @@ struct CardsMoveOneTimeStruct
 struct CardsMoveStruct
 {
     Q_GADGET
+    QML_ELEMENT
+    QML_UNCREATABLE("Don't do like this.")
 
 public:
     inline CardsMoveStruct()
@@ -579,6 +580,4 @@ Q_DECLARE_METATYPE(const Card *)
 Q_DECLARE_METATYPE(ServerPlayer *)
 Q_DECLARE_METATYPE(JudgeStruct *)
 Q_DECLARE_METATYPE(PindianStruct *)
-REGISTER_UNCREATABLE_QMLTYPE("Sanguosha", 1, 0, CardsMoveStruct)
 #endif
-

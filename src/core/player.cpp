@@ -1339,5 +1339,3 @@ void Player::loseAttachLordSkill( const QString &skill_name )
         loseSkill(skill_name);
     }
 }
-
-REGISTER_UNCREATABLE_QMLTYPE("Sanguosha", 1, 0, Player)

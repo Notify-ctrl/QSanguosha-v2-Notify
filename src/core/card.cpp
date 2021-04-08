@@ -928,5 +928,3 @@ QString DummyCard::toString(bool) const
 {
     return "$" + subcardString();
 }
-
-REGISTER_UNCREATABLE_QMLTYPE("Sanguosha", 1, 0, Card)

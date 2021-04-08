@@ -2,7 +2,6 @@
 #define ROOMSCENE_H
 
 #include <QQuickItem>
-#include "defines.h"
 #include "clientplayer.h"
 #include "client.h"
 #include "structs.h"
@@ -10,6 +9,7 @@
 class RoomScene : public QQuickItem
 {
     Q_OBJECT
+    QML_ELEMENT
 public:
     RoomScene(QQuickItem *parent = nullptr);
 

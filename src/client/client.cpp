@@ -2222,5 +2222,3 @@ void Client::updateSkill(const QVariant &skill_name)
 
     emit skill_updated(skill_name.toString());
 }
-
-REGISTER_UNCREATABLE_QMLTYPE("Sanguosha", 1, 0, Client)

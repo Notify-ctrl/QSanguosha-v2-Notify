@@ -9,6 +9,8 @@ class QSize;
 class General : public QObject
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("Don't do like this.")
     Q_ENUMS(Gender)
     Q_PROPERTY(QString kingdom READ getKingdom CONSTANT)
     Q_PROPERTY(int maxhp READ getMaxHp CONSTANT)

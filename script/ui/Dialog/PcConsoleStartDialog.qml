@@ -1,6 +1,6 @@
 import QtQuick 2.15
 import "../Util"
-import Sanguosha.Dialogs 1.0
+import Sanguosha 1.0
 import QtQuick.Controls 2.14
 import QtQuick.Layouts 1.3
 

@@ -4,7 +4,6 @@
 #include "general.h"
 #include "card.h"
 //#include "wrapped-card.h"
-#include "defines.h"
 
 class EquipCard;
 class Weapon;
@@ -18,6 +17,8 @@ class WrappedCard;
 class Player : public QObject
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("Don't do like this.")
 
     Q_PROPERTY(QString screenname READ screenName WRITE setScreenName)
     Q_PROPERTY(int hp READ getHp WRITE setHp)

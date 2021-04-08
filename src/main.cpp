@@ -7,7 +7,6 @@
 #include "audio.h"
 #include "serverplayer.h"
 #include "engine.h"
-#include "defines.h"
 
 QQmlApplicationEngine *main_window;
 

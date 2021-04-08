@@ -11,6 +11,8 @@ class Room;
 class Skill : public QObject
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("Don't do like this.")
     Q_ENUMS(Frequency)
 
 public:
@@ -54,6 +56,8 @@ private:
 class ViewAsSkill : public Skill
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("Don't do like this.")
 
 public:
     ViewAsSkill(const QString &name);

@@ -208,5 +208,3 @@ void General::lastWord() const
     }
     Sanguosha->playAudioEffect(filename);
 }
-
-REGISTER_UNCREATABLE_QMLTYPE("Sanguosha", 1, 0, General)

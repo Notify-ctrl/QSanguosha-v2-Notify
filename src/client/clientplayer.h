@@ -3,7 +3,6 @@
 
 #include "player.h"
 //#include "clientstruct.h"
-#include "defines.h"
 
 class Client;
 class QTextDocument;
@@ -11,6 +10,8 @@ class QTextDocument;
 class ClientPlayer : public Player
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("Don't do like this.")
     Q_PROPERTY(int handcard READ getHandcardNum WRITE setHandcardNum)
     Q_PROPERTY(QString mark_doc READ getMarkDoc NOTIFY mark_doc_changed)
 

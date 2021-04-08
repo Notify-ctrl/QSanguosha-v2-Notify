@@ -3,13 +3,13 @@
 
 #include <QQuickItem>
 #include "server.h"
-#include "defines.h"
 #include "settings.h"
 #include "startgamedialog.h"
 
 class PcConsoleStartDialog : public StartGameDialog
 {
     Q_OBJECT
+    QML_ELEMENT
 public:
     PcConsoleStartDialog(QQuickItem *parent = 0);
 

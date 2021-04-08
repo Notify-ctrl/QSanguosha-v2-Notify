@@ -86,6 +86,3 @@ void StartServerDialog::printServerInfo()
     } else
         emit messageLogged(tr("This server is AI disabled"));
 }
-
-
-REGISTER_QMLTYPE("Sanguosha.Dialogs", 1, 0, StartServerDialog)

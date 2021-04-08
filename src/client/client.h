@@ -5,7 +5,6 @@
 #include "skill.h"
 #include "room-state.h"
 #include "protocol.h"
-#include "defines.h"
 
 class Recorder;
 class Replayer;
@@ -15,6 +14,8 @@ class ClientSocket;
 class Client : public QObject
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("Don't do like this.")
     Q_PROPERTY(Client::Status status READ getStatus WRITE setStatus)
 
     Q_ENUMS(Status)

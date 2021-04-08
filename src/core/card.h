@@ -16,6 +16,8 @@ struct CardUseStruct;
 class Card : public QObject
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("Don't do like this.")
     Q_PROPERTY(QString suit READ getSuitString CONSTANT)
     Q_PROPERTY(bool red READ isRed STORED false CONSTANT)
     Q_PROPERTY(bool black READ isBlack STORED false CONSTANT)

@@ -4,6 +4,8 @@
 TARGET = QSanguosha
 QT += network widgets
 QT += qml quick
+QML_IMPORT_NAME = Sanguosha
+QML_IMPORT_VERSION = 1.0
 TEMPLATE = app
 
 CONFIG(release,debug|release){
@@ -12,7 +14,7 @@ CONFIG += audio
 }
 
 CONFIG += lua
-
+CONFIG += qmltypes
 CONFIG -= flat
 
 CONFIG += precompile_header
@@ -96,7 +98,6 @@ HEADERS += \
     src/core/banpair.h \
     src/core/card.h \
     src/core/compiler-specific.h \
-    src/core/defines.h \
     src/core/engine.h \
     src/core/general.h \
     src/core/json.h \
@@ -190,6 +191,7 @@ win32{
 
 macx{
     ICON = resource/icon/sgs.icns
+    CONFIG += windeployqt
 }
 
 LIBS += -L.

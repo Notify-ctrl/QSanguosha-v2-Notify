@@ -1,7 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Layouts 1.2
 import QtQuick.Controls 2.12
-import Sanguosha.Dialogs 1.0
+import Sanguosha 1.0
 import "../Util"
 
 StartGameDialog {

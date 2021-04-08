@@ -49,5 +49,3 @@ void StartGameDialog::networkError(const QString &error_msg)
 {
     emit errorGet(error_msg);
 }
-
-REGISTER_QMLTYPE("Sanguosha.Dialogs", 1, 0, StartGameDialog)

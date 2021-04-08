@@ -8,7 +8,6 @@
 #include "json.h"
 #include "gamerule.h"
 #include "clientstruct.h"
-#include "defines.h"
 
 using namespace QSanProtocol;
 

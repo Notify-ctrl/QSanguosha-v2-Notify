@@ -18,5 +18,3 @@ void PcConsoleStartDialog::consoleStart()
     m_server->daemonize();
     connectToServer();
 }
-
-REGISTER_QMLTYPE("Sanguosha.Dialogs", 1, 0, PcConsoleStartDialog)
