@@ -413,5 +413,7 @@ private:
     int n;
 };
 
+Q_DECLARE_METATYPE(const Skill *)
+
 #endif
 

@@ -80,6 +80,7 @@ SOURCES += \
     src/package/yjcm2013.cpp \
     src/package/yjcm2014.cpp \
     src/ui/pcconsolestartdialog.cpp \
+    src/ui/qmlrouter.cpp \
     src/ui/roomscene.cpp \
     src/ui/startgamedialog.cpp \
     src/ui/startserverdialog.cpp \
@@ -132,6 +133,7 @@ HEADERS += \
     src/server/server.h \
     src/server/serverplayer.h \
     src/ui/pcconsolestartdialog.h \
+    src/ui/qmlrouter.h \
     src/ui/roomscene.h \
     src/ui/startgamedialog.h \
     src/ui/startserverdialog.h \

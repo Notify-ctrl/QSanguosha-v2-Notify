@@ -7,7 +7,7 @@ import "RoomElement"
 import "Util/util.js" as Utility
 
 RoomScene {
-    property var dashboardModel: null
+    property var dashboardModel: []
     property var photoModel: []
     property int playerNum: 0
     property int currentPlayerNum: 1
@@ -547,6 +547,11 @@ RoomScene {
             let photo3 = getItemByPlayerName(args[1])
             photo3.clientPlayer.addSkill(args[2])
             photo3.clientPlayerChanged()
+            if (photo3.clientPlayer === Self) {
+                //dashboard.headSkills.push(args[2])
+                dashboard.headSkills = Self.getSkillNameList() //dashboard.headSkills
+            }
+
             break;
         case 7: // S_GAME_EVENT_LOSE_SKILL,
             let photo4 = getItemByPlayerName(args[1])

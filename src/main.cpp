@@ -7,6 +7,7 @@
 #include "audio.h"
 #include "serverplayer.h"
 #include "engine.h"
+#include "qmlrouter.h"
 
 QQmlApplicationEngine *main_window;
 
@@ -73,9 +74,12 @@ int main(int argc, char *argv[])
     Audio::init();
 #endif
 
+    Router = new QmlRouter;
+
     main_window = new QQmlApplicationEngine;
 
     Sanguosha->setParent(main_window);
+    main_window->rootContext()->setContextProperty("Router", Router);
     main_window->rootContext()->setContextProperty("Sanguosha", Sanguosha);
     main_window->load(QUrl(QStringLiteral("script/main.qml")));
     if (main_window->rootObjects().isEmpty())
