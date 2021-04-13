@@ -58,7 +58,7 @@ signals:
     void showOptions(const QStringList &options);
     void showArrangeCardBox(const QVariant &cards, const QVariant &capacities, const QVariant &names);
     void addLog(const QString &richText);
-    void updateStatus(Client::Status oldStatus, Client::Status newStatus);
+    void updateStatus(int oldStatus, int newStatus);
 
 };
 

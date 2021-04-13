@@ -260,8 +260,13 @@ Item {
         id: disableMask
         anchors.fill: parent
         color: "black"
-        opacity: 0.3
-        visible: root.state == "candidate" && !root.selectable
+        opacity: root.state === "candidate" && !root.selectable ? 0.3 : 0
+        Behavior on opacity {
+            NumberAnimation {
+                duration: 200
+                easing.type: Easing.InOutQuad
+            }
+        }
     }
 
     DelayedTrickArea {

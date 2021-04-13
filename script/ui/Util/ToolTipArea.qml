@@ -5,6 +5,7 @@ MouseArea {
     acceptedButtons: Qt.NoButton
     anchors.fill: parent
     hoverEnabled: true
+    preventStealing: true
 
     property string text: ""
     property alias hideDelay: hideTimer.interval
@@ -41,11 +42,8 @@ MouseArea {
         hideTimer.start()
     }
 
-    onMouseXChanged: {
+    onPositionChanged: {
         tip.x = mapToItem(rootWindowItem, mouseX, mouseY).x + rootWindow.x + 20
-    }
-
-    onMouseYChanged: {
         tip.y = mapToItem(rootWindowItem, mouseX, mouseY).y + rootWindow.y - 20
     }
 }

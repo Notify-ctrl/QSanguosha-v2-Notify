@@ -32,7 +32,7 @@ Item {
         card.autoBack = true;
         card.draggable = true;
         card.selectable = false;
-        card.selectedChanged.connect(adjustCards);
+        card.clicked.connect(adjustCards);
     }
 
     function remove(outputs)
@@ -98,6 +98,7 @@ Item {
     function selectCard(card)
     {
         selectedCards.push(card);
+        //card.selected = true;
         cardSelected(card.cid, true);
     }
 
@@ -106,9 +107,28 @@ Item {
         for (var i = 0; i < selectedCards.length; i++) {
             if (selectedCards[i] === card) {
                 selectedCards.splice(i, 1);
+                //card.selected = false;
                 cardSelected(card.cid, false);
                 break;
             }
         }
+    }
+
+    function unselectAll(exceptId) {
+        let card = undefined;
+        for (var i = 0; i < selectedCards.length; i++) {
+            if (selectedCards[i].cid !== exceptId) {
+                selectedCards[i].selected = false;
+            } else {
+                card = selectedCards[i];
+                card.selected = true;
+            }
+        }
+        if (card === undefined) {
+            selectedCards = [];
+        } else {
+            selectedCards = [card];
+        }
+        updateCardPosition(true);
     }
 }

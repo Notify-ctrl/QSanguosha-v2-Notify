@@ -23,6 +23,11 @@ RowLayout {
     property bool faceup: true
     property bool selectable: false
     property bool selected: false
+    property string view_as_skill: "" // for pending card
+    property bool is_pending: false
+    property var pending_card: ({})
+    property var pendings: [] // int[]
+    property int selected_card: -1
 
     property alias acceptButton: acceptButtonItem
     property alias rejectButton: rejectButtonItem
@@ -38,11 +43,32 @@ RowLayout {
     signal accepted()
     signal rejected()
     signal finished()
+    signal card_selected(int card)
 
     id: root
     spacing: 0
     Layout.fillHeight: false
     Layout.preferredHeight: 150
+
+    states: [
+        State {
+            name: "normal"
+            PropertyChanges {
+                target: outerGlow
+                visible: false
+            }
+        },
+        State {
+            name: "candidate"
+            PropertyChanges {
+                target: outerGlow
+                color: "#EEB300"
+                visible: root.selectable && root.selected
+            }
+        }
+    ]
+    state: "normal"
+
 
     EquipArea {
         id: equipAreaItem
@@ -254,6 +280,15 @@ RowLayout {
                 text: clientPlayer === null ? "" : clientPlayer.getSkillDescription()
             }
 
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    if (root.state != "candidate" || !root.selectable)
+                        return;
+                    root.selected = !root.selected;
+                }
+            }
+
             SkillPanel {
                 id: headSkillPanel
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -265,6 +300,29 @@ RowLayout {
                 anchors.fill: parent
                 source: "../../../image/general/faceturned"
                 visible: !faceup
+            }
+
+            RectangularGlow {
+                id: outerGlow
+                anchors.fill: parent
+                visible: true
+                glowRadius: 8
+                spread: 0.4
+                cornerRadius: 8
+                z: -1
+            }
+
+            Rectangle {
+                id: disableMask
+                anchors.fill: parent
+                color: "black"
+                opacity: root.state === "candidate" && !root.selectable ? 0.3 : 0
+                Behavior on opacity {
+                    NumberAnimation {
+                        duration: 200
+                        easing.type: Easing.InOutQuad
+                    }
+                }
             }
 
             SpecialArea {
@@ -334,6 +392,43 @@ RowLayout {
             visible: root.chained
             anchors.horizontalCenter: headGeneralItem.horizontalCenter
             anchors.verticalCenter: headGeneralItem.verticalCenter
+        }
+    }
+
+    function disableAllCards() {
+        handcardAreaItem.enableCards([])
+    }
+
+    function enableCards() {
+        // @TODO: expand pile
+        let ids = [], cards = handcardAreaItem.cards;
+        for (let i = 0; i < cards.length; i++) {
+            if (Router.card_isAvailable(cards[i].cid, Self.objectName))
+                ids.push(cards[i].cid);
+        }
+        handcardAreaItem.enableCards(ids)
+    }
+
+    function cardSelected(cardId, selected) {
+        if (view_as_skill !== "") {
+            console.log(view_as_skill)
+            if (selected) {
+                pendings.push(cardId);
+            } else {
+                pendings.splice(pendings.indexOf(cardId), 1);
+            }
+
+            updatePending();
+        } else {
+            if (selected) {
+                handcardAreaItem.unselectAll(cardId);
+                selected_card = cardId;
+                card_selected(cardId);
+            } else {
+                handcardAreaItem.unselectAll();
+                selected_card = -1;
+                card_selected(-1);
+            }
         }
     }
 }

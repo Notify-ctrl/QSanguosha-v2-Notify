@@ -90,6 +90,9 @@ public:
 
     QTextDocument *getLinesDoc() const;
     QTextDocument *getPromptDoc() const;
+    Q_INVOKABLE void clearPromptDoc() {
+        prompt_doc->clear();
+    }
 
     typedef void (Client::*Callback) (const QVariant &);
 
@@ -292,7 +295,7 @@ signals:
     void seats_arranged(const QList<const ClientPlayer *> &seats);
     void hp_changed(const QString &who, int delta, int nature, bool losthp);
     void maxhp_changed(const QString &who, int delta);
-    void status_changed(Client::Status oldStatus, Client::Status newStatus);
+    void status_changed(int oldStatus, int newStatus);
     void avatars_hiden();
     void pile_reset();
     void player_killed(const QString &who);

@@ -135,13 +135,13 @@ Item {
             selected = selectable ? !selected : false;
             parent.clicked();
         }
-    }
 
-    ToolTipArea {
-        id: tipArea
-        enabled: name !== "card-back"
-        text: Sanguosha.translate(name) + "[<img src='../../../image/system/log/"
-              + suit + ".png' height = 14/> " + Utility.convertNumber(number) + "] " + Sanguosha.translate(":" + name)
+        ToolTipArea {
+            id: tipArea
+            enabled: name !== "card-back"
+            text: Sanguosha.translate(name) + "[<img src='../../../image/system/log/"
+                  + suit + ".png' height = 14/> " + Utility.convertNumber(number) + "] " + Sanguosha.translate(":" + name)
+        }
     }
 
     ParallelAnimation {

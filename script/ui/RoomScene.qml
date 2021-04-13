@@ -22,12 +22,16 @@ RoomScene {
         doAppearingAnimation,
     ]
     property var anim_names: ["", "indicate", "lightbox", "nullification", "huashen", "fire", "lighting"]
+    property var selected_targets: []
 
     id: roomScene
     anchors.fill: parent
 
     // signal chat
     signal return_to_start
+    signal setAcceptEnabled(bool enabled)
+    signal setRejectEnabled(bool enabled)
+    signal setFinishEnabled(bool enabled)
 
     FontLoader {
         source: "../../font/simli.ttf"
@@ -87,7 +91,9 @@ RoomScene {
                             userRole: modelData.role
                             kingdom : modelData.kingdom
 
-                            onSelectedChanged: roomScene.onPhotoSelected(seat, selected);
+                            onSelectedChanged: {
+                                roomScene.updateSelectedTargets(clientPlayer.objectName, selected, selected_targets);
+                            }
                         }
                     }
 
@@ -156,17 +162,17 @@ RoomScene {
 
             onAccepted: {
                 closeDialog();
-                roomScene.onAccepted();
+                roomScene.doOkButton();
             }
 
             onRejected: {
                 closeDialog();
-                roomScene.onRejected();
+                roomScene.doCancelButton();
             }
 
             onFinished: {
                 closeDialog();
-                roomScene.onFinished();
+                roomScene.doFinishButton();
             }
 
             Connections {
@@ -189,15 +195,15 @@ RoomScene {
                     dashboard.userRole = Qt.binding(function(){return model.role;});
                 }
 
-                function onSetAcceptEnabled() {
+                function onSetAcceptEnabled(enabled) {
                     dashboard.acceptButton.enabled = enabled;
                 }
 
-                function onSetRejectEnabled() {
+                function onSetRejectEnabled(enabled) {
                     dashboard.rejectButton.enabled = enabled;
                 }
 
-                function onSetFinishEnabled() {
+                function onSetFinishEnabled(enabled) {
                     dashboard.finishButton.enabled = enabled;
                 }
             }
@@ -205,15 +211,23 @@ RoomScene {
             Connections {
                 target: dashboard.handcardArea
                 function onCardSelected(cardId, selected) {
-                    roomScene.onCardSelected(cardId, selected);
+                    dashboard.cardSelected(cardId, selected);
                 }
             }
 
             Connections {
                 target: dashboard.equipArea
                 function onCardSelected(cardId, selected) {
-                    roomScene.onCardSelected(cardId, selected);
+                    dashboard.cardSelected(cardId, selected);
                 }
+            }
+
+            onSelectedChanged: {
+                roomScene.updateSelectedTargets(clientPlayer.objectName, selected, selected_targets);
+            }
+
+            onCard_selected: {
+                roomScene.enableTargets(card)
             }
         }
     }
@@ -548,8 +562,9 @@ RoomScene {
             photo3.clientPlayer.addSkill(args[2])
             photo3.clientPlayerChanged()
             if (photo3.clientPlayer === Self) {
-                //dashboard.headSkills.push(args[2])
-                dashboard.headSkills = Self.getSkillNameList() //dashboard.headSkills
+                dashboard.headSkills.push(args[2])
+                dashboard.headSkills = dashboard.headSkills
+                // dashboard.headSkills = Self.getSkillNameList() //dashboard.headSkills
             }
 
             break;
@@ -581,12 +596,29 @@ RoomScene {
 
         switch (newStatus & Client.ClientStatusBasicMask) {
         case Client.NotActive:
+            // @TODO: dialog & guanxing
+            promptBox.visible = false;
+            ClientInstance.clearPromptDoc();
+
+            dashboard.disableAllCards();
+            selected_targets = [];
+
+            setAcceptEnabled(false);
+            setRejectEnabled(false);
+            setFinishEnabled(true);
+
+            // @TODO: dashboard pending & progress bar
+
             break;
         case Client.Responding:
             break;
         case Client.AskForShowOrPindian:
             break;
         case Client.Playing:
+            dashboard.enableCards();
+            setAcceptEnabled(false);
+            setRejectEnabled(false);
+            setFinishEnabled(true);
             break;
         case Client.Discarding:
         case Client.Exchanging:
@@ -617,14 +649,77 @@ RoomScene {
             setRejectEnabled(false)
             setFinishEnabled(false)
             break;
-        case Client.AskForGeneralTaken:
-        case Client.AskForArrangement:
-            setAcceptEnabled(false)
-            setRejectEnabled(false)
-            setFinishEnabled(false)
-            break;
         }
         // @TODO
+    }
+
+    function doOkButton() {
+        switch (ClientInstance.status & Client.ClientStatusBasicMask) {
+        case Client.Playing:
+            if (dashboard.selected_card !== -1) {
+                Router.roomscene_use_card(dashboard.selected_card, selected_targets);
+                enableTargets(-1);
+            }
+            break;
+        }
+    }
+    function doCancelButton() {}
+    function doFinishButton() {}
+
+    function enableTargets(card) { // card: int | { skill: string, subcards: int[] }
+        let enabled = true;
+        let candidate = false;
+        let all_photos = [dashboard];
+        for (let i = 0; i < playerNum - 1; i++) {
+            all_photos.push(photos.itemAt(i))
+        }
+        selected_targets = [];
+        for (let foo = 0; foo < playerNum; foo++) {
+            all_photos[foo].selected = false;
+        }
+
+        if (!isNaN(card) && card !== -1) {
+            candidate = true;
+        } else if (card.skill !== undefined && card.subcards instanceof Array) {
+            card = JSON.stringify(card);
+            // @TODO
+            candidate = true;
+        }
+
+        if (candidate) {
+            let data = JSON.parse(Router.roomscene_enable_targets(card, selected_targets));
+            setAcceptEnabled(data.ok_enabled);
+            let enables = data.enabled_targets;
+            for (let i2 = 0; i2 < playerNum; i2++) {
+                all_photos[i2].state = "candidate";
+                all_photos[i2].selectable = enables.contains(all_photos[i2].clientPlayer.objectName);
+            }
+        } else {
+            for (let i3 = 0; i3 < playerNum; i3++) {
+                all_photos[i3].state = "normal";
+                all_photos[i3].selected = false;
+            }
+
+            setAcceptEnabled(false);
+        }
+    }
+
+    function updateSelectedTargets(player_name, selected, targets) {
+        let card = dashboard.selected_card;
+        let all_photos = [dashboard]
+        for (let i = 0; i < playerNum - 1; i++) {
+            all_photos.push(photos.itemAt(i))
+        }
+
+        let data = JSON.parse(Router.roomscene_update_selected_targets(card, player_name, selected, targets));
+        setAcceptEnabled(data.ok_enabled);
+        selected_targets = data.selected_targets;
+        let enables = data.enabled_targets;
+        for (let i2 = 0; i2 < playerNum; i2++) {
+            if (selected_targets.contains(all_photos[i2].clientPlayer.objectName)) continue;
+            all_photos[i2].selectable = enables.contains(all_photos[i2].clientPlayer.objectName);
+        }
+        setAcceptEnabled(data.ok_enabled);
     }
 
     onFillCards: {

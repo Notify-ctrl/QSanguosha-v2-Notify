@@ -23,6 +23,7 @@ struct lua_State;
 class Engine : public QObject
 {
     Q_OBJECT
+    QML_SINGLETON
 
 public:
 	Engine(bool isManualMode = false);
