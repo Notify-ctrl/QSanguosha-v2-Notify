@@ -431,4 +431,15 @@ RowLayout {
             }
         }
     }
+
+    function getSelectedCard() {
+        if (view_as_skill !== "") {
+            return {
+                name: view_as_skill,
+                subcards: pendings
+            };
+        } else {
+            return selected_card;
+        }
+    }
 }

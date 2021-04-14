@@ -7,7 +7,6 @@ Image {
     property string type: "proactive"
     property int columns: 1
     property bool pressed: false
-    property ViewAsSkill vs_skill: null
 
     readonly property string status: pressed ? "down" : mouseArea.containsMouse ? "hover" : "normal"
 

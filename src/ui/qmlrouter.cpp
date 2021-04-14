@@ -14,6 +14,68 @@ bool QmlRouter::card_isAvailable(int card, QString player_name)
     return Sanguosha->getCard(card)->isAvailable(ClientInstance->getPlayer(player_name));
 }
 
+QString QmlRouter::get_skill_details(QString skill_name)
+{
+    static QMap<Skill::Frequency, QString> frequencyMap;
+    frequencyMap[Skill::Frequent] = "frequent";
+    frequencyMap[Skill::NotFrequent] = "frequent";
+    frequencyMap[Skill::Compulsory] = "compulsory";
+    frequencyMap[Skill::NotCompulsory] = "compulsory";
+    frequencyMap[Skill::Limited] = "oneoff";
+    frequencyMap[Skill::Wake] = "awaken";
+
+    const Skill *skill = Sanguosha->getSkill(skill_name);
+    if (!skill || !skill->isVisible()) return QString();
+
+    QJsonObject obj;
+    QJsonDocument doc;
+    obj.insert("name", skill->objectName());
+
+    if (Sanguosha->getViewAsSkill(skill_name)) {
+        obj.insert("enabled", false);
+        obj.insert("type", "proactive");
+        obj.insert("pressed", false);
+    } else {
+        obj.insert("enabled", skill->getFrequency() != Skill::Wake);
+        obj.insert("type", frequencyMap.value(skill->getFrequency()));
+        obj.insert("pressed", skill->getFrequency() == Skill::Frequent);
+    }
+
+    doc.setObject(obj);
+    return doc.toJson();
+}
+
+QStringList QmlRouter::roomscene_get_enable_skills(QStringList skill_names, int newStatus)
+{
+    QStringList ret;
+    foreach (QString str, skill_names) {
+        const Skill *skill = Sanguosha->getSkill(str);
+        if (skill->inherits("ViewAsSkill")) {
+            QString pattern = Sanguosha->currentRoomState()->getCurrentCardUsePattern();
+            QRegExp rx("@@?([_A-Za-z]+)(\\d+)?!?");
+            CardUseStruct::CardUseReason reason = CardUseStruct::CARD_USE_REASON_UNKNOWN;
+            if ((newStatus & Client::ClientStatusBasicMask) == Client::Responding) {
+                if (newStatus == Client::RespondingUse)
+                    reason = CardUseStruct::CARD_USE_REASON_RESPONSE_USE;
+                else if (newStatus == Client::Responding || rx.exactMatch(pattern))
+                    reason = CardUseStruct::CARD_USE_REASON_RESPONSE;
+            } else if (newStatus == Client::Playing)
+                reason = CardUseStruct::CARD_USE_REASON_PLAY;
+            if (qobject_cast<const ViewAsSkill *>(skill)->isAvailable(Self, reason, pattern) && !pattern.endsWith("!"))
+                ret << str;
+        } else {
+            if (skill->getFrequency(Self) == Skill::Wake) {
+                if (Self->getMark(skill->objectName()) > 0)
+                    ret << str;
+            }
+            else
+                ret << str;
+        }
+    }
+
+    return ret;
+}
+
 bool QmlRouter::roomscene_card_idenabled(int id, int index) // index 表示第几段代码 = =b
 {
     bool enabled = true;

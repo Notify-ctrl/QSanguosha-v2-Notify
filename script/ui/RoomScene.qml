@@ -562,9 +562,11 @@ RoomScene {
             photo3.clientPlayer.addSkill(args[2])
             photo3.clientPlayerChanged()
             if (photo3.clientPlayer === Self) {
-                dashboard.headSkills.push(args[2])
-                dashboard.headSkills = dashboard.headSkills
-                // dashboard.headSkills = Self.getSkillNameList() //dashboard.headSkills
+                let json_data = Router.get_skill_details(args[2])
+                if (json_data !== "") {
+                    dashboard.headSkills.push(JSON.parse(json_data));
+                    dashboard.headSkills = dashboard.headSkills;
+                }
             }
 
             break;
@@ -592,7 +594,16 @@ RoomScene {
     }
 
     onUpdateStatus: {
-        // @TODO: skill buttons
+        let i = 0;
+        let skill_names = [];
+        for (i = 0; i < dashboard.headSkills.length; i++)
+            skill_names.push(dashboard.headSkills[i].name);
+        let enabled_skill_buttons = Router.roomscene_get_enable_skills(skill_names, newStatus);
+        for (i = 0; i < dashboard.headSkills.length; i++) {
+            dashboard.headSkills[i].enabled =
+                    enabled_skill_buttons.contains(dashboard.headSkills[i].name);
+        }
+        dashboard.headSkills = dashboard.headSkills;
 
         switch (newStatus & Client.ClientStatusBasicMask) {
         case Client.NotActive:
@@ -667,15 +678,16 @@ RoomScene {
     function doFinishButton() {}
 
     function enableTargets(card) { // card: int | { skill: string, subcards: int[] }
+        let i = 0;
         let enabled = true;
         let candidate = false;
         let all_photos = [dashboard];
-        for (let i = 0; i < playerNum - 1; i++) {
+        for (i = 0; i < playerNum - 1; i++) {
             all_photos.push(photos.itemAt(i))
         }
         selected_targets = [];
-        for (let foo = 0; foo < playerNum; foo++) {
-            all_photos[foo].selected = false;
+        for (i = 0; i < playerNum; i++) {
+            all_photos[i].selected = false;
         }
 
         if (!isNaN(card) && card !== -1) {
@@ -690,14 +702,14 @@ RoomScene {
             let data = JSON.parse(Router.roomscene_enable_targets(card, selected_targets));
             setAcceptEnabled(data.ok_enabled);
             let enables = data.enabled_targets;
-            for (let i2 = 0; i2 < playerNum; i2++) {
-                all_photos[i2].state = "candidate";
-                all_photos[i2].selectable = enables.contains(all_photos[i2].clientPlayer.objectName);
+            for (i = 0; i < playerNum; i++) {
+                all_photos[i].state = "candidate";
+                all_photos[i].selectable = enables.contains(all_photos[i].clientPlayer.objectName);
             }
         } else {
-            for (let i3 = 0; i3 < playerNum; i3++) {
-                all_photos[i3].state = "normal";
-                all_photos[i3].selected = false;
+            for (i = 0; i < playerNum; i++) {
+                all_photos[i].state = "normal";
+                all_photos[i].selected = false;
             }
 
             setAcceptEnabled(false);
@@ -705,9 +717,11 @@ RoomScene {
     }
 
     function updateSelectedTargets(player_name, selected, targets) {
-        let card = dashboard.selected_card;
+        let i = 0;
+        let card = dashboard.getSelectedCard();
+        if (isNaN(card)) card = JSON.stringify(card);
         let all_photos = [dashboard]
-        for (let i = 0; i < playerNum - 1; i++) {
+        for (i = 0; i < playerNum - 1; i++) {
             all_photos.push(photos.itemAt(i))
         }
 
@@ -715,9 +729,9 @@ RoomScene {
         setAcceptEnabled(data.ok_enabled);
         selected_targets = data.selected_targets;
         let enables = data.enabled_targets;
-        for (let i2 = 0; i2 < playerNum; i2++) {
-            if (selected_targets.contains(all_photos[i2].clientPlayer.objectName)) continue;
-            all_photos[i2].selectable = enables.contains(all_photos[i2].clientPlayer.objectName);
+        for (i = 0; i < playerNum; i++) {
+            if (selected_targets.contains(all_photos[i].clientPlayer.objectName)) continue;
+            all_photos[i].selectable = enables.contains(all_photos[i].clientPlayer.objectName);
         }
         setAcceptEnabled(data.ok_enabled);
     }

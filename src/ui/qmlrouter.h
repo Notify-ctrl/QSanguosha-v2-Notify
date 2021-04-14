@@ -19,7 +19,9 @@ public:
     explicit QmlRouter(QObject *parent = nullptr);
 
     Q_INVOKABLE bool card_isAvailable(int card, QString player_name);
+    Q_INVOKABLE QString get_skill_details(QString skill_name);
 
+    Q_INVOKABLE QStringList roomscene_get_enable_skills(QStringList skill_names, int newStatus);
     Q_INVOKABLE bool roomscene_card_idenabled(int id, int index);
     Q_INVOKABLE QString roomscene_enable_targets(int id, QStringList selected_targets);
     Q_INVOKABLE QStringList roomscene_update_targets_enablity(int id, QStringList selected_targets);

@@ -15,9 +15,10 @@ Item {
             x: (index % 2 == 1) ? width + 1 : 0
             y: Math.floor(index / 2) * (height + 1)
 
-            name: modelData//.name
-            //type: modelData.type
-            //enabled: modelData.enabled
+            name: modelData.name
+            type: modelData.type
+            enabled: modelData.enabled
+            pressed: modelData.pressed
 
             onPressedChanged: {
                 if (enabled)
