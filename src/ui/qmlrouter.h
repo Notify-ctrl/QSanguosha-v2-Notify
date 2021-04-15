@@ -22,7 +22,7 @@ public:
     Q_INVOKABLE QString get_skill_details(QString skill_name);
     Q_INVOKABLE bool vs_view_filter(QString skill_name, QList<int> ids, int id);
     Q_INVOKABLE bool vs_can_view_as(QString skill_name, QList<int> ids);
-
+    Q_INVOKABLE void update_discard_skill();
     Q_INVOKABLE QStringList roomscene_get_enable_skills(QStringList skill_names, int newStatus);
     Q_INVOKABLE QString roomscene_enable_targets(int id, QStringList selected_targets);
     Q_INVOKABLE QString roomscene_enable_targets(QString json_data, QStringList selected_targets);
@@ -30,6 +30,10 @@ public:
     Q_INVOKABLE QString roomscene_update_selected_targets(int id, QString player_name, bool selected, QStringList targets);
     Q_INVOKABLE void roomscene_use_card(int id, QStringList selected_targets);
     Q_INVOKABLE void roomscene_use_card(QString json_data, QStringList selected_targets);
+    Q_INVOKABLE void roomscene_finish();
+    Q_INVOKABLE void roomscene_discard(QString json_data) {
+        ClientInstance->onPlayerDiscardCards(qml_getCard(json_data));
+    }
 
 private:
     const Card *qml_getCard(QString);
@@ -37,6 +41,7 @@ private:
     QStringList updateTargetsEnablity(const Card *, QStringList);
     QString updateSelectedTargets(const Card *, QString, bool, QStringList);
     void useCard(const Card *, QStringList);
+    const ViewAsSkill *qml_getViewAsSkill(QString);
 };
 
 extern QmlRouter *Router;

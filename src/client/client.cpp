@@ -28,6 +28,23 @@ Client::Client(QObject *parent, const QString &filename)
     m_isGameOver = false;
     m_isDisconnected = true;
 
+    aux_skill_map = new QMap<QString, void *>;
+    response_skill = new ResponseSkill;
+    response_skill->setParent(this);
+    aux_skill_map->insert("response-skill", (void *)response_skill);
+    showorpindian_skill = new ShowOrPindianSkill;
+    showorpindian_skill->setParent(this);
+    aux_skill_map->insert("showorpindian-skill", (void *)showorpindian_skill);
+    discard_skill = new DiscardSkill;
+    discard_skill->setParent(this);
+    aux_skill_map->insert("discard", (void *)discard_skill);
+    yiji_skill = new NosYijiViewAsSkill;
+    yiji_skill->setParent(this);
+    aux_skill_map->insert("askforyiji", (void *)yiji_skill);
+    choose_skill = new ChoosePlayerSkill;
+    choose_skill->setParent(this);
+    aux_skill_map->insert("choose_player", (void *)choose_skill);
+
     m_callbacks[S_COMMAND_CHECK_VERSION] = &Client::checkVersion;
     m_callbacks[S_COMMAND_SETUP] = &Client::setup;
     m_callbacks[S_COMMAND_NETWORK_DELAY_TEST] = &Client::networkDelayTest;

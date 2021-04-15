@@ -5,6 +5,7 @@
 #include "clientplayer.h"
 #include "client.h"
 #include "structs.h"
+#include "aux-skills.h"
 
 class RoomScene : public QQuickItem
 {

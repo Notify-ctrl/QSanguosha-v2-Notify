@@ -31,7 +31,7 @@ QString QmlRouter::get_skill_details(QString skill_name)
     QJsonDocument doc;
     obj.insert("name", skill->objectName());
 
-    if (Sanguosha->getViewAsSkill(skill_name)) {
+    if (qml_getViewAsSkill(skill_name)) {
         obj.insert("enabled", false);
         obj.insert("type", "proactive");
         obj.insert("pressed", false);
@@ -47,7 +47,7 @@ QString QmlRouter::get_skill_details(QString skill_name)
 
 bool QmlRouter::vs_view_filter(QString skill_name, QList<int> ids, int id)
 {
-    const ViewAsSkill *skill = Sanguosha->getViewAsSkill(skill_name);
+    const ViewAsSkill *skill = qml_getViewAsSkill(skill_name);
     QList<const Card *> selected;
     foreach (int cid, ids)
         selected << Sanguosha->getCard(cid);
@@ -56,7 +56,7 @@ bool QmlRouter::vs_view_filter(QString skill_name, QList<int> ids, int id)
 
 bool QmlRouter::vs_can_view_as(QString skill_name, QList<int> ids)
 {
-    const ViewAsSkill *skill = Sanguosha->getViewAsSkill(skill_name);
+    const ViewAsSkill *skill = qml_getViewAsSkill(skill_name);
     if (!skill) return false;
     QList<const Card *> selected;
     foreach (int cid, ids)
@@ -68,6 +68,16 @@ bool QmlRouter::vs_can_view_as(QString skill_name, QList<int> ids)
         return true;
     }
     return false;
+}
+
+void QmlRouter::update_discard_skill()
+{
+    DiscardSkill *discard_skill = ClientInstance->discard_skill;
+    discard_skill->setNum(ClientInstance->discard_num);
+    discard_skill->setMinNum(ClientInstance->min_num);
+    discard_skill->setIncludeEquip(ClientInstance->m_canDiscardEquip);
+    discard_skill->setIsDiscard(ClientInstance->getStatus() != Client::Exchanging);
+    discard_skill->setPattern(ClientInstance->m_cardDiscardPattern);
 }
 
 QStringList QmlRouter::roomscene_get_enable_skills(QStringList skill_names, int newStatus)
@@ -134,6 +144,12 @@ void QmlRouter::roomscene_use_card(QString json_data, QStringList selected_targe
     useCard(qml_getCard(json_data), selected_targets);
 }
 
+void QmlRouter::roomscene_finish()
+{
+    if (ClientInstance->getStatus() == Client::Playing)
+        ClientInstance->onPlayerResponseCard(NULL);
+}
+
 const Card *QmlRouter::qml_getCard(QString json_data)
 {
     QJsonObject json_obj = QJsonDocument::fromJson(json_data.toLatin1()).object();
@@ -142,7 +158,8 @@ const Card *QmlRouter::qml_getCard(QString json_data)
     foreach (QVariant d, json_obj.value("subcards").toArray().toVariantList()) {
         subcards << Sanguosha->getCard(d.toInt());
     }
-    const ViewAsSkill *skill = Sanguosha->getViewAsSkill(skill_name);
+
+    const ViewAsSkill *skill = qml_getViewAsSkill(skill_name);
     if (!skill) return NULL;
     return skill->viewAs(subcards);
 }
@@ -272,5 +289,13 @@ void QmlRouter::useCard(const Card *card, QStringList targets)
     }
     if (card->targetFixed() || card->targetsFeasible(selected_targets, Self))
         ClientInstance->onPlayerResponseCard(card, selected_targets);
+}
+
+const ViewAsSkill *QmlRouter::qml_getViewAsSkill(QString skill_name)
+{
+    QMap<QString, void *> *map = ClientInstance->aux_skill_map;
+    const ViewAsSkill *skill = Sanguosha->getViewAsSkill(skill_name);
+    if (map->value(skill_name, NULL) != NULL) skill = (const ViewAsSkill *)(map->value(skill_name));
+    return skill;
 }
 

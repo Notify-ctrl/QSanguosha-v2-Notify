@@ -20,7 +20,6 @@ public:
     const Card *viewAs(const QList<const Card *> &cards) const;
 
 private:
-    DummyCard *card;
     int num;
     int minnum;
     bool include_equip;

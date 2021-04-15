@@ -5,10 +5,9 @@
 #include "util.h"
 
 DiscardSkill::DiscardSkill()
-    : ViewAsSkill("discard"), card(new DummyCard),
+    : ViewAsSkill("discard"),
     num(0), include_equip(false), is_discard(true)
 {
-    card->setParent(this);
 }
 
 void DiscardSkill::setNum(int num)
@@ -56,8 +55,9 @@ bool DiscardSkill::viewFilter(const QList<const Card *> &selected, const Card *c
 const Card *DiscardSkill::viewAs(const QList<const Card *> &cards) const
 {
     if (cards.length() >= minnum) {
-        card->clearSubcards();
+        DummyCard *card = new DummyCard();
         card->addSubcards(cards);
+        card->deleteLater();
         return card;
     } else
         return NULL;
