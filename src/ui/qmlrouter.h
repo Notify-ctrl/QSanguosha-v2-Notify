@@ -20,16 +20,19 @@ public:
 
     Q_INVOKABLE bool card_isAvailable(int card, QString player_name);
     Q_INVOKABLE QString get_skill_details(QString skill_name);
+    Q_INVOKABLE bool vs_view_filter(QString skill_name, QList<int> ids, int id);
+    Q_INVOKABLE bool vs_can_view_as(QString skill_name, QList<int> ids);
 
     Q_INVOKABLE QStringList roomscene_get_enable_skills(QStringList skill_names, int newStatus);
-    Q_INVOKABLE bool roomscene_card_idenabled(int id, int index);
     Q_INVOKABLE QString roomscene_enable_targets(int id, QStringList selected_targets);
+    Q_INVOKABLE QString roomscene_enable_targets(QString json_data, QStringList selected_targets);
     Q_INVOKABLE QStringList roomscene_update_targets_enablity(int id, QStringList selected_targets);
     Q_INVOKABLE QString roomscene_update_selected_targets(int id, QString player_name, bool selected, QStringList targets);
     Q_INVOKABLE void roomscene_use_card(int id, QStringList selected_targets);
+    Q_INVOKABLE void roomscene_use_card(QString json_data, QStringList selected_targets);
 
 private:
-    const Card *qml_getCard(QVariant data);
+    const Card *qml_getCard(QString);
     QString enable_targets(const Card *, QStringList);
     QStringList updateTargetsEnablity(const Card *, QStringList);
     QString updateSelectedTargets(const Card *, QString, bool, QStringList);

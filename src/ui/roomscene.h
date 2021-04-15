@@ -46,8 +46,6 @@ signals:
     void enablePhotos(const QVariant &seats);
     // void startEmotion(const QString &emotion, int seat);
     void playAudio(const QString &path);
-    void showPrompt(const QString &prompt);
-    void hidePrompt();
     void setAcceptEnabled(bool enabled);
     void setRejectEnabled(bool enabled);
     void setFinishEnabled(bool enabled);

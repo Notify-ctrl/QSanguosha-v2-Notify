@@ -667,14 +667,29 @@ RoomScene {
     function doOkButton() {
         switch (ClientInstance.status & Client.ClientStatusBasicMask) {
         case Client.Playing:
-            if (dashboard.selected_card !== -1) {
-                Router.roomscene_use_card(dashboard.selected_card, selected_targets);
+            if (dashboard.getSelectedCard() !== -1) {
+                Router.roomscene_use_card(dashboard.getSelectedCard(), selected_targets);
                 enableTargets(-1);
             }
             break;
         }
+
+        dashboard.stopPending();
+        // @TODO: extract pile
     }
-    function doCancelButton() {}
+
+    function doCancelButton() {
+        switch (ClientInstance.status & Client.ClientStatusBasicMask) {
+        case Client.Playing:
+            // @TODO: skill btn
+            dashboard.unSelectAll();
+            dashboard.stopPending();
+            dashboard.enableCards();
+            updateStatus(ClientInstance.status, ClientInstance.status);
+            break;
+        }
+    }
+
     function doFinishButton() {}
 
     function enableTargets(card) { // card: int | { skill: string, subcards: int[] }
@@ -692,8 +707,8 @@ RoomScene {
 
         if (!isNaN(card) && card !== -1) {
             candidate = true;
-        } else if (card.skill !== undefined && card.subcards instanceof Array) {
-            card = JSON.stringify(card);
+        } else if (typeof(card) === "string") {
+            console.log(card)
             // @TODO
             candidate = true;
         }
@@ -702,15 +717,15 @@ RoomScene {
             let data = JSON.parse(Router.roomscene_enable_targets(card, selected_targets));
             setAcceptEnabled(data.ok_enabled);
             let enables = data.enabled_targets;
-            for (i = 0; i < playerNum; i++) {
-                all_photos[i].state = "candidate";
-                all_photos[i].selectable = enables.contains(all_photos[i].clientPlayer.objectName);
-            }
+            all_photos.forEach(function(photo) {
+                photo.state = "candidate";
+                photo.selectable = enables.contains(photo.clientPlayer.objectName);
+            });
         } else {
-            for (i = 0; i < playerNum; i++) {
-                all_photos[i].state = "normal";
-                all_photos[i].selected = false;
-            }
+            all_photos.forEach(function(photo) {
+                photo.state = "normal";
+                photo.selected = false;
+            });
 
             setAcceptEnabled(false);
         }
@@ -719,7 +734,6 @@ RoomScene {
     function updateSelectedTargets(player_name, selected, targets) {
         let i = 0;
         let card = dashboard.getSelectedCard();
-        if (isNaN(card)) card = JSON.stringify(card);
         let all_photos = [dashboard]
         for (i = 0; i < playerNum - 1; i++) {
             all_photos.push(photos.itemAt(i))
@@ -729,11 +743,21 @@ RoomScene {
         setAcceptEnabled(data.ok_enabled);
         selected_targets = data.selected_targets;
         let enables = data.enabled_targets;
-        for (i = 0; i < playerNum; i++) {
-            if (selected_targets.contains(all_photos[i].clientPlayer.objectName)) continue;
-            all_photos[i].selectable = enables.contains(all_photos[i].clientPlayer.objectName);
-        }
+        all_photos.forEach(function(photo) {
+            if (!selected_targets.contains(photo.clientPlayer.objectName))
+                photo.selectable = enables.contains(photo.clientPlayer.objectName);
+        })
         setAcceptEnabled(data.ok_enabled);
+    }
+
+    function activateSkill(skill_name, pressed) {
+        if (pressed) {
+            dashboard.startPending(skill_name);
+            setRejectEnabled(true);
+            // @TODO: nothing
+        } else {
+            doCancelButton();
+        }
     }
 
     onFillCards: {
@@ -768,6 +792,15 @@ RoomScene {
                 winners.append(players[i])
         for (let j = 0; j < winners.length; j++)
             popupBox.item.add(winners[j]);
+    }
+
+    function showPrompt(prompt) {
+        promptBox.text = prompt;
+        promptBox.visible = true;
+    }
+
+    function hidePrompt() {
+        promptBox.visible = false;
     }
 
 /*
@@ -805,15 +838,6 @@ RoomScene {
     onPlayAudio: {
         soundEffect.fileName = "audio/" + path;
         soundEffect.play();
-    }
-
-    onShowPrompt: {
-        promptBox.text = prompt;
-        promptBox.visible = true;
-    }
-
-    onHidePrompt: {
-        promptBox.visible = false;
     }
 
     onAskToChoosePlayerCard: {

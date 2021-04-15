@@ -25,7 +25,7 @@ RowLayout {
     property bool selected: false
     property string view_as_skill: "" // for pending card
     property bool is_pending: false
-    property var pending_card: ({})
+    property var pending_card
     property var pendings: [] // int[]
     property int selected_card: -1
 
@@ -43,7 +43,7 @@ RowLayout {
     signal accepted()
     signal rejected()
     signal finished()
-    signal card_selected(int card)
+    signal card_selected(var card)
 
     id: root
     spacing: 0
@@ -399,6 +399,10 @@ RowLayout {
         handcardAreaItem.enableCards([])
     }
 
+    function unSelectAll(expectId) {
+        handcardAreaItem.unselectAll(expectId);
+    }
+
     function enableCards() {
         // @TODO: expand pile
         let ids = [], cards = handcardAreaItem.cards;
@@ -411,7 +415,6 @@ RowLayout {
 
     function cardSelected(cardId, selected) {
         if (view_as_skill !== "") {
-            console.log(view_as_skill)
             if (selected) {
                 pendings.push(cardId);
             } else {
@@ -434,12 +437,61 @@ RowLayout {
 
     function getSelectedCard() {
         if (view_as_skill !== "") {
-            return {
-                name: view_as_skill,
+            return JSON.stringify({
+                skill: view_as_skill,
                 subcards: pendings
-            };
+            });
         } else {
             return selected_card;
         }
+    }
+
+    function updatePending() {
+        if (view_as_skill === "") return;
+
+        let enabled_cards = [];
+
+        handcardAreaItem.cards.forEach(function(card) {
+            if (card.selected || Router.vs_view_filter(view_as_skill, pendings, card.cid))
+                enabled_cards.push(card.cid);
+        });
+        handcardAreaItem.enableCards(enabled_cards);
+
+        // @TODO: equipment
+
+        if (Router.vs_can_view_as(view_as_skill, pendings)) {
+            pending_card = {
+                skill: view_as_skill,
+                subcards: pendings
+            };
+            card_selected(JSON.stringify(pending_card));
+        } else {
+            pending_card = -1;
+            card_selected(pending_card);
+        }
+    }
+
+    function startPending(skill_name) {
+        view_as_skill = skill_name;
+        pendings = [];
+        handcardAreaItem.unselectAll();
+
+        // @TODO: expand pile
+
+        // @TODO: equipment
+
+        updatePending();
+    }
+
+    function stopPending() {
+        view_as_skill = "";
+        pendings = [];
+        pending_card = -1;
+
+        // @TODO: expand pile
+
+        // @TODO: equipment
+        handcardAreaItem.adjustCards();
+        card_selected(-1);
     }
 }

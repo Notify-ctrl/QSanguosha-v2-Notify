@@ -45,6 +45,31 @@ QString QmlRouter::get_skill_details(QString skill_name)
     return doc.toJson();
 }
 
+bool QmlRouter::vs_view_filter(QString skill_name, QList<int> ids, int id)
+{
+    const ViewAsSkill *skill = Sanguosha->getViewAsSkill(skill_name);
+    QList<const Card *> selected;
+    foreach (int cid, ids)
+        selected << Sanguosha->getCard(cid);
+    return (skill && skill->viewFilter(selected, Sanguosha->getCard(id)));
+}
+
+bool QmlRouter::vs_can_view_as(QString skill_name, QList<int> ids)
+{
+    const ViewAsSkill *skill = Sanguosha->getViewAsSkill(skill_name);
+    if (!skill) return false;
+    QList<const Card *> selected;
+    foreach (int cid, ids)
+        selected << Sanguosha->getCard(cid);
+
+    const Card *vs_card = skill->viewAs(selected);
+    if (vs_card != NULL) {
+        delete vs_card;
+        return true;
+    }
+    return false;
+}
+
 QStringList QmlRouter::roomscene_get_enable_skills(QStringList skill_names, int newStatus)
 {
     QStringList ret;
@@ -76,41 +101,17 @@ QStringList QmlRouter::roomscene_get_enable_skills(QStringList skill_names, int 
     return ret;
 }
 
-bool QmlRouter::roomscene_card_idenabled(int id, int index) // index 表示第几段代码 = =b
-{
-    bool enabled = true;
-    const Card *card = Sanguosha->getCard(id);
-    Client::Status status = ClientInstance->getStatus();
-    switch (index) {
-    case 0:
-        if (card != NULL) {
-            if (status == Client::Playing && !card->isAvailable(Self))
-                enabled = false;
-            if (status == Client::Responding || status == Client::RespondingUse) {
-                Card::HandlingMethod method = card->getHandlingMethod();
-                if (status == Client::Responding && method == Card::MethodUse)
-                    method = Card::MethodResponse;
-                if (Self->isCardLimited(card, method))
-                    enabled = false;
-            }
-            if (status == Client::RespondingUse && ClientInstance->m_respondingUseFixedTarget
-                && Sanguosha->isProhibited(Self, ClientInstance->m_respondingUseFixedTarget, card))
-                enabled = false;
-            if (status == Client::RespondingForDiscard && Self->isCardLimited(card, Card::MethodDiscard))
-                enabled = false;
-        }
-        return enabled;
-    case 1:
-        return (card->targetFixed()
-                || ((status & Client::ClientStatusBasicMask) == Client::Responding
-                && (status == Client::Responding || (card->getTypeId() != Card::TypeSkill && status != Client::RespondingUse)))
-                || ClientInstance->getStatus() == Client::AskForShowOrPindian);
-    }
-}
-
 QString QmlRouter::roomscene_enable_targets(int id, QStringList selected_targets)
 {
     return enable_targets(Sanguosha->getCard(id), selected_targets);
+}
+
+QString QmlRouter::roomscene_enable_targets(QString json_data, QStringList selected_targets)
+{
+    const Card *card = qml_getCard(json_data);
+    QString ret = enable_targets(card, selected_targets);
+    delete card;
+    return ret;
 }
 
 QStringList QmlRouter::roomscene_update_targets_enablity(int id, QStringList selected_targets)
@@ -128,19 +129,22 @@ void QmlRouter::roomscene_use_card(int id, QStringList selected_targets)
     useCard(Sanguosha->getCard(id), selected_targets);
 }
 
-const Card *QmlRouter::qml_getCard(QVariant data)
+void QmlRouter::roomscene_use_card(QString json_data, QStringList selected_targets)
 {
-    if (JsonUtils::isNumber(data)) {
-        return Sanguosha->getCard(data.toInt());
-    } else {
-        QJsonObject json_obj = QJsonDocument::fromJson(data.toByteArray()).object();
-        QString skill_name = json_obj.value("skill").toString();
-        QList<const Card *> subcards;
-        foreach (QVariant d, json_obj.value("subcards").toArray().toVariantList()) {
-            subcards << Sanguosha->getCard(d.toInt());
-        }
-        return Sanguosha->getViewAsSkill(skill_name)->viewAs(subcards);
+    useCard(qml_getCard(json_data), selected_targets);
+}
+
+const Card *QmlRouter::qml_getCard(QString json_data)
+{
+    QJsonObject json_obj = QJsonDocument::fromJson(json_data.toLatin1()).object();
+    QString skill_name = json_obj.value("skill").toString();
+    QList<const Card *> subcards;
+    foreach (QVariant d, json_obj.value("subcards").toArray().toVariantList()) {
+        subcards << Sanguosha->getCard(d.toInt());
     }
+    const ViewAsSkill *skill = Sanguosha->getViewAsSkill(skill_name);
+    if (!skill) return NULL;
+    return skill->viewAs(subcards);
 }
 
 QString QmlRouter::enable_targets(const Card *card, QStringList selected)
@@ -170,6 +174,13 @@ QString QmlRouter::enable_targets(const Card *card, QStringList selected)
             enabled = false;
     }
     if (!enabled) {
+        obj.insert("ok_enabled", false);
+        obj.insert("enabled_targets", QJsonArray::fromStringList(QStringList()));
+        doc.setObject(obj);
+        return doc.toJson();
+    }
+
+    if (card == NULL) {
         obj.insert("ok_enabled", false);
         obj.insert("enabled_targets", QJsonArray::fromStringList(QStringList()));
         doc.setObject(obj);

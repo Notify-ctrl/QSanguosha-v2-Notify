@@ -20,6 +20,10 @@ Array.prototype.contains = function(element) {
     return false;
 }
 
+Array.prototype.prepend = function() {
+    this.splice(0, 0, ...arguments);
+}
+
 var kingdomColor = {
     wei : "#547998",
     shu : "#D0796C",

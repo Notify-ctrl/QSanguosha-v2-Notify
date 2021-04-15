@@ -74,7 +74,6 @@ Item {
 
         if (animated) {
             for (i = 0; i < cards.length; i++)
-                // cards[i].goBack(true);
                 roomScene.cardItemGoBack(cards[i], true)
         }
     }
@@ -98,7 +97,6 @@ Item {
     function selectCard(card)
     {
         selectedCards.push(card);
-        //card.selected = true;
         cardSelected(card.cid, true);
     }
 
@@ -107,7 +105,6 @@ Item {
         for (var i = 0; i < selectedCards.length; i++) {
             if (selectedCards[i] === card) {
                 selectedCards.splice(i, 1);
-                //card.selected = false;
                 cardSelected(card.cid, false);
                 break;
             }

@@ -21,8 +21,8 @@ Item {
             pressed: modelData.pressed
 
             onPressedChanged: {
-                if (enabled)
-                    ; //roomScene.onSkillActivated(modelData.sid, pressed);
+                if (enabled && type === "proactive")
+                    roomScene.activateSkill(modelData.name, pressed);
             }
         }
     }
