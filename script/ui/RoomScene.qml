@@ -630,14 +630,6 @@ RoomScene {
 
             let skill_name = Router.update_response_skill();
             if (skill_name !== "") {
-                if (skill_name.split("+")[1] === "immediate") {
-                    for (i = 0; i < dashboard.headSkillButtons.length; i++) {
-                        if (dashboard.headSkillButtons.itemAt(i).name === skill_name.split("+")[0]) {
-                            dashboard.headSkillButtons.itemAt(i).pressed = true;
-                            break;
-                        }
-                    }
-                }
                 dashboard.startPending(skill_name);
             }
             break;
@@ -710,7 +702,7 @@ RoomScene {
                     selected_targets = [];
                 }
                 Router.on_player_response_card(dashboard.getSelectedCard(), selected_targets);
-                prompt_box.disappear();
+                hidePrompt();
             }
 
             dashboard.unSelectAll();
@@ -718,7 +710,7 @@ RoomScene {
         case Client.AskForShowOrPindian:
             if (dashboard.getSelectedCard() !== -1) {
                 Router.on_player_response_card(dashboard.getSelectedCard());
-                prompt_box.disappear();
+                hidePrompt();
             }
             dashboard.unSelectAll();
             break;
@@ -748,14 +740,14 @@ RoomScene {
             break;
         case Client.AskForPlayerChoose:
             ClientInstance.onPlayerChoosePlayer(selected_targets[0]);
-            prompt_box.disappear();
+            hidePrompt();
             break;
         case Client.AskForYiji:/*
             const Card *card = dashboard.pendingCard();
             if (card) {
                 ClientInstance.onPlayerReplyYiji(card, selected_targets.first());
                 dashboard.stopPending();
-                prompt_box.disappear();
+                hidePrompt();
             }*/
             break;
         case Client.AskForGuanxing:
@@ -820,13 +812,13 @@ RoomScene {
         case Client.AskForYiji: {
             dashboard->stopPending();
             ClientInstance->onPlayerReplyYiji(NULL, NULL);
-            prompt_box->disappear();
+            hidePrompt();
             break;
         }*/
         case Client.AskForPlayerChoose:
             dashboard.stopPending();
             ClientInstance.onPlayerChoosePlayer("mbks");
-            prompt_box.disappear();
+            hidePrompt();
             break;
         default:
             break;

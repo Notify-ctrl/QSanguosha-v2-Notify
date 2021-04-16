@@ -101,9 +101,6 @@ QString QmlRouter::update_response_skill()
                 ClientInstance->onPlayerResponseCard(NULL);
                 return QString();
             }
-            if (Self->hasSkill(skill_name, true) && skill->isAvailable(Self, reason, pattern)) {
-                return skill_name + "+immediate";
-            }
             return skill_name;
         }
     } else {
@@ -142,12 +139,28 @@ QStringList QmlRouter::roomscene_get_enable_skills(QStringList skill_names, int 
             if (qobject_cast<const ViewAsSkill *>(skill)->isAvailable(Self, reason, pattern) && !pattern.endsWith("!"))
                 ret << str;
         } else {
+            const ViewAsSkill *vs_skill = Sanguosha->getViewAsSkill(str);
+            if (vs_skill) {
+                QString pattern = Sanguosha->currentRoomState()->getCurrentCardUsePattern();
+                QRegExp rx("@@?([_A-Za-z]+)(\\d+)?!?");
+                CardUseStruct::CardUseReason reason = CardUseStruct::CARD_USE_REASON_UNKNOWN;
+                if ((newStatus & Client::ClientStatusBasicMask) == Client::Responding) {
+                    if (newStatus == Client::RespondingUse)
+                        reason = CardUseStruct::CARD_USE_REASON_RESPONSE_USE;
+                    else if (newStatus == Client::Responding || rx.exactMatch(pattern))
+                        reason = CardUseStruct::CARD_USE_REASON_RESPONSE;
+                } else if (newStatus == Client::Playing)
+                    reason = CardUseStruct::CARD_USE_REASON_PLAY;
+                if (vs_skill->isAvailable(Self, reason, pattern) && !pattern.endsWith("!"))
+                    ret << str;
+            } else {
             if (skill->getFrequency(Self) == Skill::Wake) {
                 if (Self->getMark(skill->objectName()) > 0)
                     ret << str;
             }
             else
                 ret << str;
+            }
         }
     }
 
@@ -163,7 +176,7 @@ QString QmlRouter::roomscene_enable_targets(QString json_data, QStringList selec
 {
     const Card *card = qml_getCard(json_data);
     QString ret = enable_targets(card, selected_targets);
-    if (card->isVirtualCard()) delete card;
+    if (card && card->isVirtualCard()) delete card;
     return ret;
 }
 
@@ -176,7 +189,7 @@ QStringList QmlRouter::roomscene_update_targets_enablity(QString json_data, QStr
 {
     const Card *card = qml_getCard(json_data);
     QStringList ret = updateTargetsEnablity(card, selected_targets);
-    if (card->isVirtualCard()) delete card;
+    if (card && card->isVirtualCard()) delete card;
     return ret;
 }
 
@@ -189,7 +202,7 @@ QString QmlRouter::roomscene_update_selected_targets(QString json_data, QString 
 {
     const Card *card = qml_getCard(json_data);
     QString ret = updateSelectedTargets(card, player_name, selected, targets);
-    if (card->isVirtualCard()) delete card;
+    if (card && card->isVirtualCard()) delete card;
     return ret;
 }
 
