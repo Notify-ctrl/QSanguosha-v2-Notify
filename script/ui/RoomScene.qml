@@ -594,8 +594,8 @@ RoomScene {
     }
 
     onUpdateStatus: {
-        let i = 0;
-        let skill_names = [];
+        var i = 0;
+        var skill_names = [];
         for (i = 0; i < dashboard.headSkills.length; i++)
             skill_names.push(dashboard.headSkills[i].name);
         let enabled_skill_buttons = Router.roomscene_get_enable_skills(skill_names, newStatus);
@@ -616,7 +616,7 @@ RoomScene {
 
             setAcceptEnabled(false);
             setRejectEnabled(false);
-            setFinishEnabled(true);
+            setFinishEnabled(false);
 
             // @TODO: dashboard pending & progress bar
 
@@ -628,7 +628,18 @@ RoomScene {
             setRejectEnabled(ClientInstance.m_isDiscardActionRefusable);
             setFinishEnabled(false);
 
-            // @TODO
+            let skill_name = Router.update_response_skill();
+            if (skill_name !== "") {
+                if (skill_name.split("+")[1] === "immediate") {
+                    for (i = 0; i < dashboard.headSkillButtons.length; i++) {
+                        if (dashboard.headSkillButtons.itemAt(i).name === skill_name.split("+")[0]) {
+                            dashboard.headSkillButtons.itemAt(i).pressed = true;
+                            break;
+                        }
+                    }
+                }
+                dashboard.startPending(skill_name);
+            }
             break;
         case Client.AskForShowOrPindian:
             break;
@@ -670,7 +681,7 @@ RoomScene {
             setFinishEnabled(false)
 
             popupBox.item.cardSelected.connect(function(cid){
-                roomScene.onAmazingGraceTaken(cid);
+                ClientInstance.onPlayerChooseAG(cid);
             });
             break;
         case Client.AskForYiji:
@@ -686,7 +697,6 @@ RoomScene {
     }
 
     function doOkButton() {
-        var card = dashboard.getSelectedCard();
         switch (ClientInstance.status & Client.ClientStatusBasicMask) {
         case Client.Playing:
             if (dashboard.getSelectedCard() !== -1) {
@@ -695,22 +705,22 @@ RoomScene {
             }
             break;
         case Client.Responding:
-            if (card !== -1) {
-                if (ClientInstance.getStatus() === Client.Responding) {
+            if (dashboard.getSelectedCard() !== -1) {
+                if (ClientInstance.status === Client.Responding) {
                     selected_targets = [];
                 }
-                Router.on_player_response_card(card, selected_targets);
+                Router.on_player_response_card(dashboard.getSelectedCard(), selected_targets);
                 prompt_box.disappear();
             }
 
-            dashboard.unselectAll();
+            dashboard.unSelectAll();
             break;
         case Client.AskForShowOrPindian:
-            if (card !== -1) {
-                Router.on_player_response_card(card);
+            if (dashboard.getSelectedCard() !== -1) {
+                Router.on_player_response_card(dashboard.getSelectedCard());
                 prompt_box.disappear();
             }
-            dashboard.unselectAll();
+            dashboard.unSelectAll();
             break;
         case Client.Discarding:
         case Client.Exchanging:
@@ -778,21 +788,21 @@ RoomScene {
             //QString pattern = Sanguosha->currentRoomState()->getCurrentCardUsePattern();
             //if (pattern.isEmpty()) return;
 
-            dashboard.unselectAll();
+            dashboard.unSelectAll();
 
             dashboard.stopPending();
-            Router.roomscene_discard(JSON.stringify({skill: "mbks", subcards: []}))
+            Router.on_player_response_card(JSON.stringify({skill: "mbks", subcards: []}), [])
             hidePrompt();
             break;
         case Client.AskForShowOrPindian:
-            dashboard.unselectAll();
+            dashboard.unSelectAll();
             dashboard.stopPending();
-            Router.roomscene_discard(JSON.stringify({skill: "mbks", subcards: []}))
+            Router.on_player_response_card(JSON.stringify({skill: "mbks", subcards: []}), [])
             hidePrompt();
             break;
         case Client.Discarding:
         case Client.Exchanging:
-            dashboard.unselectAll();
+            dashboard.unSelectAll();
             dashboard.stopPending();
             Router.roomscene_discard(JSON.stringify({skill: "mbks", subcards: []}))
             hidePrompt();

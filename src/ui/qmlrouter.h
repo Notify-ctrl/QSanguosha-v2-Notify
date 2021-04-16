@@ -23,6 +23,7 @@ public:
     Q_INVOKABLE bool vs_view_filter(QString skill_name, QList<int> ids, int id);
     Q_INVOKABLE bool vs_can_view_as(QString skill_name, QList<int> ids);
     Q_INVOKABLE void update_discard_skill();
+    Q_INVOKABLE QString update_response_skill();
     Q_INVOKABLE QStringList roomscene_get_enable_skills(QStringList skill_names, int newStatus);
     Q_INVOKABLE QString roomscene_enable_targets(int id, QStringList selected_targets);
     Q_INVOKABLE QString roomscene_enable_targets(QString json_data, QStringList selected_targets);

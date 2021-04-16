@@ -80,6 +80,49 @@ void QmlRouter::update_discard_skill()
     discard_skill->setPattern(ClientInstance->m_cardDiscardPattern);
 }
 
+QString QmlRouter::update_response_skill()
+{
+    ResponseSkill *response_skill = (ResponseSkill *)ClientInstance->aux_skill_map->value("response-skill");
+    QString pattern = Sanguosha->currentRoomState()->getCurrentCardUsePattern();
+    QRegExp rx("@@?([_A-Za-z]+)(\\d+)?!?");
+    if (rx.exactMatch(pattern)) {
+        QString skill_name = rx.capturedTexts().at(1);
+        const ViewAsSkill *skill = Sanguosha->getViewAsSkill(skill_name);
+        if (skill) {
+            CardUseStruct::CardUseReason reason = CardUseStruct::CARD_USE_REASON_RESPONSE;
+            if (ClientInstance->getStatus() == Client::RespondingUse)
+                reason = CardUseStruct::CARD_USE_REASON_RESPONSE_USE;
+            QString tempUseFlag = "RoomScene_" + skill_name + "TempUse";
+            if (!Self->hasFlag(tempUseFlag))
+                Self->setFlags(tempUseFlag);
+            bool available = skill->isAvailable(Self, reason, pattern);
+            Self->setFlags("-" + tempUseFlag);
+            if (!available) {
+                ClientInstance->onPlayerResponseCard(NULL);
+                return QString();
+            }
+            if (Self->hasSkill(skill_name, true) && skill->isAvailable(Self, reason, pattern)) {
+                return skill_name + "+immediate";
+            }
+            return skill_name;
+        }
+    } else {
+        if (pattern.endsWith("!"))
+            pattern = pattern.mid(0, pattern.length() - 1);
+        response_skill->setPattern(pattern);
+        if (ClientInstance->getStatus() == Client::RespondingForDiscard)
+            response_skill->setRequest(Card::MethodDiscard);
+        else if (ClientInstance->getStatus() == Client::RespondingNonTrigger)
+            response_skill->setRequest(Card::MethodNone);
+        else if (ClientInstance->getStatus() == Client::RespondingUse)
+            response_skill->setRequest(Card::MethodUse);
+        else
+            response_skill->setRequest(Card::MethodResponse);
+        return "response-skill";
+    }
+    return QString();
+}
+
 QStringList QmlRouter::roomscene_get_enable_skills(QStringList skill_names, int newStatus)
 {
     QStringList ret;
@@ -120,7 +163,7 @@ QString QmlRouter::roomscene_enable_targets(QString json_data, QStringList selec
 {
     const Card *card = qml_getCard(json_data);
     QString ret = enable_targets(card, selected_targets);
-    delete card;
+    if (card->isVirtualCard()) delete card;
     return ret;
 }
 
@@ -133,7 +176,7 @@ QStringList QmlRouter::roomscene_update_targets_enablity(QString json_data, QStr
 {
     const Card *card = qml_getCard(json_data);
     QStringList ret = updateTargetsEnablity(card, selected_targets);
-    delete card;
+    if (card->isVirtualCard()) delete card;
     return ret;
 }
 
@@ -146,7 +189,7 @@ QString QmlRouter::roomscene_update_selected_targets(QString json_data, QString 
 {
     const Card *card = qml_getCard(json_data);
     QString ret = updateSelectedTargets(card, player_name, selected, targets);
-    delete card;
+    if (card->isVirtualCard()) delete card;
     return ret;
 }
 
