@@ -129,9 +129,25 @@ QStringList QmlRouter::roomscene_update_targets_enablity(int id, QStringList sel
     return updateTargetsEnablity(Sanguosha->getCard(id), selected_targets);
 }
 
+QStringList QmlRouter::roomscene_update_targets_enablity(QString json_data, QStringList selected_targets)
+{
+    const Card *card = qml_getCard(json_data);
+    QStringList ret = updateTargetsEnablity(card, selected_targets);
+    delete card;
+    return ret;
+}
+
 QString QmlRouter::roomscene_update_selected_targets(int id, QString player_name, bool selected, QStringList targets)
 {
     return updateSelectedTargets(Sanguosha->getCard(id), player_name, selected, targets);
+}
+
+QString QmlRouter::roomscene_update_selected_targets(QString json_data, QString player_name, bool selected, QStringList targets)
+{
+    const Card *card = qml_getCard(json_data);
+    QString ret = updateSelectedTargets(card, player_name, selected, targets);
+    delete card;
+    return ret;
 }
 
 void QmlRouter::roomscene_use_card(int id, QStringList selected_targets)
@@ -148,6 +164,26 @@ void QmlRouter::roomscene_finish()
 {
     if (ClientInstance->getStatus() == Client::Playing)
         ClientInstance->onPlayerResponseCard(NULL);
+}
+
+void QmlRouter::on_player_response_card(int id, QStringList targets)
+{
+    const Card *card = Sanguosha->getCard(id);
+    QList<const Player *> selected_targets;
+    foreach (QString str, targets) {
+        selected_targets << ClientInstance->getPlayer(str);
+    }
+    ClientInstance->onPlayerResponseCard(card, selected_targets);
+}
+
+void QmlRouter::on_player_response_card(QString json_data, QStringList targets)
+{
+    const Card *card = qml_getCard(json_data);
+    QList<const Player *> selected_targets;
+    foreach (QString str, targets) {
+        selected_targets << ClientInstance->getPlayer(str);
+    }
+    ClientInstance->onPlayerResponseCard(card, selected_targets);
 }
 
 const Card *QmlRouter::qml_getCard(QString json_data)

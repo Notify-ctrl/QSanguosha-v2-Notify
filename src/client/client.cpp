@@ -1134,8 +1134,9 @@ void Client::onPlayerChooseCard(int card_id)
     setStatus(NotActive);
 }
 
-void Client::onPlayerChoosePlayer(const Player *player)
+void Client::onPlayerChoosePlayer(const QString player_name)
 {
+    const Player *player = getPlayer(player_name);
     if (player == NULL && !m_isDiscardActionRefusable)
         player = findChild<const Player *>(players_to_choose.first());
 

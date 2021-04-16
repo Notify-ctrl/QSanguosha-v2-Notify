@@ -27,13 +27,20 @@ public:
     Q_INVOKABLE QString roomscene_enable_targets(int id, QStringList selected_targets);
     Q_INVOKABLE QString roomscene_enable_targets(QString json_data, QStringList selected_targets);
     Q_INVOKABLE QStringList roomscene_update_targets_enablity(int id, QStringList selected_targets);
+    Q_INVOKABLE QStringList roomscene_update_targets_enablity(QString json_data, QStringList selected_targets);
     Q_INVOKABLE QString roomscene_update_selected_targets(int id, QString player_name, bool selected, QStringList targets);
+    Q_INVOKABLE QString roomscene_update_selected_targets(QString json_data, QString player_name, bool selected, QStringList targets);
     Q_INVOKABLE void roomscene_use_card(int id, QStringList selected_targets);
     Q_INVOKABLE void roomscene_use_card(QString json_data, QStringList selected_targets);
     Q_INVOKABLE void roomscene_finish();
     Q_INVOKABLE void roomscene_discard(QString json_data) {
         ClientInstance->onPlayerDiscardCards(qml_getCard(json_data));
     }
+    Q_INVOKABLE void roomscene_invoke_skill(bool invoke) {
+        ClientInstance->onPlayerInvokeSkill(invoke);
+    }
+    Q_INVOKABLE void on_player_response_card(int id, QStringList targets);
+    Q_INVOKABLE void on_player_response_card(QString json_data, QStringList targets);
 
 private:
     const Card *qml_getCard(QString);

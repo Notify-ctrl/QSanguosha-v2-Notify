@@ -87,7 +87,7 @@ public:
     QString getReplayPath() const;
     Replayer *getReplayer() const;
     QString getPlayerName(const QString &str);
-    QString getSkillNameToInvoke() const;
+    Q_INVOKABLE QString getSkillNameToInvoke() const;
     QString getSkillNameToInvokeData() const;
 
     QTextDocument *getLinesDoc() const;
@@ -235,7 +235,7 @@ public slots:
     void onPlayerMakeChoice();
     void onPlayerChooseCard(int card_id = -2);
     void onPlayerChooseAG(int card_id);
-    void onPlayerChoosePlayer(const Player *player);
+    void onPlayerChoosePlayer(const QString player_name);
     void trust();
     void addRobot(int num);
 

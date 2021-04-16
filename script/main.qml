@@ -5,8 +5,8 @@ import "ui/Util"
 ApplicationWindow {
     id: rootWindow
     visible: true
-    width: 1366
-    height: 768
+    width: 1280
+    height: 720
 Item {  // For ToolTip
     id: rootWindowItem
     anchors.fill: parent

@@ -622,6 +622,13 @@ RoomScene {
 
             break;
         case Client.Responding:
+            showPrompt(ClientInstance.getPrompt());
+
+            setAcceptEnabled(false);
+            setRejectEnabled(ClientInstance.m_isDiscardActionRefusable);
+            setFinishEnabled(false);
+
+            // @TODO
             break;
         case Client.AskForShowOrPindian:
             break;
@@ -648,6 +655,12 @@ RoomScene {
             setFinishEnabled(false)
             break;
         case Client.AskForSkillInvoke:
+            showPrompt(ClientInstance.getPrompt());
+
+            setAcceptEnabled(true);
+            setRejectEnabled(true);
+            setFinishEnabled(false);
+
             break;
         case Client.AskForPlayerChoose:
             break;
@@ -673,34 +686,32 @@ RoomScene {
     }
 
     function doOkButton() {
+        var card = dashboard.getSelectedCard();
         switch (ClientInstance.status & Client.ClientStatusBasicMask) {
         case Client.Playing:
             if (dashboard.getSelectedCard() !== -1) {
                 Router.roomscene_use_card(dashboard.getSelectedCard(), selected_targets);
                 enableTargets(-1);
             }
-            break;/*
+            break;
         case Client.Responding:
-            const Card *card = dashboard.getSelected();
-            if (card) {
-                if (ClientInstance.getStatus() == Client.Responding) {
-                    Q_ASSERT(selected_targets.isEmpty());
-                    selected_targets.clear();
+            if (card !== -1) {
+                if (ClientInstance.getStatus() === Client.Responding) {
+                    selected_targets = [];
                 }
-                ClientInstance.onPlayerResponseCard(card, selected_targets);
+                Router.on_player_response_card(card, selected_targets);
                 prompt_box.disappear();
             }
 
             dashboard.unselectAll();
             break;
         case Client.AskForShowOrPindian:
-            const Card *card = dashboard.getSelected();
-            if (card) {
-                ClientInstance.onPlayerResponseCard(card);
+            if (card !== -1) {
+                Router.on_player_response_card(card);
                 prompt_box.disappear();
             }
             dashboard.unselectAll();
-            break;*/
+            break;
         case Client.Discarding:
         case Client.Exchanging:
             let card = dashboard.pending_card;
@@ -714,20 +725,20 @@ RoomScene {
             toast.show("The OK button should be disabled when client is not active!");
             return;
         case Client.AskForAG:
-            // ClientInstance.onPlayerChooseAG(-1);
+            ClientInstance.onPlayerChooseAG(-1);
             return;
         case Client.ExecDialog:
             toast.show("The OK button should be disabled when client is in executing dialog");
             return;
-        case Client.AskForSkillInvoke:/*
-            prompt_box.disappear();
-            QString skill_name = ClientInstance.getSkillNameToInvoke();
-            dashboard.highlightEquip(skill_name, false);
-            ClientInstance.onPlayerInvokeSkill(true);*/
+        case Client.AskForSkillInvoke:
+            hidePrompt();
+            let skill_name = ClientInstance.getSkillNameToInvoke();
+            //dashboard.highlightEquip(skill_name, false);
+            Router.roomscene_invoke_skill(true);
             break;
         case Client.AskForPlayerChoose:
-            //ClientInstance.onPlayerChoosePlayer(selected_targets.first());
-            //prompt_box.disappear();
+            ClientInstance.onPlayerChoosePlayer(selected_targets[0]);
+            prompt_box.disappear();
             break;
         case Client.AskForYiji:/*
             const Card *card = dashboard.pendingCard();
@@ -741,51 +752,44 @@ RoomScene {
             //guanxing_box.reply();
             break;
         case Client.AskForGongxin:
-            //ClientInstance.onPlayerReplyGongxin();
+            ClientInstance.onPlayerReplyGongxin();
             //card_container.clear();
             break;
         }
 
         dashboard.stopPending();
-        // @TODO: extract pile
+        dashboard.deactivateSkillButton();
+        // @TODO: disextract pile
     }
 
     function doCancelButton() {
         switch (ClientInstance.status & Client.ClientStatusBasicMask) {
         case Client.Playing:
-            // @TODO: skill btn
             dashboard.unSelectAll();
             dashboard.stopPending();
+            dashboard.deactivateSkillButton();
             dashboard.enableCards();
             updateStatus(ClientInstance.status, ClientInstance.status);
-            break;/*
-        case Client.Responding: {
-            dashboard->skillButtonDeactivated();
-            QString pattern = Sanguosha->currentRoomState()->getCurrentCardUsePattern();
-            if (pattern.isEmpty()) return;
-
-            dashboard->unselectAll();
-
-            if (!pattern.startsWith("@")) {
-                const ViewAsSkill *skill = dashboard->currentSkill();
-                if (!skill->inherits("ResponseSkill")) {
-                    cancelViewAsSkill();
-                    break;
-                }
-            }
-
-            ClientInstance->onPlayerResponseCard(NULL);
-            prompt_box->disappear();
-            dashboard->stopPending();
             break;
-        }
-        case Client::AskForShowOrPindian: {
-            dashboard->unselectAll();
-            ClientInstance->onPlayerResponseCard(NULL);
-            prompt_box->disappear();
-            dashboard->stopPending();
+        case Client.Responding:
+            dashboard.deactivateSkillButton();
+
+            //TODO:
+            //QString pattern = Sanguosha->currentRoomState()->getCurrentCardUsePattern();
+            //if (pattern.isEmpty()) return;
+
+            dashboard.unselectAll();
+
+            dashboard.stopPending();
+            Router.roomscene_discard(JSON.stringify({skill: "mbks", subcards: []}))
+            hidePrompt();
             break;
-        }*/
+        case Client.AskForShowOrPindian:
+            dashboard.unselectAll();
+            dashboard.stopPending();
+            Router.roomscene_discard(JSON.stringify({skill: "mbks", subcards: []}))
+            hidePrompt();
+            break;
         case Client.Discarding:
         case Client.Exchanging:
             dashboard.unselectAll();
@@ -796,28 +800,26 @@ RoomScene {
         case Client::ExecDialog: {
             m_choiceDialog->reject();
             break;
-        }
-        case Client::AskForSkillInvoke: {
-            QString skill_name = ClientInstance->getSkillNameToInvoke();
-            dashboard->highlightEquip(skill_name, false);
-            ClientInstance->onPlayerInvokeSkill(false);
-            prompt_box->disappear();
-            break;
-        }
-        case Client::AskForYiji: {
+        }*/
+        case Client.AskForSkillInvoke:
+            let skill_name = ClientInstance.getSkillNameToInvoke();
+            //dashboard->highlightEquip(skill_name, false);
+            Router.roomscene_invoke_skill(false);
+            hidePrompt();
+            break;/*
+        case Client.AskForYiji: {
             dashboard->stopPending();
             ClientInstance->onPlayerReplyYiji(NULL, NULL);
             prompt_box->disappear();
             break;
-        }
-        case Client::AskForPlayerChoose: {
-            dashboard->stopPending();
-            ClientInstance->onPlayerChoosePlayer(NULL);
-            prompt_box->disappear();
+        }*/
+        case Client.AskForPlayerChoose:
+            dashboard.stopPending();
+            ClientInstance.onPlayerChoosePlayer("mbks");
+            prompt_box.disappear();
             break;
-        }
         default:
-            break;*/
+            break;
         }
     }
 
@@ -830,7 +832,7 @@ RoomScene {
     function enableTargets(card) { // card: int | { skill: string, subcards: int[] }
         let i = 0;
         let enabled = true;
-        let candidate = false;
+        let candidate = (!isNaN(card) && card !== -1) || typeof(card) === "string";
         let all_photos = [dashboard];
         for (i = 0; i < playerNum - 1; i++) {
             all_photos.push(photos.itemAt(i))
@@ -838,14 +840,6 @@ RoomScene {
         selected_targets = [];
         for (i = 0; i < playerNum; i++) {
             all_photos[i].selected = false;
-        }
-
-        if (!isNaN(card) && card !== -1) {
-            candidate = true;
-        } else if (typeof(card) === "string") {
-            console.log(card)
-            // @TODO
-            candidate = true;
         }
 
         if (candidate) {

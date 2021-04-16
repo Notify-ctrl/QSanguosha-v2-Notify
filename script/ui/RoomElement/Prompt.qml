@@ -22,6 +22,12 @@ Image {
         wrapMode: Text.WordWrap
     }
 
+    MouseArea {
+        anchors.fill: parent
+        drag.target: parent
+        drag.axis: Drag.XAndYAxis
+    }
+
     Behavior on scale {
         NumberAnimation {
             duration: 200

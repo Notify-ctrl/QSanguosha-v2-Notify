@@ -38,6 +38,7 @@ RowLayout {
     property alias specialArea: specialArea
     property alias progressBar: progressBarItem
     property alias headSkills: headSkillPanel.skills
+    property alias headSkillButtons: headSkillPanel.skill_buttons
     property alias deputySkills: deputySkillPanel.skills
 
     signal accepted()
@@ -437,6 +438,10 @@ RowLayout {
 
     function getSelectedCard() {
         if (view_as_skill !== "") {
+            console.log(JSON.stringify({
+                skill: view_as_skill,
+                subcards: pendings
+            }));
             return JSON.stringify({
                 skill: view_as_skill,
                 subcards: pendings
@@ -483,6 +488,12 @@ RowLayout {
         updatePending();
     }
 
+    function deactivateSkillButton() {
+        for (let i = 0; i < headSkills.length; i++) {
+            headSkillButtons.itemAt(i).pressed = false;
+        }
+    }
+
     function stopPending() {
         view_as_skill = "";
         pendings = [];
@@ -491,6 +502,7 @@ RowLayout {
         // @TODO: expand pile
 
         // @TODO: equipment
+
         handcardAreaItem.adjustCards();
         card_selected(-1);
     }

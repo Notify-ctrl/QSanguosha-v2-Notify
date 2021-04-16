@@ -3,11 +3,13 @@ import QtQuick 2.15
 
 Item {
     property var skills: []
+    property alias skill_buttons: skill_buttons
 
     width: childrenRect.width
     height: childrenRect.height
 
     Repeater {
+        id: skill_buttons
         model: skills
 
         SkillButton {
