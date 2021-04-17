@@ -415,6 +415,21 @@ int Card::subcardsLength() const
     return subcards.length();
 }
 
+QString Card::getType() const
+{
+    return "BasicCard";
+}
+
+QString Card::getSubtype() const
+{
+    return "attack-card";
+}
+
+Card::CardType Card::getTypeId() const
+{
+    return Card::TypeBasic;
+}
+
 bool Card::isVirtualCard() const
 {
     return m_id < 0;

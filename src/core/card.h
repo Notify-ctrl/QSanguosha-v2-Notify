@@ -60,7 +60,7 @@ public:
     };
 
     // constructor
-    Card(Suit suit, int number, bool target_fixed = false);
+    Q_INVOKABLE Card(Suit suit, int number, bool target_fixed = false);
 
     // property getters/setters
     QString getSuitString() const;
@@ -123,9 +123,9 @@ public:
     virtual void addSubcards(const QList<int> &subcards_list);
     virtual int subcardsLength() const;
 
-    virtual QString getType() const = 0;
-    virtual QString getSubtype() const = 0;
-    virtual CardType getTypeId() const = 0;
+    virtual QString getType() const;
+    virtual QString getSubtype() const;
+    virtual CardType getTypeId() const;
     virtual bool isNDTrick() const;
 
     // card target selection
